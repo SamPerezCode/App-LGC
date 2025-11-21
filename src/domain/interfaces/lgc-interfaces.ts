@@ -1,0 +1,77 @@
+// Tipos base / enums
+
+export type EstadoPersona = "NUEVO" | "ASISTENTE_REGULAR" | "MIEMBRO";
+
+export type Genero = "MASCULINO" | "FEMENINO" | "OTRO";
+
+export type EstadoCivil = "SOLTERO" | "CASADO" | "DIVORCIADO" | "VIUDO" | "OTRO";
+
+export type TipoActividadRuta = "EVENTO" | "CURSO" | "REUNION" | "MINISTERIO";
+
+export type EstadoActividadSeguimiento = "PENDIENTE" | "EN_PROCESO" | "COMPLETADA" | "CANCELADA";
+
+export type TipoContacto = "LLAMADA" | "VISITA" | "MENSAJE_WHATSAPP" | "OTRO";
+
+export type RolUsuario = "ADMIN" | "PASTOR" | "LIDER_SEGUIMIENTO";
+
+//  Usuario (para login / autenticación)
+export interface Usuario {
+  id: number;
+  nombre: string;
+  email: string;
+  password: string;
+  rol: RolUsuario;
+  activo: boolean;
+  creadoEn: string;
+}
+
+//Persona (Módulo de Registro de Personas)
+export interface Persona {
+  id: string;
+  nombreCompleto: string;
+  telefono?: string;
+  whatsapp?: string;
+  correo?: string;
+  direccion?: string;
+  genero?: Genero;
+  estadoCivil?: EstadoCivil;
+  fechaNacimiento?: string; // "YYYY-MM-DD"
+  estado: EstadoPersona; // nuevo, asistente regular, miembro
+  creadoEn: string;
+  actualizadoEn: string;
+}
+
+// Actividades de la Ruta de Crecimiento (Catálogo)
+export interface ActividadRutaCrecimiento {
+  id: string;
+  nombre: string;
+  descripcion?: string;
+  tipo: TipoActividadRuta;
+  orden: number; // para definir el paso dentro de la ruta
+  activa: boolean;
+  creadoEn: string;
+  actualizadoEn: string;
+}
+
+// Seguimiento de actividades por persona
+export interface SeguimientoActividadPersona {
+  id: string;
+  personaId: string;
+  actividadRutaId: string;
+  estado: EstadoActividadSeguimiento;
+  fechaAsignacion: string;
+  fechaCumplimiento?: string;
+  observaciones?: string;
+  // Opcional: quién registró el seguimiento (usuario del sistema)
+  registradoPorUsuarioId?: string;
+}
+
+//  Registro de contactos / interacciones de seguimiento
+export interface RegistroContacto {
+  id: string;
+  personaId: string;
+  tipo: TipoContacto;
+  fecha: string;
+  descripcion?: string;
+  realizadoPorUsuarioId?: string;
+}
