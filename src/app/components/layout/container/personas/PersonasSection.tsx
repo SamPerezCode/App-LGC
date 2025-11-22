@@ -1,4 +1,3 @@
-// src/app/components/layout/container/personas/PersonasSection.tsx
 import { useState, type FC, type ChangeEvent, useEffect } from "react";
 import type { Persona } from "../../../../../domain/interfaces/lgc-interfaces";
 import { personasMock } from "../../../../../domain/mock-data/lgc-mock";
@@ -18,7 +17,7 @@ const PersonasSection: FC = () => {
   const [page, setPage] = useState(1);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  // cerrar automáticamente el mensaje de éxito después de 3 segundos
+  // cerrar mensaje de éxito después de 3 segundos
   useEffect(() => {
     if (!successMessage) return;
 
