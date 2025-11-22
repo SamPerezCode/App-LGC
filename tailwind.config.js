@@ -33,7 +33,7 @@ export default {
           danger: "#c16c4f",
           onDanger: "#fdfaed",
 
-          // 🎨 Tokens específicos para SIDEBAR (light)
+          // Tokens específicos para SIDEBAR (light)
           sidebarBg: "#81988d", // Olive Ashes
           sidebarText: "#fdfaed", // Manna sobre el verde
           sidebarMuted: "#e9f0ec", // Olive aclarado para hovers suaves
