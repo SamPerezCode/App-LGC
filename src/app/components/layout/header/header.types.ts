@@ -8,4 +8,5 @@ export interface HeaderProps {
   onToggleTheme: () => void;
   onToggle: () => void;
   onLogout: () => void;
+  onToggleSidebarMobile?: () => void;
 }

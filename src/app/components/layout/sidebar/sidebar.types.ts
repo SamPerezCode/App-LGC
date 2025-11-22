@@ -6,4 +6,5 @@ export interface SidebarProps {
   user: Usuario;
   activeSection: AppSection;
   onSectionChange: (section: AppSection) => void;
+  variant?: "desktop" | "mobile";
 }

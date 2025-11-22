@@ -1,21 +1,15 @@
-// src/App.tsx
 import { useState } from "react";
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import type { Usuario } from "./domain/interfaces/lgc-interfaces";
 import AppLgc from "./app/App-lgc";
 import Login from "./app/Login";
+import { useAuth } from "./app/hooks/useAuth"; // 👈 nuevo import
 
 const App: React.FC = () => {
   const [dark, setDark] = useState(false);
-  const [user, setUser] = useState<Usuario | null>(null);
-  const navigate = useNavigate();
 
-  const isAuthenticated = !!user;
-
-  const handleLogout = () => {
-    setUser(null);
-    navigate("/login");
-  };
+  // 👇 toda la lógica de sesión viene del hook
+  const { user, isAuthenticated, login, logout } = useAuth();
 
   return (
     <div className={dark ? "dark" : ""}>
@@ -27,7 +21,7 @@ const App: React.FC = () => {
               isAuthenticated ? (
                 <Navigate to="/" replace />
               ) : (
-                <Login onLoginSuccess={setUser} isDark={dark} />
+                <Login onLoginSuccess={login} isDark={dark} />
               )
             }
           />
@@ -37,10 +31,10 @@ const App: React.FC = () => {
             element={
               isAuthenticated ? (
                 <AppLgc
-                  user={user!}
+                  user={user as Usuario}
                   isDark={dark}
                   onToggleTheme={() => setDark((prev) => !prev)}
-                  onLogout={handleLogout}
+                  onLogout={() => logout()}
                 />
               ) : (
                 <Navigate to="/login" replace />

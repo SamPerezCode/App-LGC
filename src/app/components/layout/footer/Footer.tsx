@@ -1,22 +1,19 @@
 const Footer = () => {
   return (
-    <section>
-      <footer
+    <footer className="px-4 pb-4 md:px-6 md:pb-6">
+      <div
         className="
-            h-10 flex items-center justify-between
-            border-t border-lgc-border/60
-            bg-lgc-surface/95 px-6 text-xs
-            dark:border-lgc-darkBorder/60 dark:bg-lgc-darkSurface/90
-          "
+          mx-auto flex h-10 w-full items-center justify-center
+          rounded-2xl border border-lgc-border/60 bg-lgc-surface/95 px-4 text-xs
+          shadow-sm
+          dark:border-lgc-darkBorder/60 dark:bg-lgc-darkSurface/90
+        "
       >
         <span className="text-lgc-textMuted dark:text-lgc-darkTextMuted">
-          Iglesia La Gran Comisión · LGC-App
+          Iglesia La Gran Comisión · LGC-App - 2025
         </span>
-        <span className="text-lgc-textMuted dark:text-lgc-darkTextMuted">
-          v0.1 · Solo uso interno
-        </span>
-      </footer>
-    </section>
+      </div>
+    </footer>
   );
 };
 

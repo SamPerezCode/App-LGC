@@ -6,7 +6,7 @@ export const SECTION_TITLES: Record<AppSection, { title: string; subtitle: strin
     subtitle: "Resumen general del estado de la iglesia y los módulos.",
   },
   personas: {
-    title: "Registro de personas",
+    title: "Personas",
     subtitle: "Administra los nuevos asistentes, miembros y su información.",
   },
   ruta: {

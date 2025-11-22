@@ -8,22 +8,40 @@ import {
   type CollapseTimeoutRef,
 } from "./sidebar.utils";
 
-const Sidebar: FC<SidebarProps> = ({ isDark, user, activeSection, onSectionChange }) => {
-  const [expanded, setExpanded] = useState(false);
+const Sidebar: FC<SidebarProps> = ({ isDark, user, activeSection, onSectionChange, variant }) => {
+  const isMobile = variant === "mobile";
+
+  // en móvil siempre empiezan extendidos
+  const [expanded, setExpanded] = useState(isMobile);
   const collapseTimeoutRef = useRef<number | null>(null) as CollapseTimeoutRef;
 
   const logoSrc = isDark ? "/lgc-solo-manna.PNG" : "/lgc-solo-color.PNG";
 
+  const handleEnter = () => {
+    if (isMobile) return;
+    handleSidebarMouseEnter(collapseTimeoutRef, setExpanded);
+  };
+
+  const handleLeave = () => {
+    if (isMobile) return;
+    handleSidebarMouseLeave(collapseTimeoutRef, setExpanded, 300);
+  };
+
+  const widthClass = isMobile ? "w-64" : expanded ? "w-64" : "w-16";
+  const shapeClass = isMobile ? "rounded-r-3xl shadow-xl" : "";
+
   return (
     <aside
-      onMouseEnter={() => handleSidebarMouseEnter(collapseTimeoutRef, setExpanded)}
-      onMouseLeave={() => handleSidebarMouseLeave(collapseTimeoutRef, setExpanded, 300)}
+      onMouseEnter={handleEnter}
+      onMouseLeave={handleLeave}
       className={`
-        h-screen border-r border-lgc-border/60 bg-lgc-olive text-lgc-manna
+        ${widthClass}
+        ${shapeClass}
+        h-full md:h-screen
+        border-r border-lgc-border/60 bg-lgc-olive text-lgc-manna
         dark:border-lgc-darkBorder/60 dark:bg-lgc-darkSurface dark:text-lgc-darkText
         flex flex-col
         transition-[width] duration-300
-        ${expanded ? "w-64" : "w-16"}
       `}
     >
       {/* Logo + rol */}
@@ -44,7 +62,7 @@ const Sidebar: FC<SidebarProps> = ({ isDark, user, activeSection, onSectionChang
           <img src={logoSrc} alt="Logo LGC" className="h-8 w-8 object-contain" />
         </div>
 
-        {expanded && (
+        {((!isMobile && expanded) || isMobile) && (
           <div className="ml-3 flex flex-col">
             <span className="text-sm font-semibold leading-tight">LGC • Panel</span>
             <span className="text-[11px] text-lgc-manna/80 dark:text-lgc-darkTextMuted">
@@ -73,12 +91,11 @@ const Sidebar: FC<SidebarProps> = ({ isDark, user, activeSection, onSectionChang
                       : "text-lgc-manna/90 hover:bg-lgc-olive/80 dark:text-lgc-darkTextMuted dark:hover:bg-lgc-darkSurfaceMuted",
                   ].join(" ")}
                 >
-                  {/* Icono */}
                   <span className="flex h-8 w-8 items-center justify-center">
                     <img src={item.icon} alt={item.label} className="h-5 w-5 object-contain" />
                   </span>
 
-                  {expanded && (
+                  {((!isMobile && expanded) || isMobile) && (
                     <span className="ml-3 text-sm font-medium truncate">{item.label}</span>
                   )}
                 </button>

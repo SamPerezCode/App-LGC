@@ -8,7 +8,7 @@ export interface SidebarItem {
 
 const ICONS = {
   dashboard: "/home.svg",
-  personas: "/person_add.svg",
+  personas: "/person.svg",
   ruta: "/road.svg",
   seguimiento: "/list.svg",
   config: "/settings.svg",
@@ -16,7 +16,7 @@ const ICONS = {
 
 export const SIDEBAR_ITEMS: SidebarItem[] = [
   { id: "dashboard", label: "Dashboard", icon: ICONS.dashboard },
-  { id: "personas", label: "Registro de personas", icon: ICONS.personas },
+  { id: "personas", label: "Personas", icon: ICONS.personas },
   { id: "ruta", label: "Ruta de crecimiento", icon: ICONS.ruta },
   { id: "seguimiento", label: "Seguimiento", icon: ICONS.seguimiento },
   { id: "config", label: "Configuración", icon: ICONS.config },

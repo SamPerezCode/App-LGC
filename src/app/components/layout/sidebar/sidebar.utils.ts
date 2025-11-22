@@ -18,7 +18,7 @@ export function handleSidebarMouseEnter(
 export function handleSidebarMouseLeave(
   collapseTimeoutRef: CollapseTimeoutRef,
   setExpanded: Dispatch<SetStateAction<boolean>>,
-  delayMs = 250
+  delayMs = 300
 ) {
   collapseTimeoutRef.current = window.setTimeout(() => {
     setExpanded(false);
