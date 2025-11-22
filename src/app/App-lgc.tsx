@@ -84,7 +84,7 @@ const AppLgc: React.FC<AppLgcProps> = ({ user, isDark, onToggleTheme, onLogout }
           onToggleSidebarMobile={toggleSidebarMobile}
         />
 
-        <Contain />
+        <Contain activeSection={activeSection} />
         <Footer />
       </div>
     </div>

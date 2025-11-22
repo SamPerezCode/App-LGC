@@ -1,14 +1,13 @@
-import { useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import type { Usuario } from "./domain/interfaces/lgc-interfaces";
 import AppLgc from "./app/App-lgc";
 import Login from "./app/Login";
-import { useAuth } from "./app/hooks/useAuth"; // 👈 nuevo import
+import { useAuth } from "./app/hooks/useAuth";
+import { useTheme } from "./app/hooks/useTheme";
 
 const App: React.FC = () => {
-  const [dark, setDark] = useState(false);
+  const { dark, toggleTheme } = useTheme();
 
-  // 👇 toda la lógica de sesión viene del hook
   const { user, isAuthenticated, login, logout } = useAuth();
 
   return (
@@ -33,7 +32,7 @@ const App: React.FC = () => {
                 <AppLgc
                   user={user as Usuario}
                   isDark={dark}
-                  onToggleTheme={() => setDark((prev) => !prev)}
+                  onToggleTheme={toggleTheme}
                   onLogout={() => logout()}
                 />
               ) : (

@@ -28,9 +28,7 @@ const Header: FC<HeaderProps> = ({
   };
 
   return (
-    // Wrapper que da margen como el Contain
     <header className="px-4 md:px-6 pt-4 shrink-0">
-      {/* Tarjeta flotante */}
       <div
         className="
           flex h-16 items-center justify-between
@@ -41,7 +39,7 @@ const Header: FC<HeaderProps> = ({
           dark:border-lgc-darkBorder/60 dark:bg-lgc-darkSurface/90
         "
       >
-        {/* IZQUIERDA: botón menú (móvil) + título */}
+        {/*botón menú (móvil) + título */}
         <div className="flex items-center gap-3">
           {/* botón menú solo en móvil */}
           <button
@@ -63,13 +61,18 @@ const Header: FC<HeaderProps> = ({
             <h1 className="text-lg font-semibold text-lgc-primary dark:text-lgc-darkPrimary">
               {sectionInfo.title}
             </h1>
-            <p className="text-xs text-lgc-textMuted dark:text-lgc-darkTextMuted">
+            <p
+              className="
+      hidden md:block
+      text-xs text-lgc-textMuted dark:text-lgc-darkTextMuted
+    "
+            >
               {sectionInfo.subtitle}
             </p>
           </div>
         </div>
 
-        {/* DERECHA: botón tema + avatar */}
+        {/* botón tema + avatar */}
         <div className="flex items-center gap-4">
           {/* botón de tema */}
           <button
