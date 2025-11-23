@@ -1,109 +1,44 @@
-import { useState, type FC, type ChangeEvent, useEffect } from "react";
-import type { Persona } from "../../../../../domain/interfaces/lgc-interfaces";
-import { personasMock } from "../../../../../domain/mock-data/lgc-mock";
+// src/app/components/layout/container/personas/PersonasSection.tsx
+import type { FC } from "react";
 
-import RegistrarPersonaForm, { type PersonaCreateInput } from "./RegistrarPersonaForm";
-import { estadoLabel, formatFecha, normalizeText } from "./personas.utils";
-
-const PAGE_SIZE = 5;
+import RegistrarPersonaForm from "./RegistrarPersonaForm";
+import { estadoLabel, formatFecha } from "./personas.utils";
+import { usePersonasSection } from "./usePersonasSection";
+import SuccessModal from "../../../common/SuccessModal";
 
 const PersonasSection: FC = () => {
-  const [personas, setPersonas] = useState<Persona[]>(personasMock);
-
-  // vista actual: listado o formulario
-  const [view, setView] = useState<"list" | "create">("list");
-
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-
-  // cerrar mensaje de éxito después de 3 segundos
-  useEffect(() => {
-    if (!successMessage) return;
-
-    const timeoutId = window.setTimeout(() => {
-      setSuccessMessage(null);
-    }, 3000);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [successMessage]);
-
-  // cuando cambia el buscador, reseteamos a página 1
-  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
-    setPage(1);
-  };
-
-  // término normalizado (sin tildes, en minúsculas, sin espacios extra)
-  const term = normalizeText(search);
-
-  const filtered = personas.filter((persona) => {
-    if (!term) return true;
-
-    const nombre = normalizeText(persona.nombreCompleto);
-    const telefono = normalizeText(persona.telefono ?? "");
-    const estadoTexto = normalizeText(estadoLabel[persona.estado] ?? persona.estado);
-
-    return nombre.includes(term) || telefono.includes(term) || estadoTexto.includes(term);
-  });
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const startIndex = (page - 1) * PAGE_SIZE;
-  const pageItems = filtered.slice(startIndex, startIndex + PAGE_SIZE);
-
-  const handlePrev = () => setPage((prev) => Math.max(prev - 1, 1));
-  const handleNext = () => setPage((prev) => Math.min(prev + 1, totalPages));
-
-  const handleSavePersona = (data: PersonaCreateInput) => {
-    const now = new Date().toISOString();
-
-    const newPersona: Persona = {
-      ...data,
-      id: `PER-${String(personas.length + 1).padStart(3, "0")}`,
-      creadoEn: now,
-      actualizadoEn: now,
-    };
-
-    setPersonas((prev) => [...prev, newPersona]);
-    setView("list");
-    setPage(1);
-
-    setSuccessMessage("Persona registrada correctamente.");
-  };
+  const {
+    view,
+    setView,
+    search,
+    page,
+    successMessage,
+    filtered,
+    pageItems,
+    totalPages,
+    handleSearchChange,
+    handlePrev,
+    handleNext,
+    handleSavePersona,
+    closeSuccessMessage,
+  } = usePersonasSection();
 
   return (
     <div
       className="
-      relative
+        relative
         w-full
         rounded-2xl border border-lgc-border/60 bg-lgc-surface p-4 md:p-6 shadow-sm
         dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted
       "
     >
-      {/* Toast / mensaje de éxito */}
-      {successMessage && (
-        <div
-          className="
-      fixed inset-0 z-50
-      flex items-center justify-center
-    "
-        >
-          <div className="absolute inset-0 bg-black/30" onClick={() => setSuccessMessage(null)} />
-
-          {/* contenido del modal */}
-          <div
-            className="
-        relative z-10
-        max-w-xs rounded-2xl border border-lgc-border/70
-        bg-lgc-surface/95 px-4 py-3
-        text-xs md:text-sm shadow-lg
-        dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurface
-      "
-          >
-            <p className="font-medium text-lgc-primary dark:text-lgc-manna">{successMessage}</p>
-          </div>
-        </div>
-      )}
+      {/* Modal de éxito reutilizable */}
+      <SuccessModal
+        open={!!successMessage}
+        title="Registro exitoso"
+        message="La persona se registró correctamente. Puedes agregar otra si lo deseas."
+        onClose={closeSuccessMessage}
+      />
 
       <div className="space-y-4 md:space-y-6">
         {/* Título */}
@@ -113,12 +48,11 @@ const PersonasSection: FC = () => {
           </h2>
         </div>
 
-        {/* === VISTA LISTADO === */}
+        {/* === LISTADO === */}
         {view === "list" && (
           <>
             {/* Buscador + botón */}
             <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-              {/* Buscador */}
               <div className="w-full md:max-w-sm">
                 <input
                   type="text"
@@ -135,7 +69,6 @@ const PersonasSection: FC = () => {
                 />
               </div>
 
-              {/* Botón Registrar persona -> cambia a vista "create" */}
               <button
                 type="button"
                 onClick={() => setView("create")}
@@ -276,7 +209,7 @@ const PersonasSection: FC = () => {
           </>
         )}
 
-        {/* === VISTA FORMULARIO === */}
+        {/* === FORMULARIO === */}
         {view === "create" && (
           <RegistrarPersonaForm onCancel={() => setView("list")} onSave={handleSavePersona} />
         )}

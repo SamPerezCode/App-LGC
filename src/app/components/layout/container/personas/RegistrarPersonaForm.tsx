@@ -1,47 +1,54 @@
+// src/app/components/layout/container/personas/RegistrarPersonaForm.tsx
 import { useState, type FC, type FormEvent } from "react";
-import type { Persona } from "../../../../../domain/interfaces/lgc-interfaces";
-
-// Persona sin id ni timestamps: input del formulario
-export type PersonaCreateInput = Omit<Persona, "id" | "creadoEn" | "actualizadoEn">;
+import type { PersonaCreateInput } from "./personas.types";
+import { validatePersonaForm } from "./personas.utils";
 
 interface RegistrarPersonaFormProps {
-  onCancel: () => void;
   onSave: (data: PersonaCreateInput) => void;
+  onCancel?: () => void; // opcional
+  hideCancelUntilDirty?: boolean; // opcional: oculta "Cancelar" hasta que se modifique algo
 }
 
-const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({ onCancel, onSave }) => {
+const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
+  onSave,
+  onCancel,
+  hideCancelUntilDirty = false,
+}) => {
   const [form, setForm] = useState<PersonaCreateInput>({
     nombreCompleto: "",
     telefono: "",
     whatsapp: "",
     correo: "",
     direccion: "",
-    genero: "OTRO",
+    genero: "MASCULINO",
     estadoCivil: "SOLTERO",
     fechaNacimiento: "",
     estado: "NUEVO",
   });
 
   const [error, setError] = useState<string | null>(null);
+  const [isDirty, setIsDirty] = useState(false);
 
   const handleChange = (field: keyof PersonaCreateInput, value: string) => {
     setForm((prev) => ({
       ...prev,
       [field]: value,
     }));
+    if (!isDirty) setIsDirty(true);
   };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    // Validaciones básicas de ejemplo
-    if (!form.nombreCompleto.trim()) {
-      setError("El nombre es obligatorio.");
+    const errorMessage = validatePersonaForm(form);
+    if (errorMessage) {
+      setError(errorMessage);
       return;
     }
 
     setError(null);
     onSave(form);
+    setIsDirty(false); // por si reutilizas el form sin desmontarlo
   };
 
   return (
@@ -56,14 +63,12 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({ onCancel, onSave 
             type="text"
             value={form.nombreCompleto}
             onChange={(e) => handleChange("nombreCompleto", e.target.value)}
-            className="
-              mt-1 w-full rounded-xl border border-lgc-border/70
-              bg-lgc-surfaceMuted/80 px-3 py-2 text-xs md:text-sm text-lgc-text
-              shadow-sm outline-none
-              focus:border-transparent focus:ring-2 focus:ring-lgc-primary focus:ring-offset-1 focus:ring-offset-lgc-surface
-              dark:bg-lgc-darkSurfaceMuted dark:border-lgc-darkBorder/80 dark:text-lgc-darkText
-              dark:focus:ring-lgc-darkPrimary dark:focus:ring-offset-lgc-darkSurface
-            "
+            className="mt-1 w-full rounded-xl border border-lgc-border/70
+                       bg-lgc-surfaceMuted/80 px-3 py-2 text-xs md:text-sm text-lgc-text
+                       shadow-sm outline-none
+                       focus:border-transparent focus:ring-2 focus:ring-lgc-primary focus:ring-offset-1 focus:ring-offset-lgc-surface
+                       dark:bg-lgc-darkSurfaceMuted dark:border-lgc-darkBorder/80 dark:text-lgc-darkText
+                       dark:focus:ring-lgc-darkPrimary dark:focus:ring-offset-lgc-darkSurface"
             placeholder="Ej: Carlos Pérez"
           />
         </div>
@@ -71,7 +76,7 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({ onCancel, onSave 
         {/* Teléfono */}
         <div>
           <label className="block text-xs font-medium text-lgc-text dark:text-lgc-darkText">
-            Teléfono
+            Teléfono *
           </label>
           <input
             type="tel"
@@ -138,14 +143,16 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({ onCancel, onSave 
             Género
           </label>
           <select
-            value={form.genero ?? "OTRO"}
+            value={form.genero ?? "MASCULINO"}
             onChange={(e) => handleChange("genero", e.target.value)}
-            className="mt-1 w-full rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted/80 px-3 py-2 text-xs md:text-sm text-lgc-text shadow-sm outline-none
-                       dark:bg-lgc-darkSurfaceMuted dark:border-lgc-darkBorder/80 dark:text-lgc-darkText"
+            className="
+              mt-1 w-full rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted/80
+              px-3 py-2 text-xs md:text-sm text-lgc-text shadow-sm outline-none
+              dark:bg-lgc-darkSurfaceMuted dark:border-lgc-darkBorder/80 dark:text-lgc-darkText
+            "
           >
             <option value="MASCULINO">Masculino</option>
             <option value="FEMENINO">Femenino</option>
-            <option value="OTRO">Otro</option>
           </select>
         </div>
 
@@ -205,18 +212,22 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({ onCancel, onSave 
       )}
 
       <div className="flex justify-end gap-2 pt-2">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="
-            rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted px-4 py-2
-            text-xs md:text-sm text-lgc-text hover:bg-lgc-surface
-            dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText
-            dark:hover:bg-lgc-darkSurface
-          "
-        >
-          Cancelar
-        </button>
+        {/* Cancelar solo si hay handler y (no usamos hideCancelUntilDirty o el form está sucio) */}
+        {onCancel && (!hideCancelUntilDirty || isDirty) && (
+          <button
+            type="button"
+            onClick={onCancel}
+            className="
+              rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted px-4 py-2
+              text-xs md:text-sm text-lgc-text hover:bg-lgc-surface
+              dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText
+              dark:hover:bg-lgc-darkSurface
+            "
+          >
+            Cancelar
+          </button>
+        )}
+
         <button
           type="submit"
           className="
