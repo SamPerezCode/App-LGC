@@ -27,8 +27,25 @@ const Header: FC<HeaderProps> = ({
     logoutWithDelay({ setLoggingOut, setOpen, onLogout, delayMs: 500 });
   };
 
+  // 🔆 Clases del botón de tema según el modo
+  const themeButtonClass = isDark
+    ? `
+        flex h-9 w-9 items-center justify-center
+        rounded-full border border-lgc-border/60
+        bg-lgc-surface text-lgc-primary
+        shadow-sm hover:bg-lgc-surfaceMuted
+        transition-colors
+      `
+    : `
+        flex h-9 w-9 items-center justify-center
+        rounded-full border border-transparent
+        bg-lgc-primary text-lgc-onPrimary
+        shadow-sm hover:bg-lgc-primarySoft
+        transition-colors
+      `;
+
   return (
-    <header className="px-4 md:px-6 pt-4 shrink-0">
+    <header className="px-4 md:px-6 pt-4 shrink-0 relative z-20">
       <div
         className="
           flex h-16 items-center justify-between
@@ -39,7 +56,7 @@ const Header: FC<HeaderProps> = ({
           dark:border-lgc-darkBorder/60 dark:bg-lgc-darkSurface/90
         "
       >
-        {/*botón menú (móvil) + título */}
+        {/* botón menú (móvil) + título */}
         <div className="flex items-center gap-3">
           {/* botón menú solo en móvil */}
           <button
@@ -63,9 +80,9 @@ const Header: FC<HeaderProps> = ({
             </h1>
             <p
               className="
-      hidden md:block
-      text-xs text-lgc-textMuted dark:text-lgc-darkTextMuted
-    "
+                hidden md:block
+                text-xs text-lgc-textMuted dark:text-lgc-darkTextMuted
+              "
             >
               {sectionInfo.subtitle}
             </p>
@@ -75,17 +92,7 @@ const Header: FC<HeaderProps> = ({
         {/* botón tema + avatar */}
         <div className="flex items-center gap-4">
           {/* botón de tema */}
-          <button
-            onClick={onToggleTheme}
-            className="
-              flex h-9 w-9 items-center justify-center
-              rounded-full border border-lgc-border bg-lgc-surface
-              hover:bg-lgc-surfaceMuted
-              dark:border-lgc-darkBorder dark:bg-lgc-darkSurface dark:hover:bg-lgc-darkSurfaceMuted
-              transition-colors
-            "
-            aria-label="Cambiar tema"
-          >
+          <button onClick={onToggleTheme} className={themeButtonClass} aria-label="Cambiar tema">
             <img src={themeIcon} alt="icon-mode" className="h-4 w-4" />
           </button>
 
@@ -108,7 +115,7 @@ const Header: FC<HeaderProps> = ({
             {open && (
               <div
                 className="
-                  absolute right-0 mt-2 w-56
+                  absolute right-0 mt-2 w-56 z-30
                   overflow-hidden rounded-xl border
                   border-lgc-border/70 bg-lgc-surface shadow-lg
                   dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurface
