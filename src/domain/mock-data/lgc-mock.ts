@@ -10,9 +10,9 @@ import type {
 export const usuariosMock: Usuario[] = [
   {
     id: 1,
-    nombre: "Sam Pérez",
-    email: "sam@lgc.com",
-    password: "samperez0819",
+    nombre: "Admin LGC",
+    email: "admin@gmail.com",
+    password: "123456",
     rol: "ADMIN",
     activo: true,
     creadoEn: "2025-01-01T10:00:00Z",

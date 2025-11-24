@@ -1,5 +1,5 @@
 // src/app/components/layout/container/personas/PersonasSection.tsx
-import type { FC } from "react";
+import { useState, type FC } from "react";
 
 import RegistrarPersonaForm from "./RegistrarPersonaForm";
 import { estadoLabel, formatFecha } from "./personas.utils";
@@ -22,6 +22,9 @@ const PersonasSection: FC = () => {
     handleSavePersona,
     closeSuccessMessage,
   } = usePersonasSection();
+
+  // solo para la UI de "Ver más" en móvil
+  const [openActionsId, setOpenActionsId] = useState<string | null>(null);
 
   return (
     <div
@@ -84,78 +87,152 @@ const PersonasSection: FC = () => {
               </button>
             </div>
 
-            {/* Tabla */}
-            <div className="overflow-x-auto rounded-xl border border-lgc-border/60 dark:border-lgc-darkBorder/70">
-              <table className="min-w-full text-left text-xs md:text-sm">
-                <thead className="bg-lgc-surfaceMuted dark:bg-lgc-darkSurface">
-                  <tr>
-                    <th className="px-4 py-2 font-medium text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                      Nombre
-                    </th>
-                    <th className="px-4 py-2 font-medium text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                      Teléfono
-                    </th>
-                    <th className="px-4 py-2 font-medium text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                      Estado
-                    </th>
-                    <th className="px-4 py-2 font-medium text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                      Última actualización
-                    </th>
-                    <th className="px-4 py-2 font-medium text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                      Acciones
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {pageItems.map((persona) => (
-                    <tr
-                      key={persona.id}
-                      className="border-t border-lgc-border/40 dark:border-lgc-darkBorder/40"
-                    >
-                      <td className="px-4 py-2">{persona.nombreCompleto}</td>
-                      <td className="px-4 py-2">{persona.telefono ?? "-"}</td>
-                      <td className="px-4 py-2">{estadoLabel[persona.estado]}</td>
-                      <td className="px-4 py-2">{formatFecha(persona.actualizadoEn)}</td>
-                      <td className="px-4 py-2">
-                        <div className="flex flex-wrap gap-2">
-                          <button
-                            type="button"
-                            className="
-                              text-xs font-medium text-lgc-primary hover:underline
-                              dark:text-lgc-manna
-                            "
-                          >
-                            Ver
-                          </button>
-                          <button
-                            type="button"
-                            className="
-                              text-xs font-medium text-lgc-textMuted hover:text-lgc-primary hover:underline
-                              dark:text-lgc-darkTextMuted dark:hover:text-lgc-manna
-                            "
-                          >
-                            Editar
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-
-                  {pageItems.length === 0 && (
+            {/* === TABLA (solo escritorio / tablet md+) === */}
+            <div className="hidden md:block">
+              <div className="overflow-x-auto rounded-xl border border-lgc-border/60 dark:border-lgc-darkBorder/70">
+                <table className="min-w-full text-left text-xs md:text-sm">
+                  <thead className="bg-lgc-surfaceMuted dark:bg-lgc-darkSurface">
                     <tr>
-                      <td
-                        colSpan={5}
-                        className="px-4 py-4 text-center text-xs md:text-sm text-lgc-textMuted dark:text-lgc-darkTextMuted"
-                      >
-                        No se encontraron personas con ese criterio.
-                      </td>
+                      <th className="px-4 py-2 font-medium text-lgc-textMuted dark:text-lgc-darkTextMuted">
+                        Nombre
+                      </th>
+                      <th className="px-4 py-2 font-medium text-lgc-textMuted dark:text-lgc-darkTextMuted">
+                        Teléfono
+                      </th>
+                      <th className="px-4 py-2 font-medium text-lgc-textMuted dark:text-lgc-darkTextMuted">
+                        Estado
+                      </th>
+                      <th className="px-4 py-2 font-medium text-lgc-textMuted dark:text-lgc-darkTextMuted">
+                        Última actualización
+                      </th>
+                      <th className="px-4 py-2 font-medium text-lgc-textMuted dark:text-lgc-darkTextMuted">
+                        Acciones
+                      </th>
                     </tr>
-                  )}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {pageItems.map((persona) => (
+                      <tr
+                        key={persona.id}
+                        className="border-t border-lgc-border/40 dark:border-lgc-darkBorder/40"
+                      >
+                        <td className="px-4 py-2">{persona.nombreCompleto}</td>
+                        <td className="px-4 py-2">{persona.telefono ?? "-"}</td>
+                        <td className="px-4 py-2">{estadoLabel[persona.estado]}</td>
+                        <td className="px-4 py-2">{formatFecha(persona.actualizadoEn)}</td>
+                        <td className="px-4 py-2">
+                          <div className="flex flex-wrap gap-2">
+                            <button
+                              type="button"
+                              className="
+                                text-xs font-medium text-lgc-primary hover:underline
+                                dark:text-lgc-manna
+                              "
+                            >
+                              Ver
+                            </button>
+                            <button
+                              type="button"
+                              className="
+                                text-xs font-medium text-lgc-textMuted hover:text-lgc-primary hover:underline
+                                dark:text-lgc-darkTextMuted dark:hover:text-lgc-manna
+                              "
+                            >
+                              Editar
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+
+                    {pageItems.length === 0 && (
+                      <tr>
+                        <td
+                          colSpan={5}
+                          className="px-4 py-4 text-center text-xs md:text-sm text-lgc-textMuted dark:text-lgc-darkTextMuted"
+                        >
+                          No se encontraron personas con ese criterio.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
 
-            {/* Paginador */}
+            {/* === LISTA MÓVIL (cards) === */}
+            <div className="mt-3 space-y-3 md:hidden">
+              {pageItems.map((persona) => (
+                <div
+                  key={persona.id}
+                  className="
+                    rounded-2xl border border-lgc-border/60 bg-lgc-surfaceMuted/70
+                    px-4 py-3 shadow-sm
+                    dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurface
+                  "
+                >
+                  <p className="text-sm font-semibold text-lgc-primary dark:text-lgc-manna">
+                    {persona.nombreCompleto}
+                  </p>
+
+                  <p className="mt-1 text-[11px] text-lgc-text dark:text-lgc-darkText">
+                    <span className="font-medium">Teléfono:</span> {persona.telefono ?? "-"}
+                  </p>
+
+                  <p className="text-[11px] text-lgc-text dark:text-lgc-darkText">
+                    <span className="font-medium">Estado:</span> {estadoLabel[persona.estado]}
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setOpenActionsId((prev) => (prev === persona.id ? null : persona.id))
+                    }
+                    className="
+                      mt-2 inline-flex items-center justify-center
+                      rounded-xl border border-lgc-border/70 bg-lgc-surface px-3 py-1.5
+                      text-[11px] font-medium text-lgc-primary
+                      hover:bg-lgc-surfaceMuted
+                      dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-manna
+                      dark:hover:bg-lgc-darkSurface
+                    "
+                  >
+                    Ver más
+                  </button>
+
+                  {openActionsId === persona.id && (
+                    <div className="mt-2 flex gap-3">
+                      <button
+                        type="button"
+                        className="
+                          text-[11px] font-medium text-lgc-primary hover:underline
+                          dark:text-lgc-manna
+                        "
+                      >
+                        Ver
+                      </button>
+                      <button
+                        type="button"
+                        className="
+                          text-[11px] font-medium text-lgc-textMuted hover:text-lgc-primary hover:underline
+                          dark:text-lgc-darkTextMuted dark:hover:text-lgc-manna
+                        "
+                      >
+                        Editar
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))}
+
+              {pageItems.length === 0 && (
+                <p className="mt-2 text-center text-xs text-lgc-textMuted dark:text-lgc-darkTextMuted">
+                  No se encontraron personas con ese criterio.
+                </p>
+              )}
+            </div>
+
+            {/* Paginador (común para ambas vistas) */}
             <div
               className="
                 flex flex-col items-center gap-3 pt-4
