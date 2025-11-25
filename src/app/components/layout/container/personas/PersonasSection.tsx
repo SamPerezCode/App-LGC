@@ -475,18 +475,21 @@ const PersonasSection: FC = () => {
         {/* === EDICIÓN === */}
         {view === "edit" && (
           <div className="space-y-4">
-            <div className="flex flex-wrap items-center gap-2">
+            {/* Botón volver */}
+            <div className="flex flex-wrap items-center gap-3">
               <button
                 type="button"
                 onClick={() => setView(selectedPersona ? "detail" : "list")}
                 className="
-                  inline-flex items-center gap-1 rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted px-3 py-1.5
-                  text-xs font-medium text-lgc-text hover:bg-lgc-surface
+                  inline-flex items-center gap-1 rounded-full border border-lgc-border/70
+                  bg-lgc-surfaceMuted px-4 py-1.5 text-xs md:text-sm font-medium text-lgc-text
+                  hover:bg-lgc-surface
                   dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText
                   dark:hover:bg-lgc-darkSurface
                 "
               >
-                ← Volver
+                <span className="text-base leading-none">←</span>
+                <span>Volver</span>
               </button>
             </div>
 
@@ -498,7 +501,13 @@ const PersonasSection: FC = () => {
                 submitLabel="Guardar cambios"
               />
             ) : (
-              <div className="rounded-xl border border-lgc-border/60 bg-lgc-surface p-4 text-xs text-lgc-textMuted shadow-sm dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkTextMuted">
+              <div
+                className="
+                  rounded-xl border border-lgc-border/60 bg-lgc-surface p-4 text-xs
+                  text-lgc-textMuted shadow-sm
+                  dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkTextMuted
+                "
+              >
                 No se encontró la persona que deseas editar.
               </div>
             )}
