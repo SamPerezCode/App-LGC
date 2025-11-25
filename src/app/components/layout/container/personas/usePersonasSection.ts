@@ -1,37 +1,36 @@
-import { useState, useEffect, useMemo, type ChangeEvent } from "react";
+// src/app/components/layout/container/personas/usePersonasSection.ts
+import { useMemo, useState, type ChangeEvent } from "react";
 import type { Persona } from "../../../../../domain/interfaces/lgc-interfaces";
 import { personasMock } from "../../../../../domain/mock-data/lgc-mock";
-
-import type { PersonaCreateInput } from "./personas.types";
 import { estadoLabel, normalizeText } from "./personas.utils";
+import type { PersonaCreateInput } from "./personas.types";
+
+type ViewMode = "list" | "create" | "detail" | "edit";
 
 const PAGE_SIZE = 5;
 
 export const usePersonasSection = () => {
   const [personas, setPersonas] = useState<Persona[]>(personasMock);
+  const [view, setView] = useState<ViewMode>("list");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  const [view, setView] = useState<"list" | "create">("list");
   const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
+  const [pageState, setPageState] = useState(1);
+
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  // cerrar mensaje de éxito después de 3 segundos
-  useEffect(() => {
-    if (!successMessage) return;
+  const selectedPersona = useMemo(
+    () => personas.find((p) => p.id === selectedId) ?? null,
+    [personas, selectedId]
+  );
 
-    const timeoutId = window.setTimeout(() => {
-      setSuccessMessage(null);
-    }, 3000);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [successMessage]);
+  const resetSelection = () => setSelectedId(null);
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
-    setPage(1);
+    setPageState(1);
   };
 
-  // personas filtradas
   const filtered = useMemo(() => {
     const term = normalizeText(search);
     if (!term) return personas;
@@ -46,14 +45,20 @@ export const usePersonasSection = () => {
   }, [personas, search]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const page = Math.min(pageState, totalPages); // página “segura”
 
-  const pageItems = useMemo(() => {
-    const startIndex = (page - 1) * PAGE_SIZE;
-    return filtered.slice(startIndex, startIndex + PAGE_SIZE);
-  }, [filtered, page]);
+  const startIndex = (page - 1) * PAGE_SIZE;
+  const pageItems = filtered.slice(startIndex, startIndex + PAGE_SIZE);
 
-  const handlePrev = () => setPage((prev) => Math.max(prev - 1, 1));
-  const handleNext = () => setPage((prev) => Math.min(prev + 1, totalPages));
+  const handlePrev = () => setPageState((prev) => Math.max(prev - 1, 1));
+  const handleNext = () => setPageState((prev) => Math.min(prev + 1, totalPages));
+
+  const showSuccess = (message: string) => {
+    setSuccessMessage(message);
+    window.setTimeout(() => {
+      setSuccessMessage(null);
+    }, 3000);
+  };
 
   const handleSavePersona = (data: PersonaCreateInput) => {
     const now = new Date().toISOString();
@@ -67,27 +72,63 @@ export const usePersonasSection = () => {
 
     setPersonas((prev) => [...prev, newPersona]);
     setView("list");
-    setPage(1);
-    setSuccessMessage("Persona registrada correctamente.");
+    setPageState(1);
+    showSuccess("Persona registrada correctamente.");
+  };
+
+  const handleUpdatePersona = (data: PersonaCreateInput) => {
+    if (!selectedId) return;
+
+    const now = new Date().toISOString();
+
+    setPersonas((prev) =>
+      prev.map((persona) =>
+        persona.id === selectedId
+          ? {
+              ...persona,
+              ...data,
+              actualizadoEn: now,
+            }
+          : persona
+      )
+    );
+
+    setView("detail");
+    showSuccess("Datos de la persona actualizados correctamente.");
+  };
+
+  const handleViewPersona = (id: string) => {
+    setSelectedId(id);
+    setView("detail");
+  };
+
+  const handleEditPersona = (id: string) => {
+    setSelectedId(id);
+    setView("edit");
   };
 
   const closeSuccessMessage = () => setSuccessMessage(null);
 
   return {
-    // estado “público”
     view,
     setView,
+    selectedPersona,
+    resetSelection,
     search,
     page,
     successMessage,
     filtered,
     pageItems,
     totalPages,
-    // handlers
     handleSearchChange,
     handlePrev,
     handleNext,
     handleSavePersona,
+    handleViewPersona,
+    handleEditPersona,
+    handleUpdatePersona,
     closeSuccessMessage,
   };
 };
+
+export type UsePersonasSectionReturn = ReturnType<typeof usePersonasSection>;

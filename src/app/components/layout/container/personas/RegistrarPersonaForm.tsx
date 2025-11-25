@@ -7,24 +7,32 @@ interface RegistrarPersonaFormProps {
   onSave: (data: PersonaCreateInput) => void;
   onCancel?: () => void; // opcional
   hideCancelUntilDirty?: boolean; // opcional: oculta "Cancelar" hasta que se modifique algo
+  initialData?: PersonaCreateInput; // opcional: para modo edición
+  submitLabel?: string;
 }
+
+// estado base para “crear”
+const EMPTY_FORM: PersonaCreateInput = {
+  nombreCompleto: "",
+  telefono: "",
+  whatsapp: "",
+  correo: "",
+  direccion: "",
+  genero: "MASCULINO",
+  estadoCivil: "SOLTERO",
+  fechaNacimiento: "",
+  estado: "NUEVO",
+};
 
 const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
   onSave,
   onCancel,
   hideCancelUntilDirty = false,
+  initialData,
+  submitLabel = "Guardar persona",
 }) => {
-  const [form, setForm] = useState<PersonaCreateInput>({
-    nombreCompleto: "",
-    telefono: "",
-    whatsapp: "",
-    correo: "",
-    direccion: "",
-    genero: "MASCULINO",
-    estadoCivil: "SOLTERO",
-    fechaNacimiento: "",
-    estado: "NUEVO",
-  });
+  // usamos initialData solo al montar el componente
+  const [form, setForm] = useState<PersonaCreateInput>(() => initialData ?? EMPTY_FORM);
 
   const [error, setError] = useState<string | null>(null);
   const [isDirty, setIsDirty] = useState(false);
@@ -212,7 +220,6 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
       )}
 
       <div className="flex justify-end gap-2 pt-2">
-        {/* Cancelar solo si hay handler y (no usamos hideCancelUntilDirty o el form está sucio) */}
         {onCancel && (!hideCancelUntilDirty || isDirty) && (
           <button
             type="button"
@@ -222,7 +229,7 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
               text-xs md:text-sm text-lgc-text hover:bg-lgc-surface
               dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText
               dark:hover:bg-lgc-darkSurface
-            "
+          "
           >
             Cancelar
           </button>
@@ -237,7 +244,7 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
             transition-colors
           "
         >
-          Guardar persona
+          {submitLabel}
         </button>
       </div>
     </form>
