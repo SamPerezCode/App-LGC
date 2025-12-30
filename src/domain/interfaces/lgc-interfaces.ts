@@ -4,14 +4,18 @@ export type EstadoPersona = "NUEVO" | "ASISTENTE_REGULAR" | "MIEMBRO";
 
 export type Genero = "MASCULINO" | "FEMENINO" | "OTRO";
 
-export type EstadoCivil = "SOLTERO" | "CASADO" | "DIVORCIADO" | "VIUDO" | "OTRO";
+export type EstadoCivil =
+  | "SOLTERO"
+  | "CASADO"
+  | "UNION_LIBRE"
+  | "DIVORCIADO"
+  | "SEPARADO"
+  | "VIUDO";
 
+export type TipoDocumento = "CC" | "CE" | "PASAPORTE" | "TI";
 export type TipoActividadRuta = "EVENTO" | "CURSO" | "REUNION" | "MINISTERIO";
-
 export type EstadoActividadSeguimiento = "PENDIENTE" | "EN_PROCESO" | "COMPLETADA" | "CANCELADA";
-
 export type TipoContacto = "LLAMADA" | "VISITA" | "MENSAJE_WHATSAPP" | "OTRO";
-
 export type RolUsuario = "ADMIN" | "PASTOR" | "LIDER_SEGUIMIENTO";
 
 //  Usuario (para login / autenticación)
@@ -29,14 +33,18 @@ export interface Usuario {
 export interface Persona {
   id: string;
   nombreCompleto: string;
-  telefono?: string;
-  whatsapp?: string;
+  telefono: string;
   correo?: string;
   direccion?: string;
-  genero?: Genero;
+  genero: "MASCULINO" | "FEMENINO";
+  fechaNacimiento?: string;
+
+  tipoDocumento: TipoDocumento;
+  numeroDocumento: string;
+
   estadoCivil?: EstadoCivil;
-  fechaNacimiento?: string; // "YYYY-MM-DD"
-  estado: EstadoPersona; // nuevo, asistente regular, miembro
+  estado: EstadoPersona;
+
   creadoEn: string;
   actualizadoEn: string;
 }

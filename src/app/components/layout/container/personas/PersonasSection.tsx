@@ -1,11 +1,11 @@
 // src/app/components/layout/container/personas/PersonasSection.tsx
 import { useState, type FC } from "react";
-
 import RegistrarPersonaForm from "./RegistrarPersonaForm";
 import { estadoLabel, formatFecha } from "./personas.utils";
 import { usePersonasSection } from "./usePersonasSection";
 import SuccessModal from "../../../common/SuccessModal";
 import type { PersonaCreateInput } from "./personas.types";
+import type { Persona } from "../../../../../domain/interfaces/lgc-interfaces";
 
 const PersonasSection: FC = () => {
   const {
@@ -37,20 +37,25 @@ const PersonasSection: FC = () => {
     setExpandedCardId(null);
   };
 
-  // 👉 transforma Persona (con id/fechas) a PersonaCreateInput para el formulario
-  const personaToFormInput = (persona: typeof selectedPersona): PersonaCreateInput | null => {
+  const personaToFormInput = (persona: Persona | null): PersonaCreateInput | null => {
     if (!persona) return null;
 
     return {
-      nombreCompleto: persona.nombreCompleto,
+      // obligatorios
+      nombreCompleto: persona.nombreCompleto ?? "",
       telefono: persona.telefono ?? "",
-      whatsapp: persona.whatsapp ?? "",
-      correo: persona.correo ?? "",
-      direccion: persona.direccion ?? "",
+
+      // opcionales
+      correo: persona.correo,
+      direccion: persona.direccion,
       genero: persona.genero,
       estadoCivil: persona.estadoCivil,
-      fechaNacimiento: persona.fechaNacimiento ?? "",
-      estado: persona.estado,
+      fechaNacimiento: persona.fechaNacimiento,
+      tipoDocumento: persona.tipoDocumento,
+      numeroDocumento: persona.numeroDocumento,
+
+      // opcional(futuro)
+      estado: persona.estado ?? "NUEVO",
     };
   };
 
@@ -235,12 +240,6 @@ const PersonasSection: FC = () => {
                       <div className="mt-3 space-y-2 text-xs text-lgc-text dark:text-lgc-darkText">
                         <div className="flex items-center justify-between">
                           <span className="text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                            WhatsApp
-                          </span>
-                          <span>{persona.whatsapp ?? "-"}</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-lgc-textMuted dark:text-lgc-darkTextMuted">
                             Correo
                           </span>
                           <span>{persona.correo ?? "-"}</span>
@@ -394,15 +393,6 @@ const PersonasSection: FC = () => {
                     </p>
                     <p className="mt-1 text-sm text-lgc-text dark:text-lgc-darkText">
                       {selectedPersona.telefono ?? "-"}
-                    </p>
-                  </div>
-
-                  <div>
-                    <p className="text-xs font-medium text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                      WhatsApp
-                    </p>
-                    <p className="mt-1 text-sm text-lgc-text dark:text-lgc-darkText">
-                      {selectedPersona.whatsapp ?? "-"}
                     </p>
                   </div>
 

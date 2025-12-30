@@ -15,12 +15,13 @@ interface RegistrarPersonaFormProps {
 const EMPTY_FORM: PersonaCreateInput = {
   nombreCompleto: "",
   telefono: "",
-  whatsapp: "",
   correo: "",
   direccion: "",
   genero: "MASCULINO",
   estadoCivil: "SOLTERO",
   fechaNacimiento: "",
+  tipoDocumento: "CC",
+  numeroDocumento: "",
   estado: "NUEVO",
 };
 
@@ -97,15 +98,35 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
           />
         </div>
 
-        {/* WhatsApp */}
+        {/* Identificación: tipo + número */}
         <div>
           <label className="block text-xs font-medium text-lgc-text dark:text-lgc-darkText">
-            WhatsApp
+            Tipo de documento
+          </label>
+          <select
+            value={form.tipoDocumento}
+            onChange={(e) => handleChange("tipoDocumento", e.target.value)}
+            className="
+              mt-1 w-full rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted/80
+              px-3 py-2 text-xs md:text-sm text-lgc-text shadow-sm outline-none
+              dark:bg-lgc-darkSurfaceMuted dark:border-lgc-darkBorder/80 dark:text-lgc-darkText
+            "
+          >
+            <option value="CC">Cédula de ciudadanía</option>
+            <option value="CE">Cédula de extranjería</option>
+            <option value="PASAPORTE">Pasaporte</option>
+            <option value="TI">Tarjeta de identidad</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-xs font-medium text-lgc-text dark:text-lgc-darkText">
+            Número de documento
           </label>
           <input
-            type="tel"
-            value={form.whatsapp ?? ""}
-            onChange={(e) => handleChange("whatsapp", e.target.value)}
+            type="text"
+            value={form.numeroDocumento}
+            onChange={(e) => handleChange("numeroDocumento", e.target.value)}
             className="mt-1 w-full rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted/80 px-3 py-2 text-xs md:text-sm text-lgc-text shadow-sm outline-none
                        focus:border-transparent focus:ring-2 focus:ring-lgc-primary focus:ring-offset-1 focus:ring-offset-lgc-surface
                        dark:bg-lgc-darkSurfaceMuted dark:border-lgc-darkBorder/80 dark:text-lgc-darkText
@@ -177,9 +198,10 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
           >
             <option value="SOLTERO">Soltero(a)</option>
             <option value="CASADO">Casado(a)</option>
+            <option value="UNION_LIBRE">Unión libre</option>
             <option value="DIVORCIADO">Divorciado(a)</option>
+            <option value="SEPARADO">Separado(a)</option>
             <option value="VIUDO">Viudo(a)</option>
-            <option value="OTRO">Otro</option>
           </select>
         </div>
 
@@ -197,22 +219,7 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
           />
         </div>
 
-        {/* Estado dentro de la iglesia */}
-        <div>
-          <label className="block text-xs font-medium text-lgc-text dark:text-lgc-darkText">
-            Estado en la iglesia
-          </label>
-          <select
-            value={form.estado}
-            onChange={(e) => handleChange("estado", e.target.value)}
-            className="mt-1 w-full rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted/80 px-3 py-2 text-xs md:text-sm text-lgc-text shadow-sm outline-none
-                       dark:bg-lgc-darkSurfaceMuted dark:border-lgc-darkBorder/80 dark:text-lgc-darkText"
-          >
-            <option value="NUEVO">Nuevo</option>
-            <option value="ASISTENTE_REGULAR">Asistente regular</option>
-            <option value="MIEMBRO">Miembro</option>
-          </select>
-        </div>
+        {/* Nota: Estado en la iglesia se asume NUEVO en este formulario */}
       </div>
 
       {error && (

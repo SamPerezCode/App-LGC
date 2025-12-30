@@ -3,17 +3,31 @@ import { useState, type FormEvent } from "react";
 import type { Persona } from "../../../../../domain/interfaces/lgc-interfaces";
 
 // Igual que antes, el input del formulario
-export type PersonaCreateInput = Omit<Persona, "id" | "creadoEn" | "actualizadoEn">;
+export type PersonaCreateInput = {
+  nombreCompleto: string;
+  telefono: string;
+  correo?: string;
+  direccion?: string;
+  genero: Persona["genero"];
+  estadoCivil: "SOLTERO" | "CASADO" | "UNION_LIBRE" | "DIVORCIADO" | "SEPARADO" | "VIUDO";
+  fechaNacimiento?: string;
+
+  tipoDocumento: "CEDULA_CIUDADANIA" | "CEDULA_EXTRANJERIA" | "PASAPORTE" | "TARJETA_IDENTIDAD";
+  numeroDocumento: string;
+
+  estado: Persona["estado"];
+};
 
 const DEFAULT_VALUES: PersonaCreateInput = {
   nombreCompleto: "",
   telefono: "",
-  whatsapp: "",
   correo: "",
   direccion: "",
   genero: "MASCULINO",
   estadoCivil: "SOLTERO",
   fechaNacimiento: "",
+  tipoDocumento: "CEDULA_CIUDADANIA",
+  numeroDocumento: "",
   estado: "NUEVO",
 };
 

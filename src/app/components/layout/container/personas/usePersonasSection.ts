@@ -63,12 +63,14 @@ export const usePersonasSection = () => {
   const handleSavePersona = (data: PersonaCreateInput) => {
     const now = new Date().toISOString();
 
-    const newPersona: Persona = {
+    // Nota: PersonaCreateInput puede tener campos extra (ej. identificación) que aún
+    // no existen en la interfaz Persona del dominio. Por eso hacemos cast.
+    const newPersona = {
       ...data,
       id: `PER-${String(personas.length + 1).padStart(3, "0")}`,
       creadoEn: now,
       actualizadoEn: now,
-    };
+    } as Persona;
 
     setPersonas((prev) => [...prev, newPersona]);
     setView("list");
@@ -84,11 +86,11 @@ export const usePersonasSection = () => {
     setPersonas((prev) =>
       prev.map((persona) =>
         persona.id === selectedId
-          ? {
+          ? ({
               ...persona,
               ...data,
               actualizadoEn: now,
-            }
+            } as Persona)
           : persona
       )
     );
