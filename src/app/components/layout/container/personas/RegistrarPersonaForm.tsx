@@ -11,7 +11,6 @@ interface RegistrarPersonaFormProps {
   submitLabel?: string;
 }
 
-// estado base para “crear”
 const EMPTY_FORM: PersonaCreateInput = {
   nombreCompleto: "",
   telefono: "",

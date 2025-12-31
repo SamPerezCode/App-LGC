@@ -1,9 +1,7 @@
+// --------------------------------------------------------------
 // Tipos base / enums
-
 export type EstadoPersona = "NUEVO" | "ASISTENTE_REGULAR" | "MIEMBRO";
-
-export type Genero = "MASCULINO" | "FEMENINO" | "OTRO";
-
+export type Genero = "MASCULINO" | "FEMENINO";
 export type EstadoCivil =
   | "SOLTERO"
   | "CASADO"
@@ -11,12 +9,12 @@ export type EstadoCivil =
   | "DIVORCIADO"
   | "SEPARADO"
   | "VIUDO";
-
 export type TipoDocumento = "CC" | "CE" | "PASAPORTE" | "TI";
 export type TipoActividadRuta = "EVENTO" | "CURSO" | "REUNION" | "MINISTERIO";
 export type EstadoActividadSeguimiento = "PENDIENTE" | "EN_PROCESO" | "COMPLETADA" | "CANCELADA";
 export type TipoContacto = "LLAMADA" | "VISITA" | "MENSAJE_WHATSAPP" | "OTRO";
 export type RolUsuario = "ADMIN" | "PASTOR" | "LIDER_SEGUIMIENTO";
+// --------------------------------------------------------------
 
 //  Usuario (para login / autenticación)
 export interface Usuario {
@@ -36,15 +34,12 @@ export interface Persona {
   telefono: string;
   correo?: string;
   direccion?: string;
-  genero: "MASCULINO" | "FEMENINO";
+  genero: Genero;
   fechaNacimiento?: string;
-
   tipoDocumento: TipoDocumento;
   numeroDocumento: string;
-
   estadoCivil?: EstadoCivil;
   estado: EstadoPersona;
-
   creadoEn: string;
   actualizadoEn: string;
 }
