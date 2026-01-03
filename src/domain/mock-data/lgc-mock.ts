@@ -4,6 +4,7 @@ import type {
   ActividadRutaCrecimiento,
   SeguimientoActividadPersona,
   RegistroContacto,
+  RutaCrecimiento,
 } from "../interfaces/lgc-interfaces";
 
 // Usuario para login
@@ -20,79 +21,80 @@ export const usuariosMock: Usuario[] = [
 ];
 
 // Ruta de Crecimiento (catálogo de actividades)
-export const actividadesRutaMock: ActividadRutaCrecimiento[] = [
+
+// Ruta: “Nuevos”
+export const rutasMock: RutaCrecimiento[] = [
   {
-    id: "ACT-001",
-    nombre: "Asistir a la reunión dominical",
-    descripcion: "Primera asistencia o asistencia regular a las reuniones dominicales.",
-    tipo: "REUNION",
-    orden: 1,
+    id: "RUTA-001",
+    nombre: "Nuevos",
+    descripcion: "Ruta para personas con estado NUEVO",
     activa: true,
-    creadoEn: "2025-01-01T00:00:00Z",
-    actualizadoEn: "2025-01-01T00:00:00Z",
-  },
-  {
-    id: "ACT-002",
-    nombre: "Cena de bienvenida",
-    descripcion: "Actividad especial para dar la bienvenida y presentar la visión de la iglesia.",
-    tipo: "EVENTO",
-    orden: 2,
-    activa: true,
-    creadoEn: "2025-01-01T00:00:00Z",
-    actualizadoEn: "2025-01-01T00:00:00Z",
-  },
-  {
-    id: "ACT-003",
-    nombre: "Vincularse a un GPS",
-    descripcion: "Ingresar a un Grupo Pequeño de Crecimiento (GPS) para acompañamiento cercano.",
-    tipo: "REUNION",
-    orden: 3,
-    activa: true,
-    creadoEn: "2025-01-01T00:00:00Z",
-    actualizadoEn: "2025-01-01T00:00:00Z",
-  },
-  {
-    id: "ACT-004",
-    nombre: "Iniciar discipulado básico",
-    descripcion: "Inicio del curso de discipulado básico.",
-    tipo: "CURSO",
-    orden: 4,
-    activa: true,
-    creadoEn: "2025-01-01T00:00:00Z",
-    actualizadoEn: "2025-01-01T00:00:00Z",
-  },
-  {
-    id: "ACT-005",
-    nombre: "Completar discipulado básico",
-    descripcion: "Finalización exitosa del discipulado básico.",
-    tipo: "CURSO",
-    orden: 5,
-    activa: true,
-    creadoEn: "2025-01-01T00:00:00Z",
-    actualizadoEn: "2025-01-01T00:00:00Z",
-  },
-  {
-    id: "ACT-006",
-    nombre: "Bautizarse",
-    descripcion: "Participar en el bautismo en agua.",
-    tipo: "EVENTO",
-    orden: 6,
-    activa: true,
-    creadoEn: "2025-01-01T00:00:00Z",
-    actualizadoEn: "2025-01-01T00:00:00Z",
-  },
-  {
-    id: "ACT-007",
-    nombre: "Vincularse a un ministerio",
-    descripcion: "Servir en algún ministerio de la iglesia.",
-    tipo: "MINISTERIO",
-    orden: 7,
-    activa: true,
-    creadoEn: "2025-01-01T00:00:00Z",
-    actualizadoEn: "2025-01-01T00:00:00Z",
+    creadoEn: "2025-03-01T00:00:00.000Z",
+    actualizadoEn: "2025-03-01T00:00:00.000Z",
   },
 ];
 
+// Actividades de la ruta “Nuevos”
+// Nota: agrego rutaId para poder relacionarlas (no está en tu interfaz actual)
+export type ActividadRutaCrecimientoConRuta = ActividadRutaCrecimiento & { rutaId: string };
+
+export const actividadesRutaMock: ActividadRutaCrecimientoConRuta[] = [
+  {
+    id: "ACT-001",
+    rutaId: "RUTA-001",
+    nombre: "Asiste a cena de bienvenida",
+    descripcion: "Participa en la cena de bienvenida para nuevos",
+    tipo: "EVENTO",
+    orden: 1,
+    activa: true,
+    creadoEn: "2025-03-01T00:00:00.000Z",
+    actualizadoEn: "2025-03-01T00:00:00.000Z",
+  },
+  {
+    id: "ACT-002",
+    rutaId: "RUTA-001",
+    nombre: "Se vincula a un GPS",
+    descripcion: "Se integra a un grupo pequeño",
+    tipo: "REUNION",
+    orden: 2,
+    activa: true,
+    creadoEn: "2025-03-01T00:00:00.000Z",
+    actualizadoEn: "2025-03-01T00:00:00.000Z",
+  },
+  {
+    id: "ACT-003",
+    rutaId: "RUTA-001",
+    nombre: "Realiza el discipulado",
+    descripcion: "Inicia y completa el discipulado básico",
+    tipo: "CURSO",
+    orden: 3,
+    activa: true,
+    creadoEn: "2025-03-01T00:00:00.000Z",
+    actualizadoEn: "2025-03-01T00:00:00.000Z",
+  },
+  {
+    id: "ACT-004",
+    rutaId: "RUTA-001",
+    nombre: "Se bautiza",
+    descripcion: "Cumple con el paso del bautismo",
+    tipo: "EVENTO",
+    orden: 4,
+    activa: true,
+    creadoEn: "2025-03-01T00:00:00.000Z",
+    actualizadoEn: "2025-03-01T00:00:00.000Z",
+  },
+  {
+    id: "ACT-005",
+    rutaId: "RUTA-001",
+    nombre: "Participa en un ministerio",
+    descripcion: "Se integra a un ministerio",
+    tipo: "MINISTERIO",
+    orden: 5,
+    activa: true,
+    creadoEn: "2025-03-01T00:00:00.000Z",
+    actualizadoEn: "2025-03-01T00:00:00.000Z",
+  },
+];
 // Personas (nuevos, asistentes regulares, miembros)
 export const personasMock: Persona[] = [
   {

@@ -9,7 +9,7 @@ import {
   type CollapseTimeoutRef,
 } from "./sidebar.utils";
 
-const NUEVO_CREYENTE_SECTIONS: AppSection[] = ["personas", "ruta", "seguimiento"];
+const NUEVO_CREYENTE_SECTIONS: AppSection[] = ["personas", "ruta"];
 
 const Sidebar: FC<SidebarProps> = ({
   isDark,
@@ -133,7 +133,6 @@ const Sidebar: FC<SidebarProps> = ({
                   type="button"
                   onClick={handleGroupClick}
                   className={[
-                    // 👇 mismo tamaño de texto que los items simples
                     "flex w-full items-center rounded-2xl px-2 py-2 text-sm font-medium tracking-wide transition-colors duration-200",
                     isGroupActive
                       ? "bg-lgc-olive/80 text-lgc-manna"

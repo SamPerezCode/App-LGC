@@ -3,10 +3,9 @@ import type { SidebarGroup } from "./sidebar.types";
 
 const ICONS = {
   dashboard: "/home.svg",
-  nuevoCreyente: "/new_believer.svg", // usa aquí el ícono que ya tienes
+  nuevoCreyente: "/new_believer.svg",
   personas: "/person.svg",
   ruta: "/road.svg",
-  seguimiento: "/list.svg",
   config: "/settings.svg",
 } as const;
 
@@ -24,7 +23,6 @@ export const SIDEBAR_GROUPS: SidebarGroup[] = [
     children: [
       { id: "personas", label: "Personas", icon: ICONS.personas },
       { id: "ruta", label: "Ruta de crecimiento", icon: ICONS.ruta },
-      { id: "seguimiento", label: "Seguimientos", icon: ICONS.seguimiento },
     ],
   },
   {

@@ -78,3 +78,12 @@ export interface RegistroContacto {
   descripcion?: string;
   realizadoPorUsuarioId?: string;
 }
+
+export interface RutaCrecimiento {
+  id: string;
+  nombre: string;
+  descripcion?: string;
+  activa: boolean;
+  creadoEn: string;
+  actualizadoEn: string;
+}

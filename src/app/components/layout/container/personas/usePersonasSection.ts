@@ -5,7 +5,7 @@ import { personasMock } from "../../../../../domain/mock-data/lgc-mock";
 import { estadoLabel, normalizeText } from "./personas.utils";
 import type { PersonaCreateInput } from "./personas.types";
 
-type ViewMode = "list" | "create" | "detail" | "edit";
+type ViewMode = "list" | "create" | "detail" | "edit" | "seguimiento";
 
 const PAGE_SIZE = 5;
 
@@ -108,6 +108,11 @@ export const usePersonasSection = () => {
     setView("edit");
   };
 
+  const handleSeguimientoPersona = (id: string) => {
+    setSelectedId(id);
+    setView("seguimiento");
+  };
+
   const closeSuccessMessage = () => setSuccessMessage(null);
 
   return {
@@ -127,6 +132,7 @@ export const usePersonasSection = () => {
     handleSavePersona,
     handleViewPersona,
     handleEditPersona,
+    handleSeguimientoPersona,
     handleUpdatePersona,
     closeSuccessMessage,
   };

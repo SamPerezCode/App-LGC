@@ -6,6 +6,7 @@ import { usePersonasSection } from "./usePersonasSection";
 import SuccessModal from "../../../common/SuccessModal";
 import type { PersonaCreateInput } from "./personas.types";
 import type { Persona } from "../../../../../domain/interfaces/lgc-interfaces";
+import SeguimientoSection from "../seguimiento/SeguimientoSection";
 
 const PersonasSection: FC = () => {
   const {
@@ -27,6 +28,7 @@ const PersonasSection: FC = () => {
     handleEditPersona,
     handleUpdatePersona,
     closeSuccessMessage,
+    handleSeguimientoPersona,
   } = usePersonasSection();
 
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
@@ -179,6 +181,19 @@ const PersonasSection: FC = () => {
                             >
                               Editar
                             </button>
+
+                            <button
+                              type="button"
+                              onClick={() => handleSeguimientoPersona(persona.id)}
+                              className="
+                                rounded-full border border-lgc-border/70 bg-lgc-surfaceMuted px-3 py-1
+                                text-[11px] font-medium text-lgc-text hover:bg-lgc-surface
+                                dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText
+                                dark:hover:bg-lgc-darkSurface
+                              "
+                            >
+                              Seguimiento
+                            </button>
                           </div>
                         </td>
                       </tr>
@@ -266,6 +281,19 @@ const PersonasSection: FC = () => {
                             className="rounded-full bg-lgc-primary px-3 py-1 text-[11px] font-semibold text-lgc-onPrimary shadow-sm hover:bg-lgc-primarySoft dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna"
                           >
                             Editar
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => handleSeguimientoPersona(persona.id)}
+                            className="
+                              rounded-full border border-lgc-border/70 bg-lgc-surfaceMuted px-3 py-1
+                              text-[11px] font-medium text-lgc-text hover:bg-lgc-surface
+                              dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText
+                              dark:hover:bg-lgc-darkSurface
+                            "
+                          >
+                            Seguimiento
                           </button>
                         </div>
                       </div>
@@ -503,6 +531,16 @@ const PersonasSection: FC = () => {
               </div>
             )}
           </div>
+        )}
+
+        {view === "seguimiento" && selectedPersona && (
+          <SeguimientoSection persona={selectedPersona} onBack={() => setView("list")} />
+        )}
+
+        {view === "seguimiento" && !selectedPersona && (
+          <p className="text-sm text-lgc-textMuted dark:text-lgc-darkTextMuted">
+            No hay persona seleccionada.
+          </p>
         )}
       </div>
     </div>
