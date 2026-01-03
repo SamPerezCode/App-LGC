@@ -41,6 +41,7 @@ const PersonasSection: FC = () => {
     if (!persona) return null;
 
     return {
+      // Mapeo
       // obligatorios
       nombreCompleto: persona.nombreCompleto ?? "",
       telefono: persona.telefono ?? "",

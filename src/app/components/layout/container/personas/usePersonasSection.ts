@@ -46,7 +46,6 @@ export const usePersonasSection = () => {
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const page = Math.min(pageState, totalPages); // página “segura”
-
   const startIndex = (page - 1) * PAGE_SIZE;
   const pageItems = filtered.slice(startIndex, startIndex + PAGE_SIZE);
 

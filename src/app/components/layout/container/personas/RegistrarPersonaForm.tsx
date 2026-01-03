@@ -6,22 +6,14 @@ import { validatePersonaForm } from "./personas.utils";
 interface RegistrarPersonaFormProps {
   onSave: (data: PersonaCreateInput) => void;
   onCancel?: () => void; // opcional
-  hideCancelUntilDirty?: boolean; // opcional: oculta "Cancelar" hasta que se modifique algo
-  initialData?: PersonaCreateInput; // opcional: para modo edición
+  hideCancelUntilDirty?: boolean; // oculta "Cancelar" hasta que se modifique algo
+  initialData?: PersonaCreateInput; // para modo edición
   submitLabel?: string;
 }
 
 const EMPTY_FORM: PersonaCreateInput = {
   nombreCompleto: "",
   telefono: "",
-  correo: "",
-  direccion: "",
-  genero: "MASCULINO",
-  estadoCivil: "SOLTERO",
-  fechaNacimiento: "",
-  tipoDocumento: "CC",
-  numeroDocumento: "",
-  estado: "NUEVO",
 };
 
 const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
@@ -33,15 +25,17 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
 }) => {
   // usamos initialData solo al montar el componente
   const [form, setForm] = useState<PersonaCreateInput>(() => initialData ?? EMPTY_FORM);
-
   const [error, setError] = useState<string | null>(null);
   const [isDirty, setIsDirty] = useState(false);
 
   const handleChange = (field: keyof PersonaCreateInput, value: string) => {
+    const normalized = value === "" ? undefined : value;
+
     setForm((prev) => ({
       ...prev,
-      [field]: value,
+      [field]: normalized,
     }));
+
     if (!isDirty) setIsDirty(true);
   };
 
@@ -91,9 +85,9 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
             value={form.telefono ?? ""}
             onChange={(e) => handleChange("telefono", e.target.value)}
             className="mt-1 w-full rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted/80 px-3 py-2 text-xs md:text-sm text-lgc-text shadow-sm outline-none
-                       focus:border-transparent focus:ring-2 focus:ring-lgc-primary focus:ring-offset-1 focus:ring-offset-lgc-surface
-                       dark:bg-lgc-darkSurfaceMuted dark:border-lgc-darkBorder/80 dark:text-lgc-darkText
-                       dark:focus:ring-lgc-darkPrimary dark:focus:ring-offset-lgc-darkSurface"
+                        focus:border-transparent focus:ring-2 focus:ring-lgc-primary focus:ring-offset-1 focus:ring-offset-lgc-surface
+                        dark:bg-lgc-darkSurfaceMuted dark:border-lgc-darkBorder/80 dark:text-lgc-darkText
+                        dark:focus:ring-lgc-darkPrimary dark:focus:ring-offset-lgc-darkSurface"
           />
         </div>
 
@@ -103,7 +97,7 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
             Tipo de documento
           </label>
           <select
-            value={form.tipoDocumento}
+            value={form.tipoDocumento ?? ""}
             onChange={(e) => handleChange("tipoDocumento", e.target.value)}
             className="
               mt-1 w-full rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted/80
@@ -111,6 +105,7 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
               dark:bg-lgc-darkSurfaceMuted dark:border-lgc-darkBorder/80 dark:text-lgc-darkText
             "
           >
+            <option value="">Seleccione…</option>
             <option value="CC">Cédula de ciudadanía</option>
             <option value="CE">Cédula de extranjería</option>
             <option value="PASAPORTE">Pasaporte</option>
@@ -124,12 +119,12 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
           </label>
           <input
             type="text"
-            value={form.numeroDocumento}
+            value={form.numeroDocumento ?? ""}
             onChange={(e) => handleChange("numeroDocumento", e.target.value)}
             className="mt-1 w-full rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted/80 px-3 py-2 text-xs md:text-sm text-lgc-text shadow-sm outline-none
-                       focus:border-transparent focus:ring-2 focus:ring-lgc-primary focus:ring-offset-1 focus:ring-offset-lgc-surface
-                       dark:bg-lgc-darkSurfaceMuted dark:border-lgc-darkBorder/80 dark:text-lgc-darkText
-                       dark:focus:ring-lgc-darkPrimary dark:focus:ring-offset-lgc-darkSurface"
+                        focus:border-transparent focus:ring-2 focus:ring-lgc-primary focus:ring-offset-1 focus:ring-offset-lgc-surface
+                        dark:bg-lgc-darkSurfaceMuted dark:border-lgc-darkBorder/80 dark:text-lgc-darkText
+                        dark:focus:ring-lgc-darkPrimary dark:focus:ring-offset-lgc-darkSurface"
           />
         </div>
 
@@ -143,9 +138,9 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
             value={form.correo ?? ""}
             onChange={(e) => handleChange("correo", e.target.value)}
             className="mt-1 w-full rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted/80 px-3 py-2 text-xs md:text-sm text-lgc-text shadow-sm outline-none
-                       focus:border-transparent focus:ring-2 focus:ring-lgc-primary focus:ring-offset-1 focus:ring-offset-lgc-surface
-                       dark:bg-lgc-darkSurfaceMuted dark:border-lgc-darkBorder/80 dark:text-lgc-darkText
-                       dark:focus:ring-lgc-darkPrimary dark:focus:ring-offset-lgc-darkSurface"
+                        focus:border-transparent focus:ring-2 focus:ring-lgc-primary focus:ring-offset-1 focus:ring-offset-lgc-surface
+                        dark:bg-lgc-darkSurfaceMuted dark:border-lgc-darkBorder/80 dark:text-lgc-darkText
+                        dark:focus:ring-lgc-darkPrimary dark:focus:ring-offset-lgc-darkSurface"
           />
         </div>
 
@@ -159,9 +154,9 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
             value={form.direccion ?? ""}
             onChange={(e) => handleChange("direccion", e.target.value)}
             className="mt-1 w-full rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted/80 px-3 py-2 text-xs md:text-sm text-lgc-text shadow-sm outline-none
-                       focus:border-transparent focus:ring-2 focus:ring-lgc-primary focus:ring-offset-1 focus:ring-offset-lgc-surface
-                       dark:bg-lgc-darkSurfaceMuted dark:border-lgc-darkBorder/80 dark:text-lgc-darkText
-                       dark:focus:ring-lgc-darkPrimary dark:focus:ring-offset-lgc-darkSurface"
+                        focus:border-transparent focus:ring-2 focus:ring-lgc-primary focus:ring-offset-1 focus:ring-offset-lgc-surface
+                        dark:bg-lgc-darkSurfaceMuted dark:border-lgc-darkBorder/80 dark:text-lgc-darkText
+                        dark:focus:ring-lgc-darkPrimary dark:focus:ring-offset-lgc-darkSurface"
           />
         </div>
 
@@ -171,7 +166,7 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
             Género
           </label>
           <select
-            value={form.genero ?? "MASCULINO"}
+            value={form.genero ?? ""}
             onChange={(e) => handleChange("genero", e.target.value)}
             className="
               mt-1 w-full rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted/80
@@ -179,6 +174,7 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
               dark:bg-lgc-darkSurfaceMuted dark:border-lgc-darkBorder/80 dark:text-lgc-darkText
             "
           >
+            <option value="">Seleccione…</option>
             <option value="MASCULINO">Masculino</option>
             <option value="FEMENINO">Femenino</option>
           </select>
@@ -190,11 +186,12 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
             Estado civil
           </label>
           <select
-            value={form.estadoCivil ?? "SOLTERO"}
+            value={form.estadoCivil ?? ""}
             onChange={(e) => handleChange("estadoCivil", e.target.value)}
             className="mt-1 w-full rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted/80 px-3 py-2 text-xs md:text-sm text-lgc-text shadow-sm outline-none
                        dark:bg-lgc-darkSurfaceMuted dark:border-lgc-darkBorder/80 dark:text-lgc-darkText"
           >
+            <option value="">Seleccione…</option>
             <option value="SOLTERO">Soltero(a)</option>
             <option value="CASADO">Casado(a)</option>
             <option value="UNION_LIBRE">Unión libre</option>

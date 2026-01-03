@@ -55,7 +55,7 @@ const PublicRegistroPersonaPage: FC<PublicRegistroPersonaPageProps> = ({ isDark 
           </div>
         </div>
 
-        {/* Modal de éxito reutilizable */}
+        {/* Modal de éxito */}
         <SuccessModal
           open={showSuccess}
           title="Registro exitoso"
