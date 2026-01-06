@@ -1,6 +1,9 @@
 import { useMemo, useState, type FC } from "react";
 import type { RutaCrecimiento } from "../../../../../domain/interfaces/lgc-interfaces";
 import { rutasMock, actividadesRutaMock } from "../../../../../domain/mock-data/lgc-mock";
+import CreateActividadModal from "./CreateActividadModal";
+import CreateRutaModal from "./CretateRutaModal";
+import RutaDetailView from "./RutaDetailView";
 
 type ViewMode = "list" | "detail";
 
@@ -17,14 +20,21 @@ const RutaCrecimientoSection: FC = () => {
   const [view, setView] = useState<ViewMode>("list");
   const [selectedRutaId, setSelectedRutaId] = useState<string | null>(null);
 
+  // modal crear actividad
+  const [isActividadOpen, setIsActividadOpen] = useState(false);
+  const [actividadEditId, setActividadEditId] = useState<string | null>(null);
+
+  // Toggle
+  const [actividades, setActividades] = useState(actividadesRutaMock);
+
   // Para contar actividades por ruta (solo UI)
   const actividadesPorRuta = useMemo(() => {
     const map = new Map<string, number>();
-    for (const act of actividadesRutaMock) {
+    for (const act of actividades) {
       map.set(act.rutaId, (map.get(act.rutaId) ?? 0) + 1);
     }
     return map;
-  }, []);
+  }, [actividades]);
 
   const selectedRuta = useMemo(() => {
     if (!selectedRutaId) return null;
@@ -33,10 +43,13 @@ const RutaCrecimientoSection: FC = () => {
 
   const actividadesDeRuta = useMemo(() => {
     if (!selectedRutaId) return [];
-    return actividadesRutaMock
-      .filter((a) => a.rutaId === selectedRutaId)
-      .sort((a, b) => a.orden - b.orden);
-  }, [selectedRutaId]);
+    return actividades.filter((a) => a.rutaId === selectedRutaId).sort((a, b) => a.orden - b.orden);
+  }, [selectedRutaId, actividades]);
+
+  const actividadToEdit = useMemo(() => {
+    if (!actividadEditId) return null;
+    return actividadesDeRuta.find((a) => a.id === actividadEditId) ?? null;
+  }, [actividadEditId, actividadesDeRuta]);
 
   const openCreateModal = () => {
     setError(null);
@@ -74,6 +87,20 @@ const RutaCrecimientoSection: FC = () => {
       setView("list");
       setSelectedRutaId(null);
     }
+  };
+
+  const handleOpenCreateActividad = () => {
+    setActividadEditId(null);
+    setIsActividadOpen(true);
+  };
+
+  const handleOpenEditActividad = (id: string) => {
+    setActividadEditId(id);
+    setIsActividadOpen(true);
+  };
+  const closeActividadModal = () => {
+    setIsActividadOpen(false);
+    setActividadEditId(null);
   };
 
   const handleCreateRuta = () => {
@@ -239,248 +266,55 @@ const RutaCrecimientoSection: FC = () => {
           VISTA DETALLE (RUTA)
           ========================= */}
       {view === "detail" && (
-        <div className="space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <button
-              type="button"
-              onClick={handleBack}
-              className="
-                inline-flex items-center gap-2 rounded-xl border border-lgc-border/70
-                bg-lgc-surfaceMuted px-4 py-2 text-xs md:text-sm font-medium text-lgc-text
-                hover:bg-lgc-surface
-                dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText
-                dark:hover:bg-lgc-darkSurface
-              "
-            >
-              <span className="text-base leading-none">←</span>
-              Volver
-            </button>
-
-            <button
-              type="button"
-              onClick={() => console.log("Abrir modal agregar actividad")}
-              className="
-                rounded-xl bg-lgc-primary px-4 py-2 text-xs md:text-sm font-semibold text-lgc-onPrimary
-                shadow-sm hover:bg-lgc-primarySoft
-                dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna
-                transition-colors
-              "
-            >
-              Agregar actividad
-            </button>
-          </div>
-
-          {selectedRuta ? (
-            <div
-              className="
-                rounded-2xl border border-lgc-border/60 bg-lgc-surface p-4 md:p-6 shadow-sm
-                dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted
-              "
-            >
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div>
-                  <h3 className="text-base md:text-lg font-semibold text-lgc-primary dark:text-lgc-darkPrimary">
-                    {selectedRuta.nombre}
-                  </h3>
-
-                  {selectedRuta.descripcion && (
-                    <p className="mt-1 text-sm text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                      {selectedRuta.descripcion}
-                    </p>
-                  )}
-                </div>
-
-                <span
-                  className={`inline-flex rounded-full px-3 py-1 text-[11px] font-medium
-                    ${
-                      selectedRuta.activa
-                        ? "bg-lgc-surfaceMuted text-lgc-text dark:bg-lgc-darkSurface dark:text-lgc-darkText"
-                        : "bg-lgc-surfaceMuted/60 text-lgc-textMuted dark:bg-lgc-darkSurface dark:text-lgc-darkTextMuted"
-                    }`}
-                >
-                  {selectedRuta.activa ? "Activa" : "Inactiva"}
-                </span>
-              </div>
-
-              <div className="mt-4 overflow-hidden rounded-2xl border border-lgc-border/50 dark:border-lgc-darkBorder/60">
-                <table className="w-full text-left text-sm">
-                  <thead className="bg-lgc-surfaceMuted/70 dark:bg-lgc-darkSurface">
-                    <tr className="text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                      <th className="px-4 py-3 font-medium">Orden</th>
-                      <th className="px-4 py-3 font-medium">Nombre</th>
-                      <th className="px-4 py-3 font-medium">Tipo</th>
-                      <th className="px-4 py-3 font-medium">Activa</th>
-                      <th className="px-4 py-3 font-medium">Acciones</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {actividadesDeRuta.map((act) => (
-                      <tr
-                        key={act.id}
-                        className="border-t border-lgc-border/40 dark:border-lgc-darkBorder/40"
-                      >
-                        <td className="px-4 py-3 text-lgc-text dark:text-lgc-darkText">
-                          {act.orden}
-                        </td>
-                        <td className="px-4 py-3 text-lgc-text dark:text-lgc-darkText">
-                          {act.nombre}
-                        </td>
-                        <td className="px-4 py-3 text-lgc-text dark:text-lgc-darkText">
-                          {act.tipo}
-                        </td>
-                        <td className="px-4 py-3">
-                          <span
-                            className={`inline-flex rounded-full px-3 py-1 text-[11px] font-medium
-                              ${
-                                act.activa
-                                  ? "bg-lgc-surfaceMuted text-lgc-text dark:bg-lgc-darkSurface dark:text-lgc-darkText"
-                                  : "bg-lgc-surfaceMuted/60 text-lgc-textMuted dark:bg-lgc-darkSurface dark:text-lgc-darkTextMuted"
-                              }`}
-                          >
-                            {act.activa ? "Activa" : "Inactiva"}
-                          </span>
-                        </td>
-
-                        <td className="px-4 py-3">
-                          <div className="flex flex-wrap gap-2">
-                            <button
-                              type="button"
-                              onClick={() => console.log("Editar actividad", act.id)}
-                              className="
-                                rounded-full bg-lgc-primary px-3 py-1 text-[11px] font-semibold text-lgc-onPrimary
-                                shadow-sm hover:bg-lgc-primarySoft
-                                dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna
-                              "
-                            >
-                              Editar
-                            </button>
-
-                            <button
-                              type="button"
-                              onClick={() => console.log("Toggle actividad", act.id)}
-                              className="
-                                rounded-full border border-lgc-border/70 bg-lgc-surfaceMuted px-3 py-1
-                                text-[11px] font-medium text-lgc-text hover:bg-lgc-surface
-                                dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText
-                                dark:hover:bg-lgc-darkSurface
-                              "
-                            >
-                              {act.activa ? "Desactivar" : "Activar"}
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-
-                    {actividadesDeRuta.length === 0 && (
-                      <tr>
-                        <td
-                          colSpan={5}
-                          className="px-4 py-8 text-center text-sm text-lgc-textMuted dark:text-lgc-darkTextMuted"
-                        >
-                          Esta ruta aún no tiene actividades.
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          ) : (
-            <div
-              className="
-                rounded-xl border border-lgc-border/60 bg-lgc-surface p-4 text-xs
-                text-lgc-textMuted shadow-sm
-                dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkTextMuted
-              "
-            >
-              No se encontró la ruta seleccionada.
-            </div>
-          )}
-        </div>
+        <RutaDetailView
+          ruta={selectedRuta}
+          actividades={actividadesDeRuta}
+          onBack={handleBack}
+          onAddActividad={handleOpenCreateActividad}
+          onEditActividad={handleOpenEditActividad}
+          onToggleActividad={(id) => {
+            const now = new Date().toISOString();
+            setActividades((prev) =>
+              prev.map((a) => (a.id === id ? { ...a, activa: !a.activa, actualizadoEn: now } : a))
+            );
+          }}
+        />
       )}
 
       {/* =========================
           MODAL CREAR RUTA
           ========================= */}
       {isCreateOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
-          onClick={closeCreateModal}
-        >
-          <div
-            className="w-full max-w-md rounded-2xl bg-lgc-surface p-4 md:p-6 shadow-lg dark:bg-lgc-darkSurfaceMuted"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-sm md:text-base font-semibold text-lgc-text dark:text-lgc-darkText">
-                Crear ruta de crecimiento
-              </h3>
-
-              <button
-                type="button"
-                onClick={closeCreateModal}
-                className="text-lgc-textMuted hover:text-lgc-text dark:hover:text-lgc-darkText"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div>
-              <label className="block text-xs font-medium text-lgc-text dark:text-lgc-darkText">
-                Nombre *
-              </label>
-              <input
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted px-3 py-2 text-xs
-                           outline-none focus:ring-2 focus:ring-lgc-primary
-                           dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurface dark:text-lgc-darkText"
-                placeholder="Ej: Nuevos"
-              />
-            </div>
-
-            <div className="mt-3">
-              <label className="block text-xs font-medium text-lgc-text dark:text-lgc-darkText">
-                Descripción
-              </label>
-              <textarea
-                value={descripcion}
-                onChange={(e) => setDescripcion(e.target.value)}
-                rows={3}
-                className="mt-1 w-full resize-none rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted px-3 py-2 text-xs
-                           outline-none
-                           dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurface dark:text-lgc-darkText"
-                placeholder="Breve descripción de la ruta"
-              />
-            </div>
-
-            {error && <p className="mt-2 text-xs text-lgc-danger">{error}</p>}
-
-            <div className="mt-5 flex justify-end gap-2">
-              <button
-                type="button"
-                onClick={closeCreateModal}
-                className="rounded-xl border border-lgc-border/70 px-4 py-2 text-xs hover:bg-lgc-surface
-                           dark:border-lgc-darkBorder/70 dark:text-lgc-darkText dark:hover:bg-lgc-darkSurface"
-              >
-                Cancelar
-              </button>
-
-              <button
-                type="button"
-                onClick={handleCreateRuta}
-                className="rounded-xl bg-lgc-primary px-4 py-2 text-xs font-semibold text-lgc-onPrimary
-                           hover:bg-lgc-primarySoft
-                           dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna"
-              >
-                Crear ruta
-              </button>
-            </div>
-          </div>
-        </div>
+        <CreateRutaModal
+          isOpen={isCreateOpen}
+          nombre={nombre}
+          descripcion={descripcion}
+          error={error}
+          onChangeNombre={setNombre}
+          onChangeDescripcion={setDescripcion}
+          onClose={closeCreateModal}
+          onCreate={handleCreateRuta}
+        />
       )}
+
+      <CreateActividadModal
+        isOpen={isActividadOpen}
+        title={actividadEditId ? "Editar actividad" : "Agregar actividad"}
+        initialData={
+          actividadToEdit
+            ? {
+                nombre: actividadToEdit.nombre,
+                tipo: actividadToEdit.tipo,
+                descripcion: actividadToEdit.descripcion ?? "",
+              }
+            : undefined
+        }
+        onClose={closeActividadModal}
+        onSubmit={(data) => {
+          console.log("Guardar actividad", data);
+          closeActividadModal();
+        }}
+      />
     </div>
   );
 };
