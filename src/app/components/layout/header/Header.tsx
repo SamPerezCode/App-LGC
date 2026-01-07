@@ -24,10 +24,15 @@ const Header: FC<HeaderProps> = ({
   useClickOutside(dropdownRef, () => setOpen(false), open);
 
   const handleLogoutClick = () => {
-    logoutWithDelay({ setLoggingOut, setOpen, onLogout, delayMs: 500 });
+    logoutWithDelay({
+      setLoggingOut,
+      setOpen,
+      onLogout,
+      delayMs: 500,
+    });
   };
 
-  // 🔆 Clases del botón de tema según el modo
+  // Clases del botón de tema según el modo
   const themeButtonClass = isDark
     ? `
         flex h-9 w-9 items-center justify-center
@@ -92,9 +97,9 @@ const Header: FC<HeaderProps> = ({
         {/* botón tema + avatar */}
         <div className="flex items-center gap-4">
           {/* botón de tema */}
-          <button onClick={onToggleTheme} className={themeButtonClass} aria-label="Cambiar tema">
+          {/* <button onClick={onToggleTheme} className={themeButtonClass} aria-label="Cambiar tema">
             <img src={themeIcon} alt="icon-mode" className="h-4 w-4" />
-          </button>
+          </button> */}
 
           {/* avatar + dropdown */}
           <div ref={dropdownRef} className="relative">
