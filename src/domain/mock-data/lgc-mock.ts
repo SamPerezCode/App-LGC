@@ -5,6 +5,7 @@ import type {
   SeguimientoActividadPersona,
   RegistroContacto,
   RutaCrecimiento,
+  SeguimientoActividadRuta,
 } from "../interfaces/lgc-interfaces";
 
 // Usuario para login
@@ -21,7 +22,6 @@ export const usuariosMock: Usuario[] = [
 ];
 
 // Ruta de Crecimiento (catálogo de actividades)
-
 // Ruta: “Nuevos”
 export const rutasMock: RutaCrecimiento[] = [
   {
@@ -190,8 +190,8 @@ export const personasMock: Persona[] = [
 ];
 
 // Seguimiento de la Ruta de Crecimiento por persona
+// Regla: si no existe registro, la UI lo considera “PENDIENTE”.
 export const seguimientosMock: SeguimientoActividadPersona[] = [
-  // Carlos (nuevo)
   {
     id: "SEG-001",
     personaId: "PER-001",
@@ -212,7 +212,7 @@ export const seguimientosMock: SeguimientoActividadPersona[] = [
     observaciones: "Invitado a la próxima cena de bienvenida.",
     registradoPorUsuarioId: "USR-LIDER-001",
   },
-  // María (asistente regular)
+
   {
     id: "SEG-003",
     personaId: "PER-002",
@@ -232,7 +232,7 @@ export const seguimientosMock: SeguimientoActividadPersona[] = [
     observaciones: "Vinculada a un GPS de parejas jovenes.",
     registradoPorUsuarioId: "USR-LIDER-001",
   },
-  // José (miembro)
+
   {
     id: "SEG-005",
     personaId: "PER-003",
@@ -305,8 +305,25 @@ export const contactosMock: RegistroContacto[] = [
   },
 ];
 
-// Export de "DB" completa
+export const seguimientoActividadesMock: SeguimientoActividadRuta[] =
+  [
+    {
+      id: "SEG-001",
+      personaId: "PER-001", // Carlos (NUEVO)
+      actividadRutaId: "ACT-001", // cena bienvenida
+      estado: "COMPLETADA",
+      actualizadoEn: "2025-03-02T10:00:00.000Z",
+    },
+    {
+      id: "SEG-002",
+      personaId: "PER-001",
+      actividadRutaId: "ACT-002",
+      estado: "EN_PROCESO",
+      actualizadoEn: "2025-03-05T10:00:00.000Z",
+    },
+  ];
 
+// Export de "DB" completa
 export const lgcMockDb = {
   usuarios: usuariosMock,
   personas: personasMock,

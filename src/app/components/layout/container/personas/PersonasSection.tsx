@@ -7,8 +7,27 @@ import SuccessModal from "../../../common/SuccessModal";
 import type { PersonaCreateInput } from "./personas.types";
 import type { Persona } from "../../../../../domain/interfaces/lgc-interfaces";
 import SeguimientoSection from "../seguimiento/SeguimientoSection";
+import type {
+  RutaCrecimiento,
+  ActividadRutaCrecimiento,
+  SeguimientoActividadPersona,
+} from "../../../../../domain/interfaces/lgc-interfaces";
 
-const PersonasSection: FC = () => {
+type PersonasSectionProps = {
+  rutas: RutaCrecimiento[];
+  actividades: ActividadRutaCrecimiento[];
+  seguimientos: SeguimientoActividadPersona[];
+  setSeguimientos: React.Dispatch<
+    React.SetStateAction<SeguimientoActividadPersona[]>
+  >;
+};
+
+const PersonasSection: FC<PersonasSectionProps> = ({
+  rutas,
+  actividades,
+  seguimientos,
+  setSeguimientos,
+}) => {
   const {
     view,
     setView,
@@ -31,7 +50,9 @@ const PersonasSection: FC = () => {
     handleSeguimientoPersona,
   } = usePersonasSection();
 
-  const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
+  const [expandedCardId, setExpandedCardId] = useState<string | null>(
+    null
+  );
 
   const handleBackToList = () => {
     setView("list");
@@ -39,7 +60,9 @@ const PersonasSection: FC = () => {
     setExpandedCardId(null);
   };
 
-  const personaToFormInput = (persona: Persona | null): PersonaCreateInput | null => {
+  const personaToFormInput = (
+    persona: Persona | null
+  ): PersonaCreateInput | null => {
     if (!persona) return null;
 
     return {
@@ -75,7 +98,9 @@ const PersonasSection: FC = () => {
       <SuccessModal
         open={!!successMessage}
         title="Acción exitosa"
-        message={successMessage ?? "La operación se completó correctamente."}
+        message={
+          successMessage ?? "La operación se completó correctamente."
+        }
         onClose={closeSuccessMessage}
       />
 
@@ -152,15 +177,25 @@ const PersonasSection: FC = () => {
                         key={persona.id}
                         className="border-t border-lgc-border/40 dark:border-lgc-darkBorder/40"
                       >
-                        <td className="px-4 py-2">{persona.nombreCompleto}</td>
-                        <td className="px-4 py-2">{persona.telefono ?? "-"}</td>
-                        <td className="px-4 py-2">{estadoLabel[persona.estado]}</td>
-                        <td className="px-4 py-2">{formatFecha(persona.actualizadoEn)}</td>
+                        <td className="px-4 py-2">
+                          {persona.nombreCompleto}
+                        </td>
+                        <td className="px-4 py-2">
+                          {persona.telefono ?? "-"}
+                        </td>
+                        <td className="px-4 py-2">
+                          {estadoLabel[persona.estado]}
+                        </td>
+                        <td className="px-4 py-2">
+                          {formatFecha(persona.actualizadoEn)}
+                        </td>
                         <td className="px-4 py-2">
                           <div className="flex flex-wrap gap-2">
                             <button
                               type="button"
-                              onClick={() => handleViewPersona(persona.id)}
+                              onClick={() =>
+                                handleViewPersona(persona.id)
+                              }
                               className="
                                 rounded-full border border-lgc-border/70 bg-lgc-surfaceMuted px-3 py-1
                                 text-[11px] font-medium text-lgc-text hover:bg-lgc-surface
@@ -172,7 +207,9 @@ const PersonasSection: FC = () => {
                             </button>
                             <button
                               type="button"
-                              onClick={() => handleEditPersona(persona.id)}
+                              onClick={() =>
+                                handleEditPersona(persona.id)
+                              }
                               className="
                                 rounded-full bg-lgc-primary px-3 py-1 text-[11px] font-semibold text-lgc-onPrimary
                                 shadow-sm hover:bg-lgc-primarySoft
@@ -184,7 +221,9 @@ const PersonasSection: FC = () => {
 
                             <button
                               type="button"
-                              onClick={() => handleSeguimientoPersona(persona.id)}
+                              onClick={() =>
+                                handleSeguimientoPersona(persona.id)
+                              }
                               className="
                                 rounded-full border border-lgc-border/70 bg-lgc-surfaceMuted px-3 py-1
                                 text-[11px] font-medium text-lgc-text hover:bg-lgc-surface
@@ -240,12 +279,17 @@ const PersonasSection: FC = () => {
                     </div>
 
                     <div className="mt-2 flex items-center justify-between text-[11px] text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                      <span>Actualizado: {formatFecha(persona.actualizadoEn)}</span>
+                      <span>
+                        Actualizado:{" "}
+                        {formatFecha(persona.actualizadoEn)}
+                      </span>
                       <button
                         type="button"
                         className="font-semibold text-lgc-primary hover:underline dark:text-lgc-manna"
                         onClick={() =>
-                          setExpandedCardId((prev) => (prev === persona.id ? null : persona.id))
+                          setExpandedCardId((prev) =>
+                            prev === persona.id ? null : persona.id
+                          )
                         }
                       >
                         {isExpanded ? "Ver menos" : "Ver más"}
@@ -264,20 +308,26 @@ const PersonasSection: FC = () => {
                           <span className="text-lgc-textMuted dark:text-lgc-darkTextMuted">
                             Dirección
                           </span>
-                          <span className="text-right">{persona.direccion ?? "-"}</span>
+                          <span className="text-right">
+                            {persona.direccion ?? "-"}
+                          </span>
                         </div>
 
                         <div className="pt-2 flex flex-wrap gap-2">
                           <button
                             type="button"
-                            onClick={() => handleViewPersona(persona.id)}
+                            onClick={() =>
+                              handleViewPersona(persona.id)
+                            }
                             className="rounded-full border border-lgc-border/70 bg-lgc-surfaceMuted px-3 py-1 text-[11px] font-medium text-lgc-text hover:bg-lgc-surface dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText dark:hover:bg-lgc-darkSurface"
                           >
                             Ver
                           </button>
                           <button
                             type="button"
-                            onClick={() => handleEditPersona(persona.id)}
+                            onClick={() =>
+                              handleEditPersona(persona.id)
+                            }
                             className="rounded-full bg-lgc-primary px-3 py-1 text-[11px] font-semibold text-lgc-onPrimary shadow-sm hover:bg-lgc-primarySoft dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna"
                           >
                             Editar
@@ -285,7 +335,9 @@ const PersonasSection: FC = () => {
 
                           <button
                             type="button"
-                            onClick={() => handleSeguimientoPersona(persona.id)}
+                            onClick={() =>
+                              handleSeguimientoPersona(persona.id)
+                            }
                             className="
                               rounded-full border border-lgc-border/70 bg-lgc-surfaceMuted px-3 py-1
                               text-[11px] font-medium text-lgc-text hover:bg-lgc-surface
@@ -317,8 +369,15 @@ const PersonasSection: FC = () => {
               "
             >
               <span className="text-lgc-textMuted dark:text-lgc-darkTextMuted text-center">
-                Mostrando <span className="font-semibold">{pageItems.length}</span> de{" "}
-                <span className="font-semibold">{filtered.length}</span> personas
+                Mostrando{" "}
+                <span className="font-semibold">
+                  {pageItems.length}
+                </span>{" "}
+                de{" "}
+                <span className="font-semibold">
+                  {filtered.length}
+                </span>{" "}
+                personas
               </span>
 
               <div className="flex items-center gap-2">
@@ -339,7 +398,8 @@ const PersonasSection: FC = () => {
                 </button>
 
                 <span className="text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                  Página <span className="font-semibold">{page}</span> de{" "}
+                  Página <span className="font-semibold">{page}</span>{" "}
+                  de{" "}
                   <span className="font-semibold">{totalPages}</span>
                 </span>
 
@@ -365,7 +425,10 @@ const PersonasSection: FC = () => {
 
         {/* === FORMULARIO CREAR === */}
         {view === "create" && (
-          <RegistrarPersonaForm onCancel={() => setView("list")} onSave={handleSavePersona} />
+          <RegistrarPersonaForm
+            onCancel={() => setView("list")}
+            onSave={handleSavePersona}
+          />
         )}
 
         {/* === DETALLE === */}
@@ -391,7 +454,9 @@ const PersonasSection: FC = () => {
               {selectedPersona && (
                 <button
                   type="button"
-                  onClick={() => handleEditPersona(selectedPersona.id)}
+                  onClick={() =>
+                    handleEditPersona(selectedPersona.id)
+                  }
                   className="
                     inline-flex items-center gap-1 rounded-full bg-lgc-primary px-4 py-1.5
                     text-xs md:text-sm font-semibold text-lgc-onPrimary shadow-sm
@@ -448,7 +513,9 @@ const PersonasSection: FC = () => {
                       Género
                     </p>
                     <p className="mt-1 text-sm text-lgc-text dark:text-lgc-darkText">
-                      {selectedPersona.genero === "MASCULINO" ? "Masculino" : "Femenino"}
+                      {selectedPersona.genero === "MASCULINO"
+                        ? "Masculino"
+                        : "Femenino"}
                     </p>
                   </div>
 
@@ -480,12 +547,16 @@ const PersonasSection: FC = () => {
                       {estadoLabel[selectedPersona.estado]}
                     </span>
                   </span>
-                  <span>Última actualización: {formatFecha(selectedPersona.actualizadoEn)}</span>
+                  <span>
+                    Última actualización:{" "}
+                    {formatFecha(selectedPersona.actualizadoEn)}
+                  </span>
                 </div>
               </div>
             ) : (
               <div className="rounded-xl border border-lgc-border/60 bg-lgc-surface p-4 text-xs text-lgc-textMuted shadow-sm dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkTextMuted">
-                No se encontró la información de la persona seleccionada.
+                No se encontró la información de la persona
+                seleccionada.
               </div>
             )}
           </div>
@@ -498,7 +569,9 @@ const PersonasSection: FC = () => {
             <div className="flex flex-wrap items-center gap-3">
               <button
                 type="button"
-                onClick={() => setView(selectedPersona ? "detail" : "list")}
+                onClick={() =>
+                  setView(selectedPersona ? "detail" : "list")
+                }
                 className="
                   inline-flex items-center gap-1 rounded-full border border-lgc-border/70
                   bg-lgc-surfaceMuted px-4 py-1.5 text-xs md:text-sm font-medium text-lgc-text
@@ -516,7 +589,9 @@ const PersonasSection: FC = () => {
               <RegistrarPersonaForm
                 onSave={handleUpdatePersona}
                 onCancel={() => setView("detail")}
-                initialData={personaToFormInput(selectedPersona) ?? undefined}
+                initialData={
+                  personaToFormInput(selectedPersona) ?? undefined
+                }
                 submitLabel="Guardar cambios"
               />
             ) : (
@@ -532,9 +607,15 @@ const PersonasSection: FC = () => {
             )}
           </div>
         )}
-
         {view === "seguimiento" && selectedPersona && (
-          <SeguimientoSection persona={selectedPersona} onBack={() => setView("list")} />
+          <SeguimientoSection
+            persona={selectedPersona}
+            rutas={rutas}
+            actividades={actividades}
+            seguimientos={seguimientos}
+            setSeguimientos={setSeguimientos}
+            onBack={() => setView("list")}
+          />
         )}
 
         {view === "seguimiento" && !selectedPersona && (

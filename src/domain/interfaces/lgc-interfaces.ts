@@ -78,7 +78,6 @@ export interface SeguimientoActividadPersona {
   fechaAsignacion: string;
   fechaCumplimiento?: string;
   observaciones?: string;
-  // Opcional: quién registró el seguimiento (usuario del sistema)
   registradoPorUsuarioId?: string;
 }
 
@@ -100,4 +99,13 @@ export interface RutaCrecimiento {
   creadoEn: string;
   actualizadoEn: string;
   aplicaAEstado: EstadoPersona;
+}
+
+export interface SeguimientoActividadRuta {
+  id: string;
+  personaId: string;
+  actividadRutaId: string;
+  estado: EstadoActividadSeguimiento;
+  notas?: string;
+  actualizadoEn: string;
 }

@@ -12,8 +12,8 @@ const Header: FC<HeaderProps> = ({
   // onToggleTheme,
   onLogout,
   onToggleSidebarMobile,
+  onToggleSidebarDesktop,
 }) => {
-  // const themeIcon = isDark ? "/light.svg" : "/dark.svg";
   const sectionInfo = SECTION_TITLES[activeSection];
   const initials = getInitials(user.nombre);
 
@@ -32,23 +32,6 @@ const Header: FC<HeaderProps> = ({
     });
   };
 
-  // Clases del botón de tema según el modo
-  // const themeButtonClass = isDark
-  //   ? `
-  //       flex h-9 w-9 items-center justify-center
-  //       rounded-full border border-lgc-border/60
-  //       bg-lgc-surface text-lgc-primary
-  //       shadow-sm hover:bg-lgc-surfaceMuted
-  //       transition-colors
-  //     `
-  //   : `
-  //       flex h-9 w-9 items-center justify-center
-  //       rounded-full border border-transparent
-  //       bg-lgc-primary text-lgc-onPrimary
-  //       shadow-sm hover:bg-lgc-primarySoft
-  //       transition-colors
-  //     `;
-
   return (
     <header className="px-4 md:px-6 pt-4 shrink-0 relative z-20">
       <div
@@ -61,23 +44,43 @@ const Header: FC<HeaderProps> = ({
           dark:border-lgc-darkBorder/60 dark:bg-lgc-darkSurface/90
         "
       >
-        {/* botón menú (móvil) + título */}
+        {/* boton menu + titulo */}
         <div className="flex items-center gap-3">
-          {/* botón menú solo en móvil */}
-          <button
-            type="button"
-            onClick={onToggleSidebarMobile}
-            className="
-              inline-flex h-9 w-9 items-center justify-center
-              rounded-full border border-lgc-border bg-lgc-surface
-              hover:bg-lgc-surfaceMuted
-              md:hidden
-              dark:border-lgc-darkBorder dark:bg-lgc-darkSurface dark:hover:bg-lgc-darkSurfaceMuted
-            "
-            aria-label="Abrir menú lateral"
-          >
-            <img src="/menu.svg" alt="Menú" className="h-4 w-4" />
-          </button>
+          {/* boton menu mobile */}
+          {onToggleSidebarMobile && (
+            <button
+              type="button"
+              onClick={onToggleSidebarMobile}
+              className="
+                inline-flex h-9 w-9 items-center justify-center
+                rounded-full border border-lgc-border bg-lgc-surface
+                hover:bg-lgc-surfaceMuted
+                md:hidden
+                dark:border-lgc-darkBorder dark:bg-lgc-darkSurface dark:hover:bg-lgc-darkSurfaceMuted
+              "
+              aria-label="Abrir menu lateral"
+            >
+              <img src="/menu.svg" alt="Menu" className="h-4 w-4" />
+            </button>
+          )}
+
+          {/* boton menu desktop */}
+          {onToggleSidebarDesktop && (
+            <button
+              type="button"
+              onClick={onToggleSidebarDesktop}
+              data-sidebar-toggle="desktop"
+              className="
+            hidden md:inline-flex h-9 w-9 items-center justify-center
+            rounded-full border border-lgc-border bg-lgc-surface
+            hover:bg-lgc-surfaceMuted
+            dark:border-lgc-darkBorder dark:bg-lgc-darkSurface dark:hover:bg-lgc-darkSurfaceMuted
+          "
+              aria-label="Alternar menu lateral"
+            >
+              <img src="/menu.svg" alt="Menu" className="h-4 w-4" />
+            </button>
+          )}
 
           <div>
             <h1 className="text-lg font-semibold text-lgc-primary dark:text-lgc-darkPrimary">
@@ -94,14 +97,8 @@ const Header: FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* botón tema + avatar */}
+        {/* avatar */}
         <div className="flex items-center gap-4">
-          {/* botón de tema */}
-          {/* <button onClick={onToggleTheme} className={themeButtonClass} aria-label="Cambiar tema">
-            <img src={themeIcon} alt="icon-mode" className="h-4 w-4" />
-          </button> */}
-
-          {/* avatar + dropdown */}
           <div ref={dropdownRef} className="relative">
             <button
               type="button"
@@ -112,7 +109,7 @@ const Header: FC<HeaderProps> = ({
                 text-xs font-semibold uppercase
                 dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary
               "
-              aria-label="Menú de usuario"
+              aria-label="Menu de usuario"
             >
               {initials}
             </button>
@@ -147,7 +144,9 @@ const Header: FC<HeaderProps> = ({
                     disabled:opacity-60 disabled:cursor-not-allowed
                   "
                 >
-                  {loggingOut ? "Cerrando sesión…" : "Cerrar sesión"}
+                  {loggingOut
+                    ? "Cerrando sesion..."
+                    : "Cerrar sesion"}
                 </button>
               </div>
             )}

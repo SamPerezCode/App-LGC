@@ -2,11 +2,8 @@ import { useMemo, useState, type FC } from "react";
 import type {
   RutaCrecimiento,
   EstadoPersona,
+  ActividadRutaCrecimiento,
 } from "../../../../../domain/interfaces/lgc-interfaces";
-import {
-  rutasMock,
-  actividadesRutaMock,
-} from "../../../../../domain/mock-data/lgc-mock";
 import CreateActividadModal from "./CreateActividadModal";
 import CreateRutaModal from "./CretateRutaModal";
 import type { ActividadSubmitData } from "./CreateActividadModal";
@@ -14,9 +11,22 @@ import RutaDetailView from "./RutaDetailView";
 
 type ViewMode = "list" | "detail";
 
-const RutaCrecimientoSection: FC = () => {
-  const [rutas, setRutas] = useState<RutaCrecimiento[]>(rutasMock);
+type RutaCrecimientoSectionProps = {
+  rutas: RutaCrecimiento[];
+  setRutas: React.Dispatch<React.SetStateAction<RutaCrecimiento[]>>;
 
+  actividades: ActividadRutaCrecimiento[];
+  setActividades: React.Dispatch<
+    React.SetStateAction<ActividadRutaCrecimiento[]>
+  >;
+};
+
+const RutaCrecimientoSection: FC<RutaCrecimientoSectionProps> = ({
+  rutas,
+  setRutas,
+  actividades,
+  setActividades,
+}) => {
   // modal crear ruta
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [nombre, setNombre] = useState("");
@@ -36,9 +46,6 @@ const RutaCrecimientoSection: FC = () => {
   const [actividadEditId, setActividadEditId] = useState<
     string | null
   >(null);
-
-  // Toggle
-  const [actividades, setActividades] = useState(actividadesRutaMock);
 
   // Para contar actividades por ruta (solo UI)
   const actividadesPorRuta = useMemo(() => {

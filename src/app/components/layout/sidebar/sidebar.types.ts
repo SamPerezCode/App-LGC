@@ -8,6 +8,7 @@ export interface SidebarProps {
   activeSection: AppSection;
   onSectionChange: (section: AppSection) => void;
   variant: "desktop" | "mobile";
+  expanded?: boolean;
 }
 
 export interface SidebarChildItem {
@@ -20,10 +21,6 @@ export interface SidebarGroup {
   id: "dashboard" | "nuevo-creyente" | "config";
   label: string;
   icon: string;
-
-  /** Para grupos sin hijos (Dashboard, Config) */
   section?: AppSection;
-
-  /** Para módulos con sub-items (Nuevo creyente) */
   children?: SidebarChildItem[];
 }
