@@ -1,5 +1,8 @@
 import { useMemo, useState, type FC } from "react";
-import type { RutaCrecimiento } from "../../../../../domain/interfaces/lgc-interfaces";
+import type {
+  RutaCrecimiento,
+  EstadoPersona,
+} from "../../../../../domain/interfaces/lgc-interfaces";
 import {
   rutasMock,
   actividadesRutaMock,
@@ -19,6 +22,8 @@ const RutaCrecimientoSection: FC = () => {
   const [nombre, setNombre] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [aplicaAEstado, setAplicaAEstado] =
+    useState<EstadoPersona>("NUEVO");
 
   // vista detalle
   const [view, setView] = useState<ViewMode>("list");
@@ -67,6 +72,7 @@ const RutaCrecimientoSection: FC = () => {
     setError(null);
     setNombre("");
     setDescripcion("");
+    setAplicaAEstado("NUEVO");
     setIsCreateOpen(true);
   };
 
@@ -75,6 +81,7 @@ const RutaCrecimientoSection: FC = () => {
     setError(null);
     setNombre("");
     setDescripcion("");
+    setAplicaAEstado("NUEVO");
   };
 
   const handleVer = (id: string) => {
@@ -130,6 +137,7 @@ const RutaCrecimientoSection: FC = () => {
         nombre: nombre.trim(),
         descripcion: descripcion.trim() || undefined,
         activa: true,
+        aplicaAEstado,
         creadoEn: now,
         actualizadoEn: now,
       },
@@ -357,6 +365,8 @@ const RutaCrecimientoSection: FC = () => {
           nombre={nombre}
           descripcion={descripcion}
           error={error}
+          aplicaAEstado={aplicaAEstado}
+          onChangeAplicaAEstado={setAplicaAEstado}
           onChangeNombre={setNombre}
           onChangeDescripcion={setDescripcion}
           onClose={closeCreateModal}

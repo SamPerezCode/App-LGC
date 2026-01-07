@@ -1,10 +1,15 @@
 import type { FC } from "react";
+import type { EstadoPersona } from "../../../../../domain/interfaces/lgc-interfaces";
 
 interface CreateRutaModalProps {
   isOpen: boolean;
   nombre: string;
   descripcion: string;
   error: string | null;
+
+  aplicaAEstado: EstadoPersona;
+  onChangeAplicaAEstado: (value: EstadoPersona) => void;
+
   onChangeNombre: (value: string) => void;
   onChangeDescripcion: (value: string) => void;
   onClose: () => void;
@@ -16,6 +21,8 @@ const CreateRutaModal: FC<CreateRutaModalProps> = ({
   nombre,
   descripcion,
   error,
+  aplicaAEstado,
+  onChangeAplicaAEstado,
   onChangeNombre,
   onChangeDescripcion,
   onClose,
@@ -26,11 +33,11 @@ const CreateRutaModal: FC<CreateRutaModalProps> = ({
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
-      onClick={onClose} // click afuera
+      onClick={onClose}
     >
       <div
         className="w-full max-w-md rounded-2xl bg-lgc-surface p-4 md:p-6 shadow-lg dark:bg-lgc-darkSurfaceMuted"
-        onClick={(e) => e.stopPropagation()} // evita cerrar al hacer click dentro
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-sm md:text-base font-semibold text-lgc-text dark:text-lgc-darkText">
@@ -75,7 +82,32 @@ const CreateRutaModal: FC<CreateRutaModalProps> = ({
           />
         </div>
 
-        {error && <p className="mt-2 text-xs text-lgc-danger">{error}</p>}
+        {/* ✅ NUEVO */}
+        <div className="mt-3">
+          <label className="block text-xs font-medium text-lgc-text dark:text-lgc-darkText">
+            Aplica a estado *
+          </label>
+
+          <select
+            value={aplicaAEstado}
+            onChange={(e) =>
+              onChangeAplicaAEstado(e.target.value as EstadoPersona)
+            }
+            className="mt-1 w-full rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted px-3 py-2 text-xs
+                       outline-none
+                       dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurface dark:text-lgc-darkText"
+          >
+            <option value="NUEVO">NUEVO</option>
+            <option value="ASISTENTE_REGULAR">
+              ASISTENTE REGULAR
+            </option>
+            <option value="MIEMBRO">MIEMBRO</option>
+          </select>
+        </div>
+
+        {error && (
+          <p className="mt-2 text-xs text-lgc-danger">{error}</p>
+        )}
 
         <div className="mt-5 flex justify-end gap-2">
           <button

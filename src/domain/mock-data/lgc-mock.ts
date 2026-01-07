@@ -29,6 +29,7 @@ export const rutasMock: RutaCrecimiento[] = [
     nombre: "Nuevos",
     descripcion: "Ruta para personas con estado NUEVO",
     activa: true,
+    aplicaAEstado: "NUEVO",
     creadoEn: "2025-03-01T00:00:00.000Z",
     actualizadoEn: "2025-03-01T00:00:00.000Z",
   },

@@ -99,4 +99,5 @@ export interface RutaCrecimiento {
   activa: boolean;
   creadoEn: string;
   actualizadoEn: string;
+  aplicaAEstado: EstadoPersona;
 }
