@@ -1,8 +1,12 @@
 import { useMemo, useState, type FC } from "react";
 import type { RutaCrecimiento } from "../../../../../domain/interfaces/lgc-interfaces";
-import { rutasMock, actividadesRutaMock } from "../../../../../domain/mock-data/lgc-mock";
+import {
+  rutasMock,
+  actividadesRutaMock,
+} from "../../../../../domain/mock-data/lgc-mock";
 import CreateActividadModal from "./CreateActividadModal";
 import CreateRutaModal from "./CretateRutaModal";
+import type { ActividadSubmitData } from "./CreateActividadModal";
 import RutaDetailView from "./RutaDetailView";
 
 type ViewMode = "list" | "detail";
@@ -18,11 +22,15 @@ const RutaCrecimientoSection: FC = () => {
 
   // vista detalle
   const [view, setView] = useState<ViewMode>("list");
-  const [selectedRutaId, setSelectedRutaId] = useState<string | null>(null);
+  const [selectedRutaId, setSelectedRutaId] = useState<string | null>(
+    null
+  );
 
   // modal crear actividad
   const [isActividadOpen, setIsActividadOpen] = useState(false);
-  const [actividadEditId, setActividadEditId] = useState<string | null>(null);
+  const [actividadEditId, setActividadEditId] = useState<
+    string | null
+  >(null);
 
   // Toggle
   const [actividades, setActividades] = useState(actividadesRutaMock);
@@ -43,12 +51,16 @@ const RutaCrecimientoSection: FC = () => {
 
   const actividadesDeRuta = useMemo(() => {
     if (!selectedRutaId) return [];
-    return actividades.filter((a) => a.rutaId === selectedRutaId).sort((a, b) => a.orden - b.orden);
+    return actividades
+      .filter((a) => a.rutaId === selectedRutaId)
+      .sort((a, b) => a.orden - b.orden);
   }, [selectedRutaId, actividades]);
 
   const actividadToEdit = useMemo(() => {
     if (!actividadEditId) return null;
-    return actividadesDeRuta.find((a) => a.id === actividadEditId) ?? null;
+    return (
+      actividadesDeRuta.find((a) => a.id === actividadEditId) ?? null
+    );
   }, [actividadEditId, actividadesDeRuta]);
 
   const openCreateModal = () => {
@@ -126,6 +138,55 @@ const RutaCrecimientoSection: FC = () => {
     closeCreateModal();
   };
 
+  const handleGuardarActividad = (data: ActividadSubmitData) => {
+    if (!selectedRutaId) return;
+    const now = new Date().toISOString();
+    const descripcion = (data.descripcion ?? "").trim() || undefined;
+
+    // EDITAR
+    if (actividadEditId) {
+      setActividades((prev) =>
+        prev.map((a) =>
+          a.id === actividadEditId
+            ? {
+                ...a,
+                nombre: data.nombre.trim(),
+                tipo: data.tipo,
+                descripcion,
+                actualizadoEn: now,
+              }
+            : a
+        )
+      );
+      closeActividadModal();
+      return;
+    }
+
+    // CREAR
+    const ordenMax = Math.max(
+      0,
+      ...actividades
+        .filter((a) => a.rutaId === selectedRutaId)
+        .map((a) => a.orden)
+    );
+
+    setActividades((prev) => [
+      ...prev,
+      {
+        id: `ACT-${Date.now()}`,
+        rutaId: selectedRutaId,
+        orden: ordenMax + 1,
+        nombre: data.nombre.trim(),
+        tipo: data.tipo,
+        descripcion,
+        activa: true,
+        creadoEn: now,
+        actualizadoEn: now,
+      },
+    ]);
+
+    closeActividadModal();
+  };
   return (
     <div
       className="
@@ -170,7 +231,9 @@ const RutaCrecimientoSection: FC = () => {
                 <tr className="text-lgc-textMuted dark:text-lgc-darkTextMuted">
                   <th className="px-4 py-3 font-medium">Nombre</th>
                   <th className="px-4 py-3 font-medium">Activa</th>
-                  <th className="px-4 py-3 font-medium">Actividades</th>
+                  <th className="px-4 py-3 font-medium">
+                    Actividades
+                  </th>
                   <th className="px-4 py-3 font-medium">Acciones</th>
                 </tr>
               </thead>
@@ -275,7 +338,11 @@ const RutaCrecimientoSection: FC = () => {
           onToggleActividad={(id) => {
             const now = new Date().toISOString();
             setActividades((prev) =>
-              prev.map((a) => (a.id === id ? { ...a, activa: !a.activa, actualizadoEn: now } : a))
+              prev.map((a) =>
+                a.id === id
+                  ? { ...a, activa: !a.activa, actualizadoEn: now }
+                  : a
+              )
             );
           }}
         />
@@ -299,7 +366,9 @@ const RutaCrecimientoSection: FC = () => {
 
       <CreateActividadModal
         isOpen={isActividadOpen}
-        title={actividadEditId ? "Editar actividad" : "Agregar actividad"}
+        title={
+          actividadEditId ? "Editar actividad" : "Agregar actividad"
+        }
         initialData={
           actividadToEdit
             ? {
@@ -310,10 +379,7 @@ const RutaCrecimientoSection: FC = () => {
             : undefined
         }
         onClose={closeActividadModal}
-        onSubmit={(data) => {
-          console.log("Guardar actividad", data);
-          closeActividadModal();
-        }}
+        onSubmit={handleGuardarActividad}
       />
     </div>
   );

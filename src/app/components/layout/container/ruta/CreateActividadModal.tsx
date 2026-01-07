@@ -1,9 +1,15 @@
 import { useEffect, useState, type FC } from "react";
 import type { TipoActividadRuta } from "../../../../../domain/interfaces/lgc-interfaces";
 
+export interface ActividadSubmitData {
+  nombre: string;
+  tipo: TipoActividadRuta;
+  descripcion?: string;
+}
+
 export interface ActividadFormData {
   nombre: string;
-  tipo: TipoActividadRuta | "";
+  tipo: TipoActividadRuta | ""; // solo para el select del form
   descripcion?: string;
 }
 
@@ -12,7 +18,7 @@ interface CreateActividadModalProps {
   title?: string;
   initialData?: ActividadFormData;
   onClose: () => void;
-  onSubmit: (data: ActividadFormData) => void;
+  onSubmit: (data: ActividadSubmitData) => void;
 }
 
 const CreateActividadModal: FC<CreateActividadModalProps> = ({
@@ -39,32 +45,36 @@ const CreateActividadModal: FC<CreateActividadModalProps> = ({
     setError(null);
   };
 
-  // ✅ cada vez que abras o cambie initialData, recarga el form
+  // recarga el form cada qeu abro o cambie initialData
   useEffect(() => {
     if (!isOpen) return;
     resetForm();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, initialData]);
 
-  const handleChange = (field: keyof ActividadFormData, value: string) => {
+  const handleChange = (
+    field: keyof ActividadFormData,
+    value: string
+  ) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = () => {
-    if (!form.nombre.trim()) return setError("El nombre es obligatorio.");
-    if (!form.tipo) return setError("El tipo de actividad es obligatorio.");
+    if (!form.nombre.trim())
+      return setError("El nombre es obligatorio.");
+    if (!form.tipo)
+      return setError("El tipo de actividad es obligatorio.");
 
     setError(null);
     onSubmit({
       nombre: form.nombre.trim(),
-      tipo: form.tipo,
+      tipo: form.tipo as TipoActividadRuta,
       descripcion: form.descripcion?.trim() || undefined,
     });
   };
 
   const handleClose = () => {
     onClose();
-    // opcional: si quieres limpiar también al cerrar
     setForm({ nombre: "", tipo: "", descripcion: "" });
     setError(null);
   };
@@ -86,7 +96,7 @@ const CreateActividadModal: FC<CreateActividadModalProps> = ({
           </h3>
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
             className="text-lgc-textMuted hover:text-lgc-text dark:hover:text-lgc-darkText"
           >
             ✕
@@ -132,14 +142,18 @@ const CreateActividadModal: FC<CreateActividadModalProps> = ({
           <textarea
             rows={3}
             value={form.descripcion ?? ""}
-            onChange={(e) => handleChange("descripcion", e.target.value)}
+            onChange={(e) =>
+              handleChange("descripcion", e.target.value)
+            }
             placeholder="Agrega una descripción..."
             className="mt-1 w-full resize-none rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted px-3 py-2 text-xs
                        outline-none dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurface dark:text-lgc-darkText"
           />
         </div>
 
-        {error && <p className="mt-2 text-xs text-lgc-danger">{error}</p>}
+        {error && (
+          <p className="mt-2 text-xs text-lgc-danger">{error}</p>
+        )}
 
         <div className="mt-5 flex justify-end gap-2">
           <button

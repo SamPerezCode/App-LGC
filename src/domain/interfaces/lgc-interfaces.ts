@@ -10,9 +10,21 @@ export type EstadoCivil =
   | "SEPARADO"
   | "VIUDO";
 export type TipoDocumento = "CC" | "CE" | "PASAPORTE" | "TI";
-export type TipoActividadRuta = "EVENTO" | "CURSO" | "REUNION" | "MINISTERIO";
-export type EstadoActividadSeguimiento = "PENDIENTE" | "EN_PROCESO" | "COMPLETADA" | "CANCELADA";
-export type TipoContacto = "LLAMADA" | "VISITA" | "MENSAJE_WHATSAPP" | "OTRO";
+export type TipoActividadRuta =
+  | "EVENTO"
+  | "CURSO"
+  | "REUNION"
+  | "MINISTERIO";
+export type EstadoActividadSeguimiento =
+  | "PENDIENTE"
+  | "EN_PROCESO"
+  | "COMPLETADA"
+  | "CANCELADA";
+export type TipoContacto =
+  | "LLAMADA"
+  | "VISITA"
+  | "MENSAJE_WHATSAPP"
+  | "OTRO";
 export type RolUsuario = "ADMIN" | "PASTOR" | "LIDER_SEGUIMIENTO";
 // --------------------------------------------------------------
 
@@ -54,6 +66,7 @@ export interface ActividadRutaCrecimiento {
   activa: boolean;
   creadoEn: string;
   actualizadoEn: string;
+  rutaId: string;
 }
 
 // Seguimiento de actividades por persona

@@ -35,10 +35,9 @@ export const rutasMock: RutaCrecimiento[] = [
 ];
 
 // Actividades de la ruta “Nuevos”
-// Nota: agrego rutaId para poder relacionarlas (no está en tu interfaz actual)
-export type ActividadRutaCrecimientoConRuta = ActividadRutaCrecimiento & { rutaId: string };
+// Nota: agrego rutaId para poder relacionarlas (
 
-export const actividadesRutaMock: ActividadRutaCrecimientoConRuta[] = [
+export const actividadesRutaMock: ActividadRutaCrecimiento[] = [
   {
     id: "ACT-001",
     rutaId: "RUTA-001",
@@ -101,7 +100,6 @@ export const personasMock: Persona[] = [
     id: "PER-001",
     nombreCompleto: "Carlos Pérez",
     telefono: "3001112233",
-    // whatsapp: "3001112233",
     correo: "carlos@example.com",
     direccion: "Calle 10 # 5-20",
     genero: "MASCULINO",
@@ -117,7 +115,6 @@ export const personasMock: Persona[] = [
     id: "PER-002",
     nombreCompleto: "María Rodríguez",
     telefono: "3002223344",
-    // whatsapp: "3002223344",
     correo: "maria@example.com",
     direccion: "Cra 15 # 8-45",
     genero: "FEMENINO",
@@ -133,7 +130,6 @@ export const personasMock: Persona[] = [
     id: "PER-003",
     nombreCompleto: "José López",
     telefono: "3003334455",
-    // whatsapp: "3003334455",
     correo: "jose@example.com",
     direccion: "Barrio La Esperanza, Mz 3 Casa 15",
     genero: "MASCULINO",
@@ -149,7 +145,6 @@ export const personasMock: Persona[] = [
     id: "PER-004",
     nombreCompleto: "Ana Gómez",
     telefono: "3004445566",
-    // whatsapp: "3004445566",
     correo: "ana@example.com",
     direccion: "Calle 20 # 7-30",
     genero: "FEMENINO",
@@ -165,7 +160,6 @@ export const personasMock: Persona[] = [
     id: "PER-005",
     nombreCompleto: "Luis Martínez",
     telefono: "3005556677",
-    // whatsapp: "3005556677",
     correo: "luis@example.com",
     direccion: "Barrio Centro, Casa 12",
     genero: "MASCULINO",
@@ -181,7 +175,6 @@ export const personasMock: Persona[] = [
     id: "PER-006",
     nombreCompleto: "Diana Herrera",
     telefono: "3006667788",
-    // whatsapp: "3006667788",
     correo: "diana@example.com",
     direccion: "Calle 45 # 12-09",
     genero: "FEMENINO",
@@ -205,7 +198,8 @@ export const seguimientosMock: SeguimientoActividadPersona[] = [
     estado: "COMPLETADA",
     fechaAsignacion: "2025-03-01T15:00:00Z",
     fechaCumplimiento: "2025-03-02T11:00:00Z",
-    observaciones: "Primera visita a la iglesia, se mostró muy receptivo.",
+    observaciones:
+      "Primera visita a la iglesia, se mostró muy receptivo.",
     registradoPorUsuarioId: "USR-LIDER-001",
   },
   {
@@ -254,7 +248,8 @@ export const seguimientosMock: SeguimientoActividadPersona[] = [
     estado: "COMPLETADA",
     fechaAsignacion: "2024-10-15T19:00:00Z",
     fechaCumplimiento: "2024-11-30T19:00:00Z",
-    observaciones: "Completó todas las clases del discipulado básico.",
+    observaciones:
+      "Completó todas las clases del discipulado básico.",
     registradoPorUsuarioId: "USR-PASTOR-001",
   },
   {
@@ -285,7 +280,8 @@ export const contactosMock: RegistroContacto[] = [
     personaId: "PER-001",
     tipo: "MENSAJE_WHATSAPP",
     fecha: "2025-03-02T14:00:00Z",
-    descripcion: "Se le envió mensaje de bienvenida y versículo de ánimo.",
+    descripcion:
+      "Se le envió mensaje de bienvenida y versículo de ánimo.",
     realizadoPorUsuarioId: "USR-LIDER-001",
   },
   {
@@ -293,7 +289,8 @@ export const contactosMock: RegistroContacto[] = [
     personaId: "PER-001",
     tipo: "LLAMADA",
     fecha: "2025-03-04T19:30:00Z",
-    descripcion: "Confirmó asistencia tentativa a la cena de bienvenida.",
+    descripcion:
+      "Confirmó asistencia tentativa a la cena de bienvenida.",
     realizadoPorUsuarioId: "USR-LIDER-001",
   },
   {
@@ -301,7 +298,8 @@ export const contactosMock: RegistroContacto[] = [
     personaId: "PER-002",
     tipo: "VISITA",
     fecha: "2025-02-05T17:00:00Z",
-    descripcion: "Visita de seguimiento, se habló sobre integrarse a un ministerio.",
+    descripcion:
+      "Visita de seguimiento, se habló sobre integrarse a un ministerio.",
     realizadoPorUsuarioId: "USR-PASTOR-001",
   },
 ];

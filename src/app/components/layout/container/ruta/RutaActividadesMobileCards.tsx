@@ -129,15 +129,19 @@ const RutaActividadesMobileCards: FC<RutaActividadesMobileCardsProps> = ({
 
                     <span
                       className={`
-    relative inline-flex h-5 w-9 items-center rounded-full transition-colors
-    ${act.activa ? "bg-lgc-primary" : "bg-lgc-border/60 dark:bg-lgc-darkBorder/60"}
-  `}
+                        relative inline-flex h-5 w-9 items-center rounded-full transition-colors
+                        ${
+                          act.activa
+                            ? "bg-lgc-primary"
+                            : "bg-lgc-border/60 dark:bg-lgc-darkBorder/60"
+                        }
+                      `}
                     >
                       <span
                         className={`
-      inline-block h-4 w-4 rounded-full bg-white transition-transform
-      ${act.activa ? "translate-x-4" : "translate-x-1"}
-    `}
+                        inline-block h-4 w-4 rounded-full bg-white transition-transform
+                        ${act.activa ? "translate-x-4" : "translate-x-1"}
+                      `}
                       />
                     </span>
                   </button>
