@@ -15,7 +15,7 @@ const Sidebar: FC<SidebarProps> = ({
   expanded,
 }) => {
   const isMobile = variant === "mobile";
-  const isExpanded = isMobile ? true : expanded ?? true;
+  const isExpanded = isMobile ? true : expanded ?? false;
 
   const isCollapsed = !isMobile && !isExpanded;
 

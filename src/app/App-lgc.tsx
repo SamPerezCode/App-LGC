@@ -31,7 +31,7 @@ const AppLgc: React.FC<AppLgcProps> = ({
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(() => {
     if (typeof window === "undefined") return true;
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === null) return true;
+    if (stored === null) return false;
     return stored === "1";
   });
   const desktopSidebarRef = useRef<HTMLDivElement | null>(null);
