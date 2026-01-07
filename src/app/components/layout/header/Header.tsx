@@ -7,13 +7,13 @@ import { useClickOutside } from "../../../hooks/useClickOutside";
 
 const Header: FC<HeaderProps> = ({
   user,
-  isDark,
+  // isDark,
   activeSection,
-  onToggleTheme,
+  // onToggleTheme,
   onLogout,
   onToggleSidebarMobile,
 }) => {
-  const themeIcon = isDark ? "/light.svg" : "/dark.svg";
+  // const themeIcon = isDark ? "/light.svg" : "/dark.svg";
   const sectionInfo = SECTION_TITLES[activeSection];
   const initials = getInitials(user.nombre);
 
@@ -33,21 +33,21 @@ const Header: FC<HeaderProps> = ({
   };
 
   // Clases del botón de tema según el modo
-  const themeButtonClass = isDark
-    ? `
-        flex h-9 w-9 items-center justify-center
-        rounded-full border border-lgc-border/60
-        bg-lgc-surface text-lgc-primary
-        shadow-sm hover:bg-lgc-surfaceMuted
-        transition-colors
-      `
-    : `
-        flex h-9 w-9 items-center justify-center
-        rounded-full border border-transparent
-        bg-lgc-primary text-lgc-onPrimary
-        shadow-sm hover:bg-lgc-primarySoft
-        transition-colors
-      `;
+  // const themeButtonClass = isDark
+  //   ? `
+  //       flex h-9 w-9 items-center justify-center
+  //       rounded-full border border-lgc-border/60
+  //       bg-lgc-surface text-lgc-primary
+  //       shadow-sm hover:bg-lgc-surfaceMuted
+  //       transition-colors
+  //     `
+  //   : `
+  //       flex h-9 w-9 items-center justify-center
+  //       rounded-full border border-transparent
+  //       bg-lgc-primary text-lgc-onPrimary
+  //       shadow-sm hover:bg-lgc-primarySoft
+  //       transition-colors
+  //     `;
 
   return (
     <header className="px-4 md:px-6 pt-4 shrink-0 relative z-20">
