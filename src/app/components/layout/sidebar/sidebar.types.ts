@@ -9,6 +9,7 @@ export interface SidebarProps {
   onSectionChange: (section: AppSection) => void;
   variant: "desktop" | "mobile";
   expanded?: boolean;
+  onToggleSidebarDesktop?: () => void;
 }
 
 export interface SidebarChildItem {

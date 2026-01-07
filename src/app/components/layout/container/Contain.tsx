@@ -27,6 +27,7 @@ const Contain: FC<ContainProps> = ({ activeSection }) => {
   const [actividades, setActividades] = useState<
     ActividadRutaCrecimiento[]
   >(actividadesRutaMock);
+
   const [seguimientos, setSeguimientos] =
     useState<SeguimientoActividadPersona[]>(seguimientosMock);
 

@@ -126,6 +126,7 @@ const AppLgc: React.FC<AppLgcProps> = ({
           activeSection={activeSection}
           onSectionChange={setActiveSection}
           expanded={isSidebarExpanded}
+          onToggleSidebarDesktop={toggleSidebarDesktop}
         />
       </div>
 
