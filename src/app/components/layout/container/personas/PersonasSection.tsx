@@ -64,13 +64,13 @@ const PersonasSection: FC<PersonasSectionProps> = ({
         dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted
       "
     >
-      {/* Modal de Ç¸xito reutilizable */}
+      {/* Modal de exito reutilizable */}
       <SuccessModal
         open={!!successMessage}
         title="AcciÇün exitosa"
         message={
           successMessage ??
-          "La operaciÇün se completÇü correctamente."
+          "La operación se completó correctamente."
         }
         onClose={closeSuccessMessage}
       />

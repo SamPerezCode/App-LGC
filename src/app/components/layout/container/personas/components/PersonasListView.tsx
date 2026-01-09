@@ -42,12 +42,12 @@ const PersonasListView: FC<PersonasListViewProps> = ({
 
   return (
     <>
-      {/* Buscador + botÇün */}
+      {/* Buscador + botón */}
       <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div className="w-full md:max-w-sm">
           <input
             type="text"
-            placeholder="Buscar por nombre, telÇ¸fono o estado..."
+            placeholder="Buscar por nombre, teléfono o estado..."
             value={search}
             onChange={onSearchChange}
             className="
@@ -85,13 +85,13 @@ const PersonasListView: FC<PersonasListViewProps> = ({
                   Nombre
                 </th>
                 <th className="px-4 py-2 font-medium text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                  TelÇ¸fono
+                  Teléfono
                 </th>
                 <th className="px-4 py-2 font-medium text-lgc-textMuted dark:text-lgc-darkTextMuted">
                   Estado
                 </th>
                 <th className="px-4 py-2 font-medium text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                  Çsltima actualizaciÇün
+                  Última actualización
                 </th>
                 <th className="px-4 py-2 font-medium text-lgc-textMuted dark:text-lgc-darkTextMuted">
                   Acciones
@@ -177,7 +177,7 @@ const PersonasListView: FC<PersonasListViewProps> = ({
         </div>
       </div>
 
-      {/* === CARDS (mÇüvil) === */}
+      {/* === CARDS (mobile) === */}
       <div className="space-y-3 md:hidden">
         {pageItems.map((persona) => {
           const isExpanded = expandedCardId === persona.id;
@@ -218,7 +218,7 @@ const PersonasListView: FC<PersonasListViewProps> = ({
                     )
                   }
                 >
-                  {isExpanded ? "Ver menos" : "Ver mÇ­s"}
+                  {isExpanded ? "Ver menos" : "Ver más"}
                 </button>
               </div>
 
@@ -320,7 +320,7 @@ const PersonasListView: FC<PersonasListViewProps> = ({
           </button>
 
           <span className="text-lgc-textMuted dark:text-lgc-darkTextMuted">
-            PÇ­gina{" "}
+            Página{" "}
             <span className="font-semibold">{page}</span> de{" "}
             <span className="font-semibold">
               {totalPages}

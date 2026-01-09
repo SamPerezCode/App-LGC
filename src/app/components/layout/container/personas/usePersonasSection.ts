@@ -1,23 +1,35 @@
 // src/app/components/layout/container/personas/usePersonasSection.ts
 import { useMemo, useState, type ChangeEvent } from "react";
 import type { Persona } from "../../../../../domain/interfaces/lgc-interfaces";
-import { personasMock } from "../../../../../domain/mock-data/lgc-mock";
-import { estadoLabel, normalizeText } from "./personas.utils";
+import {
+  estadoLabel,
+  normalizeText,
+} from "./personas.utils";
 import type { PersonaCreateInput } from "./personas.types";
+import { usePersonasContext } from "./PersonasContext";
 
-type ViewMode = "list" | "create" | "detail" | "edit" | "seguimiento";
+type ViewMode =
+  | "list"
+  | "create"
+  | "detail"
+  | "edit"
+  | "seguimiento";
 
 const PAGE_SIZE = 5;
 
 export const usePersonasSection = () => {
-  const [personas, setPersonas] = useState<Persona[]>(personasMock);
+  const { personas, setPersonas } = usePersonasContext();
   const [view, setView] = useState<ViewMode>("list");
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<
+    string | null
+  >(null);
 
   const [search, setSearch] = useState("");
   const [pageState, setPageState] = useState(1);
 
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<
+    string | null
+  >(null);
 
   const selectedPersona = useMemo(
     () => personas.find((p) => p.id === selectedId) ?? null,
@@ -26,7 +38,9 @@ export const usePersonasSection = () => {
 
   const resetSelection = () => setSelectedId(null);
 
-  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
     setSearch(e.target.value);
     setPageState(1);
   };
@@ -37,20 +51,36 @@ export const usePersonasSection = () => {
 
     return personas.filter((persona) => {
       const nombre = normalizeText(persona.nombreCompleto);
-      const telefono = normalizeText(persona.telefono ?? "");
-      const estadoTexto = normalizeText(estadoLabel[persona.estado] ?? persona.estado);
+      const telefono = normalizeText(
+        persona.telefono ?? ""
+      );
+      const estadoTexto = normalizeText(
+        estadoLabel[persona.estado] ?? persona.estado
+      );
 
-      return nombre.includes(term) || telefono.includes(term) || estadoTexto.includes(term);
+      return (
+        nombre.includes(term) ||
+        telefono.includes(term) ||
+        estadoTexto.includes(term)
+      );
     });
   }, [personas, search]);
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filtered.length / PAGE_SIZE)
+  );
   const page = Math.min(pageState, totalPages); // página “segura”
   const startIndex = (page - 1) * PAGE_SIZE;
-  const pageItems = filtered.slice(startIndex, startIndex + PAGE_SIZE);
+  const pageItems = filtered.slice(
+    startIndex,
+    startIndex + PAGE_SIZE
+  );
 
-  const handlePrev = () => setPageState((prev) => Math.max(prev - 1, 1));
-  const handleNext = () => setPageState((prev) => Math.min(prev + 1, totalPages));
+  const handlePrev = () =>
+    setPageState((prev) => Math.max(prev - 1, 1));
+  const handleNext = () =>
+    setPageState((prev) => Math.min(prev + 1, totalPages));
 
   const showSuccess = (message: string) => {
     setSuccessMessage(message);
@@ -66,7 +96,10 @@ export const usePersonasSection = () => {
     // no existen en la interfaz Persona del dominio. Por eso hacemos cast.
     const newPersona = {
       ...data,
-      id: `PER-${String(personas.length + 1).padStart(3, "0")}`,
+      id: `PER-${String(personas.length + 1).padStart(
+        3,
+        "0"
+      )}`,
       creadoEn: now,
       actualizadoEn: now,
     } as Persona;
@@ -77,7 +110,9 @@ export const usePersonasSection = () => {
     showSuccess("Persona registrada correctamente.");
   };
 
-  const handleUpdatePersona = (data: PersonaCreateInput) => {
+  const handleUpdatePersona = (
+    data: PersonaCreateInput
+  ) => {
     if (!selectedId) return;
 
     const now = new Date().toISOString();
@@ -95,7 +130,9 @@ export const usePersonasSection = () => {
     );
 
     setView("detail");
-    showSuccess("Datos de la persona actualizados correctamente.");
+    showSuccess(
+      "Datos de la persona actualizados correctamente."
+    );
   };
 
   const handleViewPersona = (id: string) => {
@@ -138,4 +175,6 @@ export const usePersonasSection = () => {
   };
 };
 
-export type UsePersonasSectionReturn = ReturnType<typeof usePersonasSection>;
+export type UsePersonasSectionReturn = ReturnType<
+  typeof usePersonasSection
+>;

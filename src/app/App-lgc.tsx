@@ -7,6 +7,7 @@ import Footer from "./components/layout/footer/Footer";
 import Header from "./components/layout/header/Header";
 import Sidebar from "./components/layout/sidebar/Sidebar";
 import type { AppSection } from "./types/layout";
+import { PersonasProvider } from "./components/layout/container/personas/PersonasContext";
 
 interface AppLgcProps {
   user: Usuario;
@@ -28,23 +29,30 @@ const AppLgc: React.FC<AppLgcProps> = ({
   const [isSidebarMobileOpen, setIsSidebarMobileOpen] =
     useState(false);
 
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(() => {
-    if (typeof window === "undefined") return true;
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === null) return false;
-    return stored === "1";
-  });
-  const desktopSidebarRef = useRef<HTMLDivElement | null>(null);
+  const [isSidebarExpanded, setIsSidebarExpanded] =
+    useState(() => {
+      if (typeof window === "undefined") return true;
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored === null) return false;
+      return stored === "1";
+    });
+  const desktopSidebarRef = useRef<HTMLDivElement | null>(
+    null
+  );
 
   const toggleSidebarMobile = () =>
     setIsSidebarMobileOpen((prev) => !prev);
-  const closeSidebarMobile = () => setIsSidebarMobileOpen(false);
+  const closeSidebarMobile = () =>
+    setIsSidebarMobileOpen(false);
 
   const toggleSidebarDesktop = () =>
     setIsSidebarExpanded((prev) => !prev);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, isSidebarExpanded ? "1" : "0");
+    localStorage.setItem(
+      STORAGE_KEY,
+      isSidebarExpanded ? "1" : "0"
+    );
   }, [isSidebarExpanded]);
 
   // cerrar con ESC
@@ -56,7 +64,8 @@ const AppLgc: React.FC<AppLgcProps> = ({
     };
 
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () =>
+      window.removeEventListener("keydown", handleKeyDown);
   }, [isSidebarMobileOpen]);
 
   useEffect(() => {
@@ -69,7 +78,8 @@ const AppLgc: React.FC<AppLgcProps> = ({
       if (!sidebarEl) return;
 
       // si el click fue en el boton del header, no cerrar
-      if (target.closest('[data-sidebar-toggle="desktop"]')) return;
+      if (target.closest('[data-sidebar-toggle="desktop"]'))
+        return;
 
       // si el click fue dentro del sidebar, no cerrar
       if (sidebarEl.contains(target)) return;
@@ -79,22 +89,26 @@ const AppLgc: React.FC<AppLgcProps> = ({
 
     document.addEventListener("mousedown", handleClick);
     return () =>
-      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener(
+        "mousedown",
+        handleClick
+      );
   }, [isSidebarExpanded]);
 
   return (
-    <div className="flex min-h-screen">
-      {/* BACKDROP movil */}
-      {isSidebarMobileOpen && (
-        <div
-          className="fixed inset-0 z-30 bg-black/30 md:hidden"
-          onClick={closeSidebarMobile}
-        />
-      )}
+    <PersonasProvider>
+      <div className="flex min-h-screen">
+        {/* BACKDROP movil */}
+        {isSidebarMobileOpen && (
+          <div
+            className="fixed inset-0 z-30 bg-black/30 md:hidden"
+            onClick={closeSidebarMobile}
+          />
+        )}
 
-      {/* SIDEBAR MOVIL */}
-      <div
-        className={`
+        {/* SIDEBAR MOVIL */}
+        <div
+          className={`
           fixed inset-y-0 left-0 z-40 md:hidden
           w-64
           transition-transform duration-300
@@ -104,48 +118,52 @@ const AppLgc: React.FC<AppLgcProps> = ({
               : "-translate-x-full"
           }
         `}
-      >
-        <Sidebar
-          variant="mobile"
-          isDark={isDark}
-          user={user}
-          activeSection={activeSection}
-          onSectionChange={(section) => {
-            setActiveSection(section);
-            closeSidebarMobile();
-          }}
-        />
-      </div>
+        >
+          <Sidebar
+            variant="mobile"
+            isDark={isDark}
+            user={user}
+            activeSection={activeSection}
+            onSectionChange={(section) => {
+              setActiveSection(section);
+              closeSidebarMobile();
+            }}
+          />
+        </div>
 
-      {/* SIDEBAR DESKTOP */}
-      <div className="hidden md:block" ref={desktopSidebarRef}>
-        <Sidebar
-          variant="desktop"
-          isDark={isDark}
-          user={user}
-          activeSection={activeSection}
-          onSectionChange={setActiveSection}
-          expanded={isSidebarExpanded}
-          onToggleSidebarDesktop={toggleSidebarDesktop}
-        />
-      </div>
+        {/* SIDEBAR DESKTOP */}
+        <div
+          className="hidden md:block"
+          ref={desktopSidebarRef}
+        >
+          <Sidebar
+            variant="desktop"
+            isDark={isDark}
+            user={user}
+            activeSection={activeSection}
+            onSectionChange={setActiveSection}
+            expanded={isSidebarExpanded}
+            onToggleSidebarDesktop={toggleSidebarDesktop}
+          />
+        </div>
 
-      <div className="flex flex-1 flex-col bg-lgc-bg dark:bg-lgc-darkBg">
-        <Header
-          user={user}
-          isDark={isDark}
-          activeSection={activeSection}
-          onToggleTheme={onToggleTheme}
-          onToggle={onToggleTheme}
-          onLogout={onLogout}
-          onToggleSidebarMobile={toggleSidebarMobile}
-          onToggleSidebarDesktop={toggleSidebarDesktop}
-        />
+        <div className="flex flex-1 flex-col bg-lgc-bg dark:bg-lgc-darkBg">
+          <Header
+            user={user}
+            isDark={isDark}
+            activeSection={activeSection}
+            onToggleTheme={onToggleTheme}
+            onToggle={onToggleTheme}
+            onLogout={onLogout}
+            onToggleSidebarMobile={toggleSidebarMobile}
+            onToggleSidebarDesktop={toggleSidebarDesktop}
+          />
 
-        <Contain activeSection={activeSection} />
-        <Footer />
+          <Contain activeSection={activeSection} />
+          <Footer />
+        </div>
       </div>
-    </div>
+    </PersonasProvider>
   );
 };
 
