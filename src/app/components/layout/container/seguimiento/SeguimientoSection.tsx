@@ -1,11 +1,13 @@
-import { useMemo, type FC } from "react";
+import { useMemo, useState, type FC } from "react";
 import type {
-  EstadoActividadSeguimiento,
   Persona,
   SeguimientoActividadPersona,
   RutaCrecimiento,
   ActividadRutaCrecimiento,
 } from "../../../../../domain/interfaces/lgc-interfaces";
+import RegistroActividadModal, {
+  type RegistroActividadFormState,
+} from "./RegistroActividadModal";
 
 interface SeguimientoSectionProps {
   persona: Persona;
@@ -18,6 +20,34 @@ interface SeguimientoSectionProps {
   onBack: () => void;
 }
 
+const getCurrentUserName = () => {
+  try {
+    const raw = localStorage.getItem("lgc:user");
+    if (!raw) return "Administrador";
+    const parsed = JSON.parse(raw);
+    return parsed?.nombre ?? "Administrador";
+  } catch {
+    return "Administrador";
+  }
+};
+
+const formatDate = (value?: string) => {
+  if (!value) return "-";
+  const date = new Date(value);
+  return date.toLocaleDateString("es-CO", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+};
+
+const toDateInput = (value?: string) => {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return date.toISOString().slice(0, 10);
+};
+
 const SeguimientoSection: FC<SeguimientoSectionProps> = ({
   persona,
   rutas,
@@ -26,7 +56,18 @@ const SeguimientoSection: FC<SeguimientoSectionProps> = ({
   setSeguimientos,
   onBack,
 }) => {
-  // 1) ruta aplicable por estado
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const [form, setForm] = useState<RegistroActividadFormState>({
+    actividadId: "",
+    fecha: "",
+    observaciones: "",
+    registradoPor: getCurrentUserName(),
+    editadoPor: "",
+  });
+
   const rutaAplicable = useMemo(() => {
     return (
       rutas.find(
@@ -35,7 +76,6 @@ const SeguimientoSection: FC<SeguimientoSectionProps> = ({
     );
   }, [rutas, persona.estado]);
 
-  // 2) actividades de esa ruta
   const actividadesDeRuta = useMemo(() => {
     if (!rutaAplicable) return [];
     return actividades
@@ -43,78 +83,138 @@ const SeguimientoSection: FC<SeguimientoSectionProps> = ({
       .sort((a, b) => a.orden - b.orden);
   }, [actividades, rutaAplicable]);
 
-  // 3) índice rápido de seguimiento
-  const seguimientoByActividad = useMemo(() => {
-    const map = new Map<string, SeguimientoActividadPersona>();
-    for (const s of seguimientos) {
-      if (s.personaId === persona.id) {
-        map.set(s.actividadRutaId, s);
-      }
-    }
-    return map;
-  }, [seguimientos, persona.id]);
+  const actividadesById = useMemo(
+    () => new Map(actividadesDeRuta.map((a) => [a.id, a])),
+    [actividadesDeRuta]
+  );
 
-  // 4) actividades con estado de seguimiento (default PENDIENTE)
-  const actividadesConEstado = useMemo(() => {
-    return actividadesDeRuta.map((a) => {
-      const s = seguimientoByActividad.get(a.id);
-      return {
-        ...a,
-        estadoSeguimiento: (s?.estado ??
-          "PENDIENTE") as EstadoActividadSeguimiento,
-      };
+  const seguimientosPersona = useMemo(
+    () => seguimientos.filter((s) => s.personaId === persona.id),
+    [seguimientos, persona.id]
+  );
+  const seguimientosRegistrados = useMemo(
+    () =>
+      seguimientosPersona.filter((s) => s.estado === "COMPLETADA"),
+    [seguimientosPersona]
+  );
+
+  const registrosOrdenados = useMemo(() => {
+    return [...seguimientosRegistrados].sort((a, b) => {
+      const aDate = a.fechaCumplimiento ?? a.fechaAsignacion;
+      const bDate = b.fechaCumplimiento ?? b.fechaAsignacion;
+      return new Date(bDate).getTime() - new Date(aDate).getTime();
     });
-  }, [actividadesDeRuta, seguimientoByActividad]);
+  }, [seguimientosRegistrados]);
 
-  const total = actividadesConEstado.length;
-  const completadas = actividadesConEstado.filter(
-    (a) => a.estadoSeguimiento === "COMPLETADA"
-  ).length;
+  const actividadRegistradaIds = useMemo(
+    () =>
+      new Set(seguimientosRegistrados.map((s) => s.actividadRutaId)),
+    [seguimientosRegistrados]
+  );
 
-  const setEstadoActividad = (
-    actividadId: string,
-    estado: EstadoActividadSeguimiento
-  ) => {
-    const now = new Date().toISOString();
+  const actividadesDisponibles = useMemo(
+    () =>
+      actividadesDeRuta.filter(
+        (a) => !actividadRegistradaIds.has(a.id)
+      ),
+    [actividadesDeRuta, actividadRegistradaIds]
+  );
 
-    setSeguimientos((prev) => {
-      const idx = prev.findIndex(
-        (s) =>
-          s.personaId === persona.id &&
-          s.actividadRutaId === actividadId
-      );
+  const completadasUnicas = useMemo(() => {
+    const ids = new Set(
+      seguimientosRegistrados.map((s) => s.actividadRutaId)
+    );
+    return ids.size;
+  }, [seguimientosRegistrados]);
 
-      if (idx === -1) {
-        return [
-          ...prev,
-          {
-            id: `SEG-${Date.now()}`,
-            personaId: persona.id,
-            actividadRutaId: actividadId,
-            estado,
-            fechaAsignacion: now,
-            fechaCumplimiento:
-              estado === "COMPLETADA" ? now : undefined,
-          },
-        ];
-      }
+  const total = actividadesDeRuta.length;
+  const canAddActividad = actividadesDisponibles.length > 0;
 
-      return prev.map((s, i) =>
-        i === idx
-          ? {
-              ...s,
-              estado,
-              fechaCumplimiento:
-                estado === "COMPLETADA" ? now : undefined,
-            }
-          : s
-      );
+  const openCreateModal = () => {
+    setError(null);
+    setEditingId(null);
+    setForm({
+      actividadId: actividadesDisponibles[0]?.id ?? "",
+      fecha: "",
+      observaciones: "",
+      registradoPor: getCurrentUserName(),
+      editadoPor: "",
     });
+    setIsModalOpen(true);
   };
+
+  const openEditModal = (entry: SeguimientoActividadPersona) => {
+    setError(null);
+    setEditingId(entry.id);
+    const fechaBase =
+      entry.fechaCumplimiento ?? entry.fechaAsignacion;
+    setForm({
+      actividadId: entry.actividadRutaId,
+      fecha: toDateInput(fechaBase),
+      observaciones: entry.observaciones ?? "",
+      registradoPor: entry.registradoPorUsuarioId ?? "Administrador",
+      editadoPor: getCurrentUserName(),
+    });
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setError(null);
+    setIsModalOpen(false);
+    setEditingId(null);
+  };
+
+  const handleSave = () => {
+    if (!form.actividadId) {
+      setError("Selecciona una actividad.");
+      return;
+    }
+
+    if (!editingId && actividadRegistradaIds.has(form.actividadId)) {
+      setError("Esta actividad ya fue registrada.");
+      return;
+    }
+
+    const isoDate = form.fecha
+      ? new Date(form.fecha).toISOString()
+      : new Date().toISOString();
+
+    if (editingId) {
+      setSeguimientos((prev) =>
+        prev.map((item) => {
+          if (item.id !== editingId) return item;
+          return {
+            ...item,
+            estado: "COMPLETADA",
+            observaciones: form.observaciones?.trim() || undefined,
+            fechaCumplimiento: isoDate,
+            editadoPorUsuarioId:
+              form.editadoPor || getCurrentUserName(),
+          };
+        })
+      );
+    } else {
+      const newEntry: SeguimientoActividadPersona = {
+        id: `SEG-${Date.now()}`,
+        personaId: persona.id,
+        actividadRutaId: form.actividadId,
+        estado: "COMPLETADA",
+        fechaAsignacion: new Date().toISOString(),
+        fechaCumplimiento: isoDate,
+        observaciones: form.observaciones?.trim() || undefined,
+        registradoPorUsuarioId: form.registradoPor || undefined,
+      };
+
+      setSeguimientos((prev) => [...prev, newEntry]);
+    }
+
+    closeModal();
+  };
+
+  const modalMode = editingId ? "edit" : "create";
 
   return (
     <div className="space-y-4 md:space-y-6">
-      {/* header */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <button
           type="button"
@@ -127,19 +227,34 @@ const SeguimientoSection: FC<SeguimientoSectionProps> = ({
             dark:hover:bg-lgc-darkSurface
           "
         >
-          <span className="text-base leading-none">←</span>
+          <span className="text-base leading-none">&lt;-</span>
           Volver
         </button>
 
-        <div className="text-xs md:text-sm text-lgc-textMuted dark:text-lgc-darkTextMuted">
-          Progreso:{" "}
-          <span className="font-semibold text-lgc-text dark:text-lgc-darkText">
-            {completadas}/{total}
-          </span>
+        <div className="flex items-center gap-3">
+          <div className="text-xs md:text-sm text-lgc-textMuted dark:text-lgc-darkTextMuted">
+            Progreso:{" "}
+            <span className="font-semibold text-lgc-text dark:text-lgc-darkText">
+              {completadasUnicas}/{total}
+            </span>
+          </div>
+
+          <button
+            type="button"
+            onClick={openCreateModal}
+            disabled={!canAddActividad}
+            className="
+              rounded-xl bg-lgc-primary px-4 py-2 text-xs md:text-sm font-semibold text-lgc-onPrimary
+              shadow-sm hover:bg-lgc-primarySoft disabled:cursor-not-allowed disabled:opacity-60
+              dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna
+              transition-colors
+            "
+          >
+            Agregar actividad
+          </button>
         </div>
       </div>
 
-      {/* persona + ruta */}
       <div
         className="
           rounded-2xl border border-lgc-border/60 bg-lgc-surface p-4 md:p-6 shadow-sm
@@ -147,7 +262,7 @@ const SeguimientoSection: FC<SeguimientoSectionProps> = ({
         "
       >
         <h3 className="text-base md:text-lg font-semibold text-lgc-primary dark:text-lgc-darkPrimary">
-          Seguimiento — {persona.nombreCompleto}
+          Seguimiento - {persona.nombreCompleto}
         </h3>
 
         <div className="mt-2 text-sm text-lgc-textMuted dark:text-lgc-darkTextMuted">
@@ -170,75 +285,96 @@ const SeguimientoSection: FC<SeguimientoSectionProps> = ({
         )}
       </div>
 
-      {/* actividades */}
-      {rutaAplicable && (
-        <div
-          className="
-            rounded-2xl border border-lgc-border/60 bg-lgc-surface p-4 md:p-6 shadow-sm
-            dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted
-          "
-        >
-          <h4 className="text-sm md:text-base font-semibold text-lgc-text dark:text-lgc-darkText">
-            Actividades
-          </h4>
+      <div
+        className="
+          rounded-2xl border border-lgc-border/60 bg-lgc-surface p-4 md:p-6 shadow-sm
+          dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted
+        "
+      >
+        <h4 className="text-sm md:text-base font-semibold text-lgc-text dark:text-lgc-darkText">
+          Bitacora de actividades
+        </h4>
 
-          <div className="mt-4 space-y-3">
-            {actividadesConEstado.map((a) => (
+        <div className="mt-4 space-y-3">
+          {registrosOrdenados.length === 0 && (
+            <div className="text-xs text-lgc-textMuted dark:text-lgc-darkTextMuted">
+              Aun no hay actividades registradas.
+            </div>
+          )}
+
+          {registrosOrdenados.map((reg) => {
+            const actividad = actividadesById.get(
+              reg.actividadRutaId
+            );
+
+            return (
               <div
-                key={a.id}
+                key={reg.id}
                 className="rounded-2xl border border-lgc-border/50 bg-lgc-surfaceMuted/40 p-4
                            dark:border-lgc-darkBorder/60 dark:bg-lgc-darkSurface"
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <div className="text-xs text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                      Actividad {a.orden} • {a.tipo}
+                      {actividad?.tipo ?? "ACTIVIDAD"} ·{" "}
+                      {formatDate(
+                        reg.fechaCumplimiento ?? reg.fechaAsignacion
+                      )}
                     </div>
-
                     <div className="mt-1 text-sm font-semibold text-lgc-text dark:text-lgc-darkText">
-                      {a.nombre}
+                      {actividad?.nombre ?? "Actividad no encontrada"}
                     </div>
-
-                    {a.descripcion && (
+                    {reg.observaciones && (
                       <div className="mt-1 text-xs text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                        {a.descripcion}
+                        {reg.observaciones}
                       </div>
                     )}
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <select
-                      value={a.estadoSeguimiento}
-                      onChange={(e) =>
-                        setEstadoActividad(
-                          a.id,
-                          e.target.value as EstadoActividadSeguimiento
-                        )
-                      }
+                  <div className="flex flex-col items-end gap-2 text-[11px] text-lgc-textMuted dark:text-lgc-darkTextMuted">
+                    <span className="rounded-full px-2 py-1 bg-lgc-surfaceMuted dark:bg-lgc-darkSurface">
+                      {reg.estado}
+                    </span>
+                    <span>
+                      Registrado por:{" "}
+                      {reg.registradoPorUsuarioId ?? "-"}
+                    </span>
+                    {reg.editadoPorUsuarioId && (
+                      <span>
+                        Editado por: {reg.editadoPorUsuarioId}
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => openEditModal(reg)}
                       className="
-                        rounded-xl border border-lgc-border/70 bg-lgc-surface px-3 py-2 text-xs
-                        text-lgc-text outline-none
+                        rounded-lg border border-lgc-border/70 bg-lgc-surfaceMuted px-3 py-1 text-[11px]
+                        text-lgc-text hover:bg-lgc-surface
                         dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText
+                        dark:hover:bg-lgc-darkSurface
                       "
                     >
-                      <option value="PENDIENTE">Pendiente</option>
-                      <option value="EN_PROCESO">En proceso</option>
-                      <option value="COMPLETADA">Completada</option>
-                      <option value="CANCELADA">Cancelada</option>
-                    </select>
+                      Editar
+                    </button>
                   </div>
                 </div>
               </div>
-            ))}
-
-            {actividadesConEstado.length === 0 && (
-              <div className="text-xs text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                Esta ruta aún no tiene actividades.
-              </div>
-            )}
-          </div>
+            );
+          })}
         </div>
-      )}
+      </div>
+
+      <RegistroActividadModal
+        isOpen={isModalOpen}
+        mode={modalMode}
+        actividades={actividadesDeRuta}
+        form={form}
+        setForm={setForm}
+        error={error}
+        onClose={closeModal}
+        onSave={handleSave}
+        disableActividadIds={[...actividadRegistradaIds]}
+      />
     </div>
   );
 };

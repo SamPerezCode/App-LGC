@@ -15,11 +15,7 @@ export type TipoActividadRuta =
   | "CURSO"
   | "REUNION"
   | "MINISTERIO";
-export type EstadoActividadSeguimiento =
-  | "PENDIENTE"
-  | "EN_PROCESO"
-  | "COMPLETADA"
-  | "CANCELADA";
+export type EstadoActividadSeguimiento = "PENDIENTE" | "COMPLETADA";
 export type TipoContacto =
   | "LLAMADA"
   | "VISITA"
@@ -79,6 +75,7 @@ export interface SeguimientoActividadPersona {
   fechaCumplimiento?: string;
   observaciones?: string;
   registradoPorUsuarioId?: string;
+  editadoPorUsuarioId?: string;
 }
 
 //  Registro de contactos / interacciones de seguimiento

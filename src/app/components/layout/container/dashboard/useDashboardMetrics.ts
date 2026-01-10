@@ -131,9 +131,7 @@ export const useDashboardMetrics = (
     const seguimientosCompletados = seguimientosMock.filter(
       (s) => s.estado === "COMPLETADA"
     ).length;
-    const seguimientosEnProceso = seguimientosMock.filter(
-      (s) => s.estado === "EN_PROCESO"
-    ).length;
+
     const seguimientosPendientes = seguimientosMock.filter(
       (s) => s.estado === "PENDIENTE"
     ).length;
@@ -264,9 +262,9 @@ export const useDashboardMetrics = (
       },
       {
         id: "seguimientos",
-        title: "Seguimientos activos",
-        value: seguimientosEnProceso,
-        subtitle: `Pendientes: ${seguimientosPendientes}`,
+        title: "Seguimientos pendientes",
+        value: seguimientosPendientes,
+        subtitle: `Completadas: ${seguimientosCompletados}`,
         hint: `Tasa de cumplimiento: ${completionRate}%`,
         icon: KPI_ICONS.seguimiento,
         iconBgClass: "bg-lgc-danger/10 dark:bg-lgc-darkSurfaceMuted",
@@ -308,8 +306,8 @@ export const useDashboardMetrics = (
           value: seguimientosPendientes,
         },
         {
-          label: "Seguimientos en proceso",
-          value: seguimientosEnProceso,
+          label: "Seguimientos completados",
+          value: seguimientosCompletados,
         },
       ],
       recentActivity,
