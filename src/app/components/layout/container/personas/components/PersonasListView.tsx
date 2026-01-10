@@ -2,6 +2,7 @@ import { useState, type FC, type ChangeEvent } from "react";
 import type { Persona } from "../../../../../../domain/interfaces/lgc-interfaces";
 import { estadoLabel, formatFecha } from "../personas.utils";
 import Button from "../../../../../ui/Button";
+import Pagination from "../../../../../ui/Pagination";
 
 type PersonasListViewProps = {
   search: string;
@@ -253,58 +254,15 @@ const PersonasListView: FC<PersonasListViewProps> = ({
       </div>
 
       {/* Paginador */}
-      <div
-        className="
-          flex flex-col items-center gap-3 pt-4
-          text-xs md:flex-row md:justify-center md:gap-6 md:text-sm
-        "
-      >
-        <span className="text-lgc-textMuted dark:text-lgc-darkTextMuted text-center">
-          Mostrando{" "}
-          <span className="font-semibold">{pageItems.length}</span> de{" "}
-          <span className="font-semibold">{filteredCount}</span>{" "}
-          personas
-        </span>
-
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={onPrev}
-            disabled={page === 1}
-            className="
-              rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted px-3 py-1
-              text-xs md:text-sm text-lgc-text
-              disabled:cursor-not-allowed disabled:opacity-50
-              hover:bg-lgc-surface
-              dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText
-              dark:hover:bg-lgc-darkSurface
-            "
-          >
-            Anterior
-          </button>
-
-          <span className="text-lgc-textMuted dark:text-lgc-darkTextMuted">
-            Página <span className="font-semibold">{page}</span> de{" "}
-            <span className="font-semibold">{totalPages}</span>
-          </span>
-
-          <button
-            type="button"
-            onClick={onNext}
-            disabled={page === totalPages}
-            className="
-              rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted px-3 py-1
-              text-xs md:text-sm text-lgc-text
-              disabled:cursor-not-allowed disabled:opacity-50
-              hover:bg-lgc-surface
-              dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText
-              dark:hover:bg-lgc-darkSurface
-            "
-          >
-            Siguiente
-          </button>
-        </div>
-      </div>
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        showingCount={pageItems.length}
+        totalCount={filteredCount}
+        itemLabel="personas"
+        onPrev={onPrev}
+        onNext={onNext}
+      />
     </>
   );
 };
