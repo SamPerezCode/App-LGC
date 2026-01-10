@@ -121,25 +121,54 @@ const RutaDetailView: FC<RutaDetailViewProps> = ({
                     key={act.id}
                     className="border-t border-lgc-border/40 dark:border-lgc-darkBorder/40"
                   >
-                    <td className="px-4 py-3 text-lgc-text dark:text-lgc-darkText">{act.orden}</td>
-                    <td className="px-4 py-3 text-lgc-text dark:text-lgc-darkText">{act.nombre}</td>
-                    <td className="px-4 py-3 text-lgc-text dark:text-lgc-darkText">{act.tipo}</td>
+                    <td className="px-4 py-3 text-lgc-text dark:text-lgc-darkText">
+                      {act.orden}
+                    </td>
+                    <td className="px-4 py-3 text-lgc-text dark:text-lgc-darkText">
+                      {act.nombre}
+                    </td>
+                    <td className="px-4 py-3 text-lgc-text dark:text-lgc-darkText">
+                      {act.tipo}
+                    </td>
 
                     <td className="px-4 py-3">
-                      <span
-                        className={`
-                        inline-flex items-center justify-center
-                        w-20 px-3 py-1
-                        rounded-full text-[11px] font-medium
-                        ${
-                          act.activa
-                            ? "bg-lgc-surfaceMuted text-lgc-text dark:bg-lgc-darkSurface dark:text-lgc-darkText"
-                            : "bg-lgc-surfaceMuted/60 text-lgc-textMuted dark:bg-lgc-darkSurface dark:text-lgc-darkTextMuted"
-                        }
-                      `}
+                      <button
+                        type="button"
+                        onClick={() => onToggleActividad(act.id)}
+                        className="
+                    inline-flex items-center justify-between
+                    w-28 px-3 py-1
+                    rounded-full border border-lgc-border/70
+                    bg-lgc-surfaceMuted
+                    text-[11px] font-medium text-lgc-text
+                    hover:bg-lgc-surface
+                    dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText
+                    transition-colors
+                  "
+                        aria-pressed={act.activa}
                       >
-                        {act.activa ? "Activa" : "Inactiva"}
-                      </span>
+                        <span className="min-w-[52px] text-left">
+                          {act.activa ? "Activa" : "Inactiva"}
+                        </span>
+
+                        <span
+                          className={`
+                      relative inline-flex h-5 w-9 items-center rounded-full transition-colors
+                      ${
+                        act.activa
+                          ? "bg-lgc-primary"
+                          : "bg-lgc-border/60 dark:bg-lgc-darkBorder/60"
+                      }
+                    `}
+                        >
+                          <span
+                            className={`
+          inline-block h-4 w-4 rounded-full bg-white transition-transform
+          ${act.activa ? "translate-x-4" : "translate-x-1"}
+        `}
+                          />
+                        </span>
+                      </button>
                     </td>
 
                     <td className="px-4 py-3">
@@ -154,44 +183,6 @@ const RutaDetailView: FC<RutaDetailViewProps> = ({
                             "
                         >
                           Editar
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() => onToggleActividad(act.id)}
-                          className="
-                              inline-flex items-center justify-between
-                              w-28 px-3 py-1
-                              rounded-full border border-lgc-border/70
-                              bg-lgc-surfaceMuted
-                              text-[11px] font-medium text-lgc-text
-                              hover:bg-lgc-surface
-                              dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText
-                              transition-colors
-                            "
-                          aria-pressed={act.activa}
-                        >
-                          <span className="min-w-[52px] text-left">
-                            {act.activa ? "Activa" : "Inactiva"}
-                          </span>
-
-                          <span
-                            className={`
-                                relative inline-flex h-5 w-9 items-center rounded-full transition-colors
-                                ${
-                                  act.activa
-                                    ? "bg-lgc-primary"
-                                    : "bg-lgc-border/60 dark:bg-lgc-darkBorder/60"
-                                }
-                              `}
-                          >
-                            <span
-                              className={`
-                                  inline-block h-4 w-4 rounded-full bg-white transition-transform
-                                  ${act.activa ? "translate-x-4" : "translate-x-1"}
-                                `}
-                            />
-                          </span>
                         </button>
                       </div>
                     </td>
