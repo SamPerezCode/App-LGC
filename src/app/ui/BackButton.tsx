@@ -16,7 +16,13 @@ const BackButton: FC<BackButtonProps> = ({
       size="sm"
       onClick={onClick}
       startIcon={
-        <span className="text-base leading-none">{"←"}</span>
+        <span
+          className="h-4 w-4 bg-lgc-text dark:bg-lgc-darkText"
+          style={{
+            WebkitMask: "url(/back.svg) no-repeat center / contain",
+            mask: "url(/back.svg) no-repeat center / contain",
+          }}
+        />
       }
     >
       {label}

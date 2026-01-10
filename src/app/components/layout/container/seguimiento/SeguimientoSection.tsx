@@ -8,6 +8,8 @@ import type {
 import RegistroActividadModal, {
   type RegistroActividadFormState,
 } from "./RegistroActividadModal";
+import BackButton from "../../../../ui/BackButton";
+import Button from "../../../../ui/Button";
 
 interface SeguimientoSectionProps {
   persona: Persona;
@@ -216,20 +218,7 @@ const SeguimientoSection: FC<SeguimientoSectionProps> = ({
   return (
     <div className="space-y-4 md:space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <button
-          type="button"
-          onClick={onBack}
-          className="
-            inline-flex items-center gap-2 rounded-xl border border-lgc-border/70
-            bg-lgc-surfaceMuted px-4 py-2 text-xs md:text-sm font-medium text-lgc-text
-            hover:bg-lgc-surface
-            dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText
-            dark:hover:bg-lgc-darkSurface
-          "
-        >
-          <span className="text-base leading-none">&lt;-</span>
-          Volver
-        </button>
+        <BackButton onClick={onBack}></BackButton>
 
         <div className="flex items-center gap-3">
           <div className="text-xs md:text-sm text-lgc-textMuted dark:text-lgc-darkTextMuted">
@@ -239,19 +228,13 @@ const SeguimientoSection: FC<SeguimientoSectionProps> = ({
             </span>
           </div>
 
-          <button
-            type="button"
+          <Button
+            variant="primary"
             onClick={openCreateModal}
             disabled={!canAddActividad}
-            className="
-              rounded-xl bg-lgc-primary px-4 py-2 text-xs md:text-sm font-semibold text-lgc-onPrimary
-              shadow-sm hover:bg-lgc-primarySoft disabled:cursor-not-allowed disabled:opacity-60
-              dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna
-              transition-colors
-            "
           >
             Agregar actividad
-          </button>
+          </Button>
         </div>
       </div>
 

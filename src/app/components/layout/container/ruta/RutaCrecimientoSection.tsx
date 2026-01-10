@@ -8,6 +8,7 @@ import CreateActividadModal from "./CreateActividadModal";
 import CreateRutaModal from "./CretateRutaModal";
 import type { ActividadSubmitData } from "./CreateActividadModal";
 import RutaDetailView from "./RutaDetailView";
+import Button from "../../../../ui/Button";
 
 type ViewMode = "list" | "detail";
 
@@ -225,19 +226,9 @@ const RutaCrecimientoSection: FC<RutaCrecimientoSectionProps> = ({
               </p>
             </div>
 
-            <button
-              type="button"
-              onClick={openCreateModal}
-              className="
-                inline-flex items-center justify-center rounded-xl
-                bg-lgc-primary px-4 py-2 text-xs md:text-sm font-semibold text-lgc-onPrimary
-                shadow-sm hover:bg-lgc-primarySoft
-                dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna
-                transition-colors
-              "
-            >
+            <Button variant="primary" onClick={openCreateModal}>
               Agregar ruta
-            </button>
+            </Button>
           </div>
 
           <div className="mt-4 overflow-hidden rounded-2xl border border-lgc-border/50 dark:border-lgc-darkBorder/60">
@@ -359,6 +350,9 @@ const RutaCrecimientoSection: FC<RutaCrecimientoSectionProps> = ({
                   : a
               )
             );
+          }}
+          onDeleteActividad={(id) => {
+            setActividades((prev) => prev.filter((a) => a.id !== id));
           }}
         />
       )}

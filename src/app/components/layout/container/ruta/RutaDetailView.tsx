@@ -20,6 +20,7 @@ interface RutaDetailViewProps {
   onAddActividad: () => void;
   onEditActividad: (id: string) => void;
   onToggleActividad: (id: string) => void;
+  onDeleteActividad: (id: string) => void;
 }
 
 const RutaDetailView: FC<RutaDetailViewProps> = ({
@@ -29,6 +30,7 @@ const RutaDetailView: FC<RutaDetailViewProps> = ({
   onAddActividad,
   onEditActividad,
   onToggleActividad,
+  onDeleteActividad,
 }) => {
   return (
     <div className="space-y-4">
@@ -110,10 +112,17 @@ const RutaDetailView: FC<RutaDetailViewProps> = ({
                       <div className="flex flex-wrap gap-2">
                         <Button
                           variant="primary"
+                          size="sm"
                           onClick={() => onEditActividad(act.id)}
                         >
-                          {" "}
                           Editar
+                        </Button>
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={() => onDeleteActividad(act.id)}
+                        >
+                          Eliminar
                         </Button>
                       </div>
                     </td>
