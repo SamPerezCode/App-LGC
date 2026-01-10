@@ -42,6 +42,9 @@ const RutaCrecimientoSection: FC<RutaCrecimientoSectionProps> = ({
     null
   );
 
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [rutaEditId, setRutaEditId] = useState<string | null>(null);
+
   // modal crear actividad
   const [isActividadOpen, setIsActividadOpen] = useState(false);
   const [actividadEditId, setActividadEditId] = useState<
@@ -103,7 +106,47 @@ const RutaCrecimientoSection: FC<RutaCrecimientoSectionProps> = ({
   };
 
   const handleEditar = (id: string) => {
-    console.log("Editar ruta", id);
+    const ruta = rutas.find((r) => r.id === id);
+    if (!ruta) return;
+
+    setRutaEditId(id);
+    setNombre(ruta.nombre);
+    setDescripcion(ruta.descripcion ?? "");
+    setAplicaAEstado(ruta.aplicaAEstado);
+    setError(null);
+    setIsEditOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setIsEditOpen(false);
+    setRutaEditId(null);
+    setError(null);
+  };
+
+  const handleUpdateRuta = () => {
+    if (!rutaEditId) return;
+    if (!nombre.trim()) {
+      setError("El nombre es obligatorio.");
+      return;
+    }
+
+    const now = new Date().toISOString();
+
+    setRutas((prev) =>
+      prev.map((r) =>
+        r.id === rutaEditId
+          ? {
+              ...r,
+              nombre: nombre.trim(),
+              descripcion: descripcion.trim() || undefined,
+              aplicaAEstado,
+              actualizadoEn: now,
+            }
+          : r
+      )
+    );
+
+    closeEditModal();
   };
 
   const handleEliminar = (id: string) => {
@@ -377,6 +420,23 @@ const RutaCrecimientoSection: FC<RutaCrecimientoSectionProps> = ({
         onClose={closeActividadModal}
         onSubmit={handleGuardarActividad}
       />
+
+      {isEditOpen && (
+        <CreateRutaModal
+          isOpen={isEditOpen}
+          title="Editar ruta de crecimiento"
+          submitLabel="Guardar cambios"
+          nombre={nombre}
+          descripcion={descripcion}
+          error={error}
+          aplicaAEstado={aplicaAEstado}
+          onChangeAplicaAEstado={setAplicaAEstado}
+          onChangeNombre={setNombre}
+          onChangeDescripcion={setDescripcion}
+          onClose={closeEditModal}
+          onCreate={handleUpdateRuta}
+        />
+      )}
     </div>
   );
 };

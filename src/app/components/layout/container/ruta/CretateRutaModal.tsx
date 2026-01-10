@@ -14,6 +14,9 @@ interface CreateRutaModalProps {
   onChangeDescripcion: (value: string) => void;
   onClose: () => void;
   onCreate: () => void;
+
+  title?: string;
+  submitLabel?: string;
 }
 
 const CreateRutaModal: FC<CreateRutaModalProps> = ({
@@ -27,6 +30,8 @@ const CreateRutaModal: FC<CreateRutaModalProps> = ({
   onChangeDescripcion,
   onClose,
   onCreate,
+  title = "Crear ruta de crecimiento",
+  submitLabel = "Crear ruta",
 }) => {
   if (!isOpen) return null;
 
@@ -41,7 +46,7 @@ const CreateRutaModal: FC<CreateRutaModalProps> = ({
       >
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-sm md:text-base font-semibold text-lgc-text dark:text-lgc-darkText">
-            Crear ruta de crecimiento
+            {title}
           </h3>
 
           <button
@@ -123,10 +128,10 @@ const CreateRutaModal: FC<CreateRutaModalProps> = ({
             type="button"
             onClick={onCreate}
             className="rounded-xl bg-lgc-primary px-4 py-2 text-xs font-semibold text-lgc-onPrimary
-                       hover:bg-lgc-primarySoft
-                       dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna"
+             hover:bg-lgc-primarySoft
+             dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna"
           >
-            Crear ruta
+            {submitLabel}
           </button>
         </div>
       </div>
