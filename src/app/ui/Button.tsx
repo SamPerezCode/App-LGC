@@ -1,6 +1,13 @@
 import type { ButtonHTMLAttributes, FC, ReactNode } from "react";
 
-type ButtonVariant = "primary" | "outline" | "ghost" | "danger";
+type ButtonVariant =
+  | "primary"
+  | "outline"
+  | "ghost"
+  | "danger"
+  | "dangerOutline"
+  | "dangerSoft"
+  | "accentSoft";
 type ButtonSize = "sm" | "md";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -28,6 +35,21 @@ const VARIANT_STYLES: Record<ButtonVariant, string> = {
     bg-lgc-danger text-white font-semibold shadow-sm
     hover:opacity-90
     dark:bg-lgc-darkAccent dark:text-white
+  `,
+  dangerOutline: `
+    border border-lgc-danger/60 text-lgc-danger font-semibold
+    hover:bg-lgc-danger/10
+    dark:border-lgc-darkAccent/70 dark:text-lgc-darkAccent dark:hover:bg-lgc-darkAccent/10
+  `,
+  dangerSoft: `
+    bg-lgc-danger/10 text-lgc-danger font-semibold
+    hover:bg-lgc-danger/20
+    dark:bg-lgc-darkAccent/15 dark:text-lgc-darkAccent dark:hover:bg-lgc-darkAccent/25
+  `,
+  accentSoft: `
+    bg-lgc-accent/15 text-lgc-accent font-semibold
+    hover:bg-lgc-accent/25
+    dark:bg-lgc-darkAccent/15 dark:text-lgc-darkAccent dark:hover:bg-lgc-darkAccent/25
   `,
 };
 

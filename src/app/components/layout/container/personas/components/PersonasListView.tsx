@@ -1,15 +1,11 @@
 import { useState, type FC, type ChangeEvent } from "react";
 import type { Persona } from "../../../../../../domain/interfaces/lgc-interfaces";
-import {
-  estadoLabel,
-  formatFecha,
-} from "../personas.utils";
+import { estadoLabel, formatFecha } from "../personas.utils";
+import Button from "../../../../../ui/Button";
 
 type PersonasListViewProps = {
   search: string;
-  onSearchChange: (
-    event: ChangeEvent<HTMLInputElement>
-  ) => void;
+  onSearchChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onCreate: () => void;
   pageItems: Persona[];
   filteredCount: number;
@@ -36,9 +32,9 @@ const PersonasListView: FC<PersonasListViewProps> = ({
   onEdit,
   onSeguimiento,
 }) => {
-  const [expandedCardId, setExpandedCardId] = useState<
-    string | null
-  >(null);
+  const [expandedCardId, setExpandedCardId] = useState<string | null>(
+    null
+  );
 
   return (
     <>
@@ -118,44 +114,28 @@ const PersonasListView: FC<PersonasListViewProps> = ({
                   </td>
                   <td className="px-4 py-2">
                     <div className="flex flex-wrap gap-2">
-                      <button
-                        type="button"
+                      <Button
                         onClick={() => onView(persona.id)}
-                        className="
-                          rounded-full border border-lgc-border/70 bg-lgc-surfaceMuted px-3 py-1
-                          text-[11px] font-medium text-lgc-text hover:bg-lgc-surface
-                          dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText
-                          dark:hover:bg-lgc-darkSurface
-                        "
+                        size="sm"
                       >
                         Ver
-                      </button>
-                      <button
-                        type="button"
+                      </Button>
+
+                      <Button
                         onClick={() => onEdit(persona.id)}
-                        className="
-                          rounded-full bg-lgc-primary px-3 py-1 text-[11px] font-semibold text-lgc-onPrimary
-                          shadow-sm hover:bg-lgc-primarySoft
-                          dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna
-                        "
+                        variant="primary"
+                        size="sm"
                       >
                         Editar
-                      </button>
+                      </Button>
 
-                      <button
-                        type="button"
-                        onClick={() =>
-                          onSeguimiento(persona.id)
-                        }
-                        className="
-                          rounded-full border border-lgc-border/70 bg-lgc-surfaceMuted px-3 py-1
-                          text-[11px] font-medium text-lgc-text hover:bg-lgc-surface
-                          dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText
-                          dark:hover:bg-lgc-darkSurface
-                        "
+                      <Button
+                        size="sm"
+                        variant="accentSoft"
+                        onClick={() => onSeguimiento(persona.id)}
                       >
                         Seguimiento
-                      </button>
+                      </Button>
                     </div>
                   </td>
                 </tr>
@@ -167,8 +147,7 @@ const PersonasListView: FC<PersonasListViewProps> = ({
                     colSpan={5}
                     className="px-4 py-4 text-center text-xs md:text-sm text-lgc-textMuted dark:text-lgc-darkTextMuted"
                   >
-                    No se encontraron personas con ese
-                    criterio.
+                    No se encontraron personas con ese criterio.
                   </td>
                 </tr>
               )}
@@ -204,17 +183,14 @@ const PersonasListView: FC<PersonasListViewProps> = ({
 
               <div className="mt-2 flex items-center justify-between text-[11px] text-lgc-textMuted dark:text-lgc-darkTextMuted">
                 <span>
-                  Actualizado:{" "}
-                  {formatFecha(persona.actualizadoEn)}
+                  Actualizado: {formatFecha(persona.actualizadoEn)}
                 </span>
                 <button
                   type="button"
                   className="font-semibold text-lgc-primary hover:underline dark:text-lgc-manna"
                   onClick={() =>
                     setExpandedCardId((prev) =>
-                      prev === persona.id
-                        ? null
-                        : persona.id
+                      prev === persona.id ? null : persona.id
                     )
                   }
                 >
@@ -232,7 +208,7 @@ const PersonasListView: FC<PersonasListViewProps> = ({
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                      DirecciÇün
+                      Dirección
                     </span>
                     <span className="text-right">
                       {persona.direccion ?? "-"}
@@ -240,35 +216,28 @@ const PersonasListView: FC<PersonasListViewProps> = ({
                   </div>
 
                   <div className="pt-2 flex flex-wrap gap-2">
-                    <button
-                      type="button"
+                    <Button
                       onClick={() => onView(persona.id)}
-                      className="rounded-full border border-lgc-border/70 bg-lgc-surfaceMuted px-3 py-1 text-[11px] font-medium text-lgc-text hover:bg-lgc-surface dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText dark:hover:bg-lgc-darkSurface"
+                      size="sm"
                     >
                       Ver
-                    </button>
-                    <button
-                      type="button"
+                    </Button>
+
+                    <Button
                       onClick={() => onEdit(persona.id)}
-                      className="rounded-full bg-lgc-primary px-3 py-1 text-[11px] font-semibold text-lgc-onPrimary shadow-sm hover:bg-lgc-primarySoft dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna"
+                      variant="primary"
+                      size="sm"
                     >
                       Editar
-                    </button>
+                    </Button>
 
-                    <button
-                      type="button"
-                      onClick={() =>
-                        onSeguimiento(persona.id)
-                      }
-                      className="
-                        rounded-full border border-lgc-border/70 bg-lgc-surfaceMuted px-3 py-1
-                        text-[11px] font-medium text-lgc-text hover:bg-lgc-surface
-                        dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText
-                        dark:hover:bg-lgc-darkSurface
-                      "
+                    <Button
+                      size="sm"
+                      variant="accentSoft"
+                      onClick={() => onSeguimiento(persona.id)}
                     >
                       Seguimiento
-                    </button>
+                    </Button>
                   </div>
                 </div>
               )}
@@ -292,13 +261,8 @@ const PersonasListView: FC<PersonasListViewProps> = ({
       >
         <span className="text-lgc-textMuted dark:text-lgc-darkTextMuted text-center">
           Mostrando{" "}
-          <span className="font-semibold">
-            {pageItems.length}
-          </span>{" "}
-          de{" "}
-          <span className="font-semibold">
-            {filteredCount}
-          </span>{" "}
+          <span className="font-semibold">{pageItems.length}</span> de{" "}
+          <span className="font-semibold">{filteredCount}</span>{" "}
           personas
         </span>
 
@@ -320,11 +284,8 @@ const PersonasListView: FC<PersonasListViewProps> = ({
           </button>
 
           <span className="text-lgc-textMuted dark:text-lgc-darkTextMuted">
-            Página{" "}
-            <span className="font-semibold">{page}</span> de{" "}
-            <span className="font-semibold">
-              {totalPages}
-            </span>
+            Página <span className="font-semibold">{page}</span> de{" "}
+            <span className="font-semibold">{totalPages}</span>
           </span>
 
           <button

@@ -273,43 +273,28 @@ const RutaCrecimientoSection: FC<RutaCrecimientoSectionProps> = ({
 
                     <td className="px-4 py-3">
                       <div className="flex flex-wrap gap-2">
-                        <button
-                          type="button"
+                        <Button
                           onClick={() => handleVer(ruta.id)}
-                          className="
-                            rounded-full border border-lgc-border/70 bg-lgc-surfaceMuted px-3 py-1
-                            text-[11px] font-medium text-lgc-text hover:bg-lgc-surface
-                            dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText
-                            dark:hover:bg-lgc-darkSurface
-                          "
+                          size="sm"
                         >
                           Ver
-                        </button>
+                        </Button>
 
-                        <button
-                          type="button"
+                        <Button
                           onClick={() => handleEditar(ruta.id)}
-                          className="
-                            rounded-full bg-lgc-primary px-3 py-1 text-[11px] font-semibold text-lgc-onPrimary
-                            shadow-sm hover:bg-lgc-primarySoft
-                            dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna
-                          "
+                          variant="primary"
+                          size="sm"
                         >
                           Editar
-                        </button>
+                        </Button>
 
-                        <button
-                          type="button"
+                        <Button
+                          variant="dangerSoft"
+                          size="sm"
                           onClick={() => handleEliminar(ruta.id)}
-                          className="
-                            rounded-full border border-lgc-border/70 bg-lgc-surfaceMuted px-3 py-1
-                            text-[11px] font-medium text-lgc-text hover:bg-lgc-surface
-                            dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText
-                            dark:hover:bg-lgc-darkSurface
-                          "
                         >
                           Eliminar
-                        </button>
+                        </Button>
                       </div>
                     </td>
                   </tr>

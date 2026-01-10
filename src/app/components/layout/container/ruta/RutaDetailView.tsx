@@ -118,7 +118,7 @@ const RutaDetailView: FC<RutaDetailViewProps> = ({
                           Editar
                         </Button>
                         <Button
-                          variant="danger"
+                          variant="dangerSoft"
                           size="sm"
                           onClick={() => onDeleteActividad(act.id)}
                         >
