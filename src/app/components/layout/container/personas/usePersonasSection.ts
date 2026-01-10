@@ -12,7 +12,7 @@ const PAGE_SIZE = 5;
 export const usePersonasSection = () => {
   const { personas, setPersonas } = usePersonasContext();
   const [view, setView] = useState<ViewMode>("list");
-  const [viewHistory, setViewHistory] = useState<ViewMode[]>([]);
+  const [, setViewHistory] = useState<ViewMode[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const [search, setSearch] = useState("");
@@ -46,8 +46,6 @@ export const usePersonasSection = () => {
     () => personas.find((p) => p.id === selectedId) ?? null,
     [personas, selectedId]
   );
-
-  const resetSelection = () => setSelectedId(null);
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -178,3 +176,4 @@ export const usePersonasSection = () => {
 export type UsePersonasSectionReturn = ReturnType<
   typeof usePersonasSection
 >;
+//
