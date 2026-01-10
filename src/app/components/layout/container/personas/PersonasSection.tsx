@@ -30,9 +30,9 @@ const PersonasSection: FC<PersonasSectionProps> = ({
 }) => {
   const {
     view,
-    setView,
+    navigateTo,
+    goBack,
     selectedPersona,
-    resetSelection,
     search,
     page,
     successMessage,
@@ -50,10 +50,10 @@ const PersonasSection: FC<PersonasSectionProps> = ({
     handleSeguimientoPersona,
   } = usePersonasSection();
 
-  const handleBackToList = () => {
-    setView("list");
-    resetSelection();
-  };
+  // const handleBackToList = () => {
+  //   setView("list");
+  //   resetSelection();
+  // };
 
   return (
     <div
@@ -69,8 +69,7 @@ const PersonasSection: FC<PersonasSectionProps> = ({
         open={!!successMessage}
         title="AcciÇün exitosa"
         message={
-          successMessage ??
-          "La operación se completó correctamente."
+          successMessage ?? "La operación se completó correctamente."
         }
         onClose={closeSuccessMessage}
       />
@@ -87,7 +86,7 @@ const PersonasSection: FC<PersonasSectionProps> = ({
           <PersonasListView
             search={search}
             onSearchChange={handleSearchChange}
-            onCreate={() => setView("create")}
+            onCreate={() => navigateTo("create")}
             pageItems={pageItems}
             filteredCount={filtered.length}
             page={page}
@@ -102,7 +101,7 @@ const PersonasSection: FC<PersonasSectionProps> = ({
 
         {view === "create" && (
           <RegistrarPersonaForm
-            onCancel={() => setView("list")}
+            onCancel={goBack}
             onSave={handleSavePersona}
           />
         )}
@@ -110,22 +109,19 @@ const PersonasSection: FC<PersonasSectionProps> = ({
         {view === "detail" && (
           <PersonasDetailView
             persona={selectedPersona}
-            onBack={handleBackToList}
-            onEdit={() => {
-              if (selectedPersona)
-                handleEditPersona(selectedPersona.id);
-            }}
+            onBack={goBack}
+            onEdit={() =>
+              selectedPersona && handleEditPersona(selectedPersona.id)
+            }
           />
         )}
 
         {view === "edit" && (
           <PersonasEditView
             persona={selectedPersona}
-            onBack={() =>
-              setView(selectedPersona ? "detail" : "list")
-            }
+            onBack={goBack}
             onSave={handleUpdatePersona}
-            onCancel={() => setView("detail")}
+            onCancel={goBack}
           />
         )}
 
@@ -136,7 +132,7 @@ const PersonasSection: FC<PersonasSectionProps> = ({
             actividades={actividades}
             seguimientos={seguimientos}
             setSeguimientos={setSeguimientos}
-            onBack={() => setView("list")}
+            onBack={goBack}
           />
         )}
 

@@ -1,35 +1,46 @@
 // src/app/components/layout/container/personas/usePersonasSection.ts
 import { useMemo, useState, type ChangeEvent } from "react";
 import type { Persona } from "../../../../../domain/interfaces/lgc-interfaces";
-import {
-  estadoLabel,
-  normalizeText,
-} from "./personas.utils";
+import { estadoLabel, normalizeText } from "./personas.utils";
 import type { PersonaCreateInput } from "./personas.types";
 import { usePersonasContext } from "./PersonasContext";
 
-type ViewMode =
-  | "list"
-  | "create"
-  | "detail"
-  | "edit"
-  | "seguimiento";
+type ViewMode = "list" | "create" | "detail" | "edit" | "seguimiento";
 
 const PAGE_SIZE = 5;
 
 export const usePersonasSection = () => {
   const { personas, setPersonas } = usePersonasContext();
   const [view, setView] = useState<ViewMode>("list");
-  const [selectedId, setSelectedId] = useState<
-    string | null
-  >(null);
+  const [viewHistory, setViewHistory] = useState<ViewMode[]>([]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const [search, setSearch] = useState("");
   const [pageState, setPageState] = useState(1);
 
-  const [successMessage, setSuccessMessage] = useState<
-    string | null
-  >(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(
+    null
+  );
+
+  const navigateTo = (next: ViewMode) => {
+    setViewHistory((prev) => [...prev, view]);
+    setView(next);
+  };
+
+  const goBack = (fallback: ViewMode = "list") => {
+    setViewHistory((prev) => {
+      if (!prev.length) {
+        setView(fallback);
+        if (fallback === "list") setSelectedId(null);
+        return prev;
+      }
+
+      const last = prev[prev.length - 1];
+      setView(last);
+      if (last === "list") setSelectedId(null);
+      return prev.slice(0, -1);
+    });
+  };
 
   const selectedPersona = useMemo(
     () => personas.find((p) => p.id === selectedId) ?? null,
@@ -38,9 +49,7 @@ export const usePersonasSection = () => {
 
   const resetSelection = () => setSelectedId(null);
 
-  const handleSearchChange = (
-    e: ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
     setPageState(1);
   };
@@ -51,9 +60,7 @@ export const usePersonasSection = () => {
 
     return personas.filter((persona) => {
       const nombre = normalizeText(persona.nombreCompleto);
-      const telefono = normalizeText(
-        persona.telefono ?? ""
-      );
+      const telefono = normalizeText(persona.telefono ?? "");
       const estadoTexto = normalizeText(
         estadoLabel[persona.estado] ?? persona.estado
       );
@@ -92,27 +99,22 @@ export const usePersonasSection = () => {
   const handleSavePersona = (data: PersonaCreateInput) => {
     const now = new Date().toISOString();
 
-    // Nota: PersonaCreateInput puede tener campos extra (ej. identificación) que aún
-    // no existen en la interfaz Persona del dominio. Por eso hacemos cast.
     const newPersona = {
       ...data,
-      id: `PER-${String(personas.length + 1).padStart(
-        3,
-        "0"
-      )}`,
+      id: `PER-${String(personas.length + 1).padStart(3, "0")}`,
       creadoEn: now,
       actualizadoEn: now,
     } as Persona;
 
     setPersonas((prev) => [...prev, newPersona]);
     setView("list");
+    setViewHistory([]);
+    setSelectedId(null);
     setPageState(1);
     showSuccess("Persona registrada correctamente.");
   };
 
-  const handleUpdatePersona = (
-    data: PersonaCreateInput
-  ) => {
+  const handleUpdatePersona = (data: PersonaCreateInput) => {
     if (!selectedId) return;
 
     const now = new Date().toISOString();
@@ -129,34 +131,32 @@ export const usePersonasSection = () => {
       )
     );
 
-    setView("detail");
-    showSuccess(
-      "Datos de la persona actualizados correctamente."
-    );
+    goBack("detail");
+    showSuccess("Datos de la persona actualizados correctamente.");
   };
 
   const handleViewPersona = (id: string) => {
     setSelectedId(id);
-    setView("detail");
+    navigateTo("detail");
   };
 
   const handleEditPersona = (id: string) => {
     setSelectedId(id);
-    setView("edit");
+    navigateTo("edit");
   };
 
   const handleSeguimientoPersona = (id: string) => {
     setSelectedId(id);
-    setView("seguimiento");
+    navigateTo("seguimiento");
   };
 
   const closeSuccessMessage = () => setSuccessMessage(null);
 
   return {
     view,
-    setView,
+    navigateTo,
+    goBack,
     selectedPersona,
-    resetSelection,
     search,
     page,
     successMessage,

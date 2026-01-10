@@ -31,9 +31,7 @@ const PersonasEditView: FC<PersonasEditViewProps> = ({
             dark:hover:bg-lgc-darkSurface
           "
         >
-          <span className="text-base leading-none">
-            ƒÅ?
-          </span>
+          <span className="text-base leading-none">←</span>
           <span>Volver</span>
         </button>
       </div>
@@ -42,9 +40,7 @@ const PersonasEditView: FC<PersonasEditViewProps> = ({
         <RegistrarPersonaForm
           onSave={onSave}
           onCancel={onCancel}
-          initialData={
-            mapPersonaToFormInput(persona) ?? undefined
-          }
+          initialData={mapPersonaToFormInput(persona) ?? undefined}
           submitLabel="Guardar cambios"
         />
       ) : (
@@ -55,7 +51,7 @@ const PersonasEditView: FC<PersonasEditViewProps> = ({
             dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkTextMuted
           "
         >
-          No se encontrÇü la persona que deseas editar.
+          No se encontraron la persona que deseas editar.
         </div>
       )}
     </div>

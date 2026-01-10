@@ -9,5 +9,4 @@ export interface HeaderProps {
   onToggle: () => void;
   onLogout: () => void;
   onToggleSidebarMobile?: () => void;
-  onToggleSidebarDesktop?: () => void;
 }

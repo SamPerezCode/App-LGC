@@ -7,15 +7,16 @@ import { useClickOutside } from "../../../hooks/useClickOutside";
 
 const Header: FC<HeaderProps> = ({
   user,
-  // isDark,
+  isDark,
   activeSection,
-  // onToggleTheme,
   onLogout,
   onToggleSidebarMobile,
-  onToggleSidebarDesktop,
 }) => {
   const sectionInfo = SECTION_TITLES[activeSection];
   const initials = getInitials(user.nombre);
+  const logoSrc = isDark
+    ? "/lgc-solo-manna.PNG"
+    : "/lgc-solo-color.PNG";
 
   const [open, setOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
@@ -44,9 +45,8 @@ const Header: FC<HeaderProps> = ({
           dark:border-lgc-darkBorder/60 dark:bg-lgc-darkSurface/90
         "
       >
-        {/* boton menu + titulo */}
-        <div className="flex items-center gap-3">
-          {/* boton menu mobile */}
+        {/* menu (mobile) + logo (desktop) + titulo */}
+        <div className="flex items-center gap-3 min-w-0">
           {onToggleSidebarMobile && (
             <button
               type="button"
@@ -64,34 +64,19 @@ const Header: FC<HeaderProps> = ({
             </button>
           )}
 
-          {/* boton menu desktop */}
-          {onToggleSidebarDesktop && (
-            <button
-              type="button"
-              onClick={onToggleSidebarDesktop}
-              data-sidebar-toggle="desktop"
-              className="
-            hidden md:inline-flex h-9 w-9 items-center justify-center
-            rounded-full border border-lgc-border bg-lgc-surface
-            hover:bg-lgc-surfaceMuted
-            dark:border-lgc-darkBorder dark:bg-lgc-darkSurface dark:hover:bg-lgc-darkSurfaceMuted
-          "
-              aria-label="Alternar menu lateral"
-            >
-              <img src="/menu.svg" alt="Menu" className="h-4 w-4" />
-            </button>
-          )}
+          <div className="hidden md:flex h-9 w-9 items-center justify-center rounded-2xl bg-lgc-surfaceMuted shadow-sm dark:bg-lgc-darkSurfaceMuted">
+            <img
+              src={logoSrc}
+              alt="Logo LGC"
+              className="h-6 w-6 object-contain"
+            />
+          </div>
 
-          <div>
-            <h1 className="text-lg font-semibold text-lgc-primary dark:text-lgc-darkPrimary">
+          <div className="min-w-0">
+            <h1 className="text-lg font-semibold text-lgc-primary dark:text-lgc-darkPrimary truncate">
               {sectionInfo.title}
             </h1>
-            <p
-              className="
-                hidden md:block
-                text-xs text-lgc-textMuted dark:text-lgc-darkTextMuted
-              "
-            >
+            <p className="hidden md:block text-xs text-lgc-textMuted dark:text-lgc-darkTextMuted">
               {sectionInfo.subtitle}
             </p>
           </div>

@@ -1,9 +1,6 @@
 import type { FC } from "react";
 import type { Persona } from "../../../../../../domain/interfaces/lgc-interfaces";
-import {
-  estadoLabel,
-  formatFecha,
-} from "../personas.utils";
+import { estadoLabel, formatFecha } from "../personas.utils";
 
 type PersonasDetailViewProps = {
   persona: Persona | null;
@@ -30,9 +27,7 @@ const PersonasDetailView: FC<PersonasDetailViewProps> = ({
             dark:hover:bg-lgc-darkSurface
           "
         >
-          <span className="text-base leading-none">
-            ƒÅ?
-          </span>
+          <span className="text-base leading-none">←</span>
           <span>Volver al listado</span>
         </button>
 
@@ -66,7 +61,7 @@ const PersonasDetailView: FC<PersonasDetailViewProps> = ({
 
             <div>
               <p className="text-xs font-medium text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                TelÇ¸fono
+                Teléfono
               </p>
               <p className="mt-1 text-sm text-lgc-text dark:text-lgc-darkText">
                 {persona.telefono ?? "-"}
@@ -84,7 +79,7 @@ const PersonasDetailView: FC<PersonasDetailViewProps> = ({
 
             <div>
               <p className="text-xs font-medium text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                DirecciÇün
+                Dirección
               </p>
               <p className="mt-1 text-sm text-lgc-text dark:text-lgc-darkText">
                 {persona.direccion ?? "-"}
@@ -93,7 +88,7 @@ const PersonasDetailView: FC<PersonasDetailViewProps> = ({
 
             <div>
               <p className="text-xs font-medium text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                GÇ¸nero
+                Género
               </p>
               <p className="mt-1 text-sm text-lgc-text dark:text-lgc-darkText">
                 {persona.genero === "MASCULINO"
@@ -131,15 +126,14 @@ const PersonasDetailView: FC<PersonasDetailViewProps> = ({
               </span>
             </span>
             <span>
-              Çsltima actualizaciÇün:{" "}
+              Última actualización:{" "}
               {formatFecha(persona.actualizadoEn)}
             </span>
           </div>
         </div>
       ) : (
         <div className="rounded-xl border border-lgc-border/60 bg-lgc-surface p-4 text-xs text-lgc-textMuted shadow-sm dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkTextMuted">
-          No se encontrÇü la informaciÇün de la persona
-          seleccionada.
+          No se encontró la información de la persona seleccionada.
         </div>
       )}
     </div>

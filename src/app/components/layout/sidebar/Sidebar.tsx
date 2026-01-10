@@ -7,7 +7,6 @@ import { SIDEBAR_GROUPS } from "./sidebar.constants";
 const NUEVO_CREYENTE_SECTIONS: AppSection[] = ["personas", "ruta"];
 
 const Sidebar: FC<SidebarProps> = ({
-  isDark,
   user,
   activeSection,
   onSectionChange,
@@ -17,7 +16,6 @@ const Sidebar: FC<SidebarProps> = ({
 }) => {
   const isMobile = variant === "mobile";
   const isExpanded = isMobile ? true : expanded ?? false;
-
   const isCollapsed = !isMobile && !isExpanded;
 
   const [openGroupId, setOpenGroupId] = useState<string | null>(() =>
@@ -26,9 +24,7 @@ const Sidebar: FC<SidebarProps> = ({
       : null
   );
 
-  const logoSrc = isDark
-    ? "/lgc-solo-manna.PNG"
-    : "/lgc-solo-color.PNG";
+  const showBrand = isMobile || isExpanded;
 
   return (
     <aside
@@ -41,40 +37,56 @@ const Sidebar: FC<SidebarProps> = ({
           ${isMobile ? "w-64" : isExpanded ? "w-64" : "w-16"}
         `}
     >
-      {/* Logo + rol */}
+      {/* Top bar (menu + brand) */}
       <div className="h-16 flex items-center border-b border-lgc-border/40 px-3 dark:border-lgc-darkBorder/40">
-        <div
-          className={[
-            "flex h-10 w-10 items-center justify-center rounded-2xl bg-lgc-manna shadow-sm dark:bg-lgc-darkSurfaceMuted",
-            !isMobile && !isExpanded ? "cursor-pointer" : "",
-          ].join(" ")}
-          onClick={() => {
-            if (!isMobile && !isExpanded) onToggleSidebarDesktop?.();
-          }}
-          role={!isMobile && !isExpanded ? "button" : undefined}
-          tabIndex={!isMobile && !isExpanded ? 0 : undefined}
-          onKeyDown={(e) => {
-            if (!isMobile && !isExpanded && e.key === "Enter")
-              onToggleSidebarDesktop?.();
-          }}
-        >
-          <img
-            src={logoSrc}
-            alt="Logo LGC"
-            className="h-8 w-8 object-contain"
-          />
-        </div>
-
-        {isExpanded && (
-          <div className="ml-3 flex flex-col">
-            <span className="text-sm font-semibold leading-tight">
-              LGC • Panel
-            </span>
-            <span className="text-[11px] text-lgc-manna/80 dark:text-lgc-darkTextMuted">
-              {user.rol}
-            </span>
-          </div>
+        {!isMobile && (
+          <button
+            type="button"
+            onClick={() => onToggleSidebarDesktop?.()}
+            data-sidebar-toggle="desktop"
+            className="
+              flex h-9 w-9 items-center justify-center rounded-full
+              border border-lgc-border/60 bg-lgc-olive/80 text-lgc-manna
+              hover:bg-lgc-olive/70
+              dark:border-lgc-darkBorder/60 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText
+              dark:hover:bg-lgc-darkSurface
+            "
+            aria-label="Alternar menu lateral"
+          >
+            <img
+              src="/menu.svg"
+              alt="Menu"
+              className="h-4 w-4 object-contain"
+            />
+          </button>
         )}
+
+        <div
+          className={`flex items-center ${isMobile ? "gap-3" : ""}`}
+        >
+          {isMobile && (
+            <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-lgc-surfaceMuted shadow-sm dark:bg-lgc-darkSurfaceMuted">
+              <img
+                src="/lgc-solo-color.PNG"
+                alt="Logo LGC"
+                className="h-6 w-6 object-contain"
+              />
+            </div>
+          )}
+
+          {showBrand && (
+            <div
+              className={`${!isMobile ? "ml-3" : ""} flex flex-col`}
+            >
+              <span className="text-sm font-semibold leading-tight">
+                LGC Panel
+              </span>
+              <span className="text-[11px] text-lgc-manna/80 dark:text-lgc-darkTextMuted">
+                {user.rol}
+              </span>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* NAV - centrado vertical */}
