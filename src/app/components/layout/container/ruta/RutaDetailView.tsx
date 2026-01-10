@@ -2,6 +2,11 @@ import type { FC } from "react";
 import type { RutaCrecimiento } from "../../../../../domain/interfaces/lgc-interfaces";
 import RutaActividadesMobileCards from "./RutaActividadesMobileCards";
 
+import SectionHeader from "../../../../ui/SectionHeader";
+import BackButton from "../../../../ui/BackButton";
+import Button from "../../../../ui/Button";
+import StatusToggle from "../../../../ui/StatusToggle";
+
 interface RutaDetailViewProps {
   ruta: RutaCrecimiento | null;
   actividades: Array<{
@@ -27,35 +32,7 @@ const RutaDetailView: FC<RutaDetailViewProps> = ({
 }) => {
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <button
-          type="button"
-          onClick={onBack}
-          className="
-            inline-flex items-center gap-2 rounded-xl border border-lgc-border/70
-            bg-lgc-surfaceMuted px-4 py-2 text-xs md:text-sm font-medium text-lgc-text
-            hover:bg-lgc-surface
-            dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText
-            dark:hover:bg-lgc-darkSurface
-          "
-        >
-          <span className="text-base leading-none">←</span>
-          Volver
-        </button>
-
-        <button
-          type="button"
-          onClick={onAddActividad}
-          className="
-            rounded-xl bg-lgc-primary px-4 py-2 text-xs md:text-sm font-semibold text-lgc-onPrimary
-            shadow-sm hover:bg-lgc-primarySoft
-            dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna
-            transition-colors
-          "
-        >
-          Agregar actividad
-        </button>
-      </div>
+      <BackButton onClick={onBack} />
 
       {ruta ? (
         <div
@@ -64,30 +41,19 @@ const RutaDetailView: FC<RutaDetailViewProps> = ({
             dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted
           "
         >
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <h3 className="text-base md:text-lg font-semibold text-lgc-primary dark:text-lgc-darkPrimary">
-                {ruta.nombre}
-              </h3>
-
-              {ruta.descripcion && (
-                <p className="mt-1 text-sm text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                  {ruta.descripcion}
-                </p>
-              )}
-            </div>
-
-            <span
-              className={`inline-flex rounded-full px-3 py-1 text-[11px] font-medium
-                ${
-                  ruta.activa
-                    ? "bg-lgc-surfaceMuted text-lgc-text dark:bg-lgc-darkSurface dark:text-lgc-darkText"
-                    : "bg-lgc-surfaceMuted/60 text-lgc-textMuted dark:bg-lgc-darkSurface dark:text-lgc-darkTextMuted"
-                }`}
-            >
-              {ruta.activa ? "Activa" : "Inactiva"}
-            </span>
-          </div>
+          <SectionHeader
+            title={ruta.nombre}
+            subtitle={ruta.descripcion}
+            status={{
+              label: ruta.activa ? "Activa" : "Inactiva",
+              tone: ruta.activa ? "success" : "muted",
+            }}
+            actions={
+              <Button variant="primary" onClick={onAddActividad}>
+                Agregar actividad
+              </Button>
+            }
+          />
 
           {/* =========================
     ACTIVIDADES: MOBILE + DESKTOP
@@ -132,58 +98,23 @@ const RutaDetailView: FC<RutaDetailViewProps> = ({
                     </td>
 
                     <td className="px-4 py-3">
-                      <button
-                        type="button"
+                      <StatusToggle
+                        checked={act.activa}
                         onClick={() => onToggleActividad(act.id)}
-                        className="
-                    inline-flex items-center justify-between
-                    w-28 px-3 py-1
-                    rounded-full border border-lgc-border/70
-                    bg-lgc-surfaceMuted
-                    text-[11px] font-medium text-lgc-text
-                    hover:bg-lgc-surface
-                    dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText
-                    transition-colors
-                  "
-                        aria-pressed={act.activa}
-                      >
-                        <span className="min-w-[52px] text-left">
-                          {act.activa ? "Activa" : "Inactiva"}
-                        </span>
-
-                        <span
-                          className={`
-                      relative inline-flex h-5 w-9 items-center rounded-full transition-colors
-                      ${
-                        act.activa
-                          ? "bg-lgc-primary"
-                          : "bg-lgc-border/60 dark:bg-lgc-darkBorder/60"
-                      }
-                    `}
-                        >
-                          <span
-                            className={`
-          inline-block h-4 w-4 rounded-full bg-white transition-transform
-          ${act.activa ? "translate-x-4" : "translate-x-1"}
-        `}
-                          />
-                        </span>
-                      </button>
+                        onLabel="Activa"
+                        offLabel="Inactiva"
+                      />
                     </td>
 
                     <td className="px-4 py-3">
                       <div className="flex flex-wrap gap-2">
-                        <button
-                          type="button"
+                        <Button
+                          variant="primary"
                           onClick={() => onEditActividad(act.id)}
-                          className="
-                              rounded-full bg-lgc-primary px-3 py-1 text-[11px] font-semibold text-lgc-onPrimary
-                              shadow-sm hover:bg-lgc-primarySoft
-                              dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna
-                            "
                         >
+                          {" "}
                           Editar
-                        </button>
+                        </Button>
                       </div>
                     </td>
                   </tr>

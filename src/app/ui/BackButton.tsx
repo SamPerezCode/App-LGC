@@ -16,7 +16,7 @@ const BackButton: FC<BackButtonProps> = ({
       size="sm"
       onClick={onClick}
       startIcon={
-        <span className="text-base leading-none">{"<"}</span>
+        <span className="text-base leading-none">{"←"}</span>
       }
     >
       {label}
