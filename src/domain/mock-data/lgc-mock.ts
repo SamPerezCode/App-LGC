@@ -245,7 +245,7 @@ export const seguimientosMock: SeguimientoActividadPersona[] = [
   {
     id: "SEG-006",
     personaId: "PER-003",
-    actividadRutaId: "ACT-004",
+    actividadRutaId: "ACT-003",
     estado: "COMPLETADA",
     fechaAsignacion: "2024-10-15T19:00:00Z",
     fechaCumplimiento: "2024-11-30T19:00:00Z",
@@ -256,7 +256,7 @@ export const seguimientosMock: SeguimientoActividadPersona[] = [
   {
     id: "SEG-007",
     personaId: "PER-003",
-    actividadRutaId: "ACT-006",
+    actividadRutaId: "ACT-004",
     estado: "COMPLETADA",
     fechaAsignacion: "2024-12-10T08:00:00Z",
     fechaCumplimiento: "2024-12-20T09:30:00Z",
@@ -266,7 +266,7 @@ export const seguimientosMock: SeguimientoActividadPersona[] = [
   {
     id: "SEG-008",
     personaId: "PER-003",
-    actividadRutaId: "ACT-007",
+    actividadRutaId: "ACT-005",
     estado: "PENDIENTE",
     fechaAsignacion: "2025-01-15T09:00:00Z",
     observaciones: "Sirviendo en el ministerio de alabanza.",

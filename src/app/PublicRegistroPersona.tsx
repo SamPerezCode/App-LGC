@@ -2,6 +2,8 @@
 import { useState, type FC } from "react";
 import RegistrarPersonaForm from "./components/layout/container/personas/RegistrarPersonaForm";
 import type { PersonaCreateInput } from "./components/layout/container/personas/personas.types";
+import type { Persona } from "../domain/interfaces/lgc-interfaces";
+import { usePersonasContext } from "./components/layout/container/personas/PersonasContext";
 import SuccessModal from "./components/common/SuccessModal";
 import Footer from "./components/layout/footer/Footer";
 
@@ -9,14 +11,36 @@ interface PublicRegistroPersonaPageProps {
   isDark: boolean;
 }
 
-const PublicRegistroPersonaPage: FC<PublicRegistroPersonaPageProps> = ({ isDark }) => {
+const PublicRegistroPersonaPage: FC<
+  PublicRegistroPersonaPageProps
+> = ({ isDark }) => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [formKey, setFormKey] = useState(0);
+  const { setPersonas } = usePersonasContext();
 
-  const logoSrc = isDark ? "/lgc-solo-manna.PNG" : "/lgc-solo-color.PNG";
+  const logoSrc = isDark
+    ? "/lgc-solo-manna.PNG"
+    : "/lgc-solo-color.PNG";
 
   const handleSave = (data: PersonaCreateInput) => {
-    console.log("Nueva persona registrada (público):", data);
+    const now = new Date().toISOString();
+
+    setPersonas((prev) => {
+      const nextId = `PER-${String(prev.length + 1).padStart(
+        3,
+        "0"
+      )}`;
+      const newPersona = {
+        ...data,
+        id: nextId,
+        estado: data.estado ?? "NUEVO",
+        creadoEn: now,
+        actualizadoEn: now,
+      } as Persona;
+
+      return [...prev, newPersona];
+    });
+
     setShowSuccess(true);
   };
 
@@ -32,7 +56,11 @@ const PublicRegistroPersonaPage: FC<PublicRegistroPersonaPageProps> = ({ isDark 
           {/* Header */}
           <div className="mb-6 flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-lgc-surface shadow-sm dark:bg-lgc-darkSurfaceMuted">
-              <img src={logoSrc} alt="Logo LGC" className="h-8 w-8 object-contain" />
+              <img
+                src={logoSrc}
+                alt="Logo LGC"
+                className="h-8 w-8 object-contain"
+              />
             </div>
             <div>
               <h1 className="text-lg md:text-2xl font-semibold text-lgc-primary dark:text-lgc-darkPrimary">

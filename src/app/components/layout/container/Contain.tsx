@@ -33,7 +33,12 @@ const Contain: FC<ContainProps> = ({ activeSection }) => {
 
   return (
     <main className="flex-1 overflow-y-auto px-4 py-4 md:px-6 md:py-6">
-      {activeSection === "dashboard" && <DashboardSection />}
+      {activeSection === "dashboard" && (
+        <DashboardSection
+          actividades={actividades}
+          seguimientos={seguimientos}
+        />
+      )}
 
       {activeSection === "personas" && (
         <PersonasSection

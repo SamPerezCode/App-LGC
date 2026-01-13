@@ -6,15 +6,31 @@ import {
   type RangeOption,
 } from "./useDashboardMetrics";
 
+import type {
+  ActividadRutaCrecimiento,
+  SeguimientoActividadPersona,
+} from "../../../../../domain/interfaces/lgc-interfaces";
+
+type DashboardSectionProps = {
+  actividades: ActividadRutaCrecimiento[];
+  seguimientos: SeguimientoActividadPersona[];
+};
+
 const RANGE_OPTIONS: RangeOption[] = [
   { label: "7d", days: 7 },
   { label: "30d", days: 30 },
   { label: "90d", days: 90 },
 ];
 
-const DashboardSection: FC = () => {
+const DashboardSection: FC<DashboardSectionProps> = ({
+  actividades,
+  seguimientos,
+}) => {
   const [range, setRange] = useState(RANGE_OPTIONS[1]);
-  const metrics = useDashboardMetrics(range);
+  const metrics = useDashboardMetrics(range, {
+    actividades,
+    seguimientos,
+  });
 
   return (
     <section className="flex flex-col gap-6">
@@ -24,8 +40,7 @@ const DashboardSection: FC = () => {
             Panel ejecutivo
           </h2>
           <p className="text-sm text-lgc-textMuted dark:text-lgc-darkTextMuted">
-            Resumen de personas, ruta y seguimiento en un
-            solo lugar.
+            Resumen de personas, ruta y seguimiento en un solo lugar.
           </p>
         </div>
         <RangeSelector

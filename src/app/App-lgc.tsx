@@ -7,7 +7,6 @@ import Footer from "./components/layout/footer/Footer";
 import Header from "./components/layout/header/Header";
 import Sidebar from "./components/layout/sidebar/Sidebar";
 import type { AppSection } from "./types/layout";
-import { PersonasProvider } from "./components/layout/container/personas/PersonasContext";
 
 interface AppLgcProps {
   user: Usuario;
@@ -82,64 +81,62 @@ const AppLgc: React.FC<AppLgcProps> = ({
   }, [isSidebarExpanded]);
 
   return (
-    <PersonasProvider>
-      <div className="flex min-h-screen">
-        {/* BACKDROP movil */}
-        {isSidebarMobileOpen && (
-          <div
-            className="fixed inset-0 z-30 bg-black/30 md:hidden"
-            onClick={closeSidebarMobile}
-          />
-        )}
-
-        {/* SIDEBAR MOVIL */}
+    <div className="flex min-h-screen">
+      {/* BACKDROP movil */}
+      {isSidebarMobileOpen && (
         <div
-          className={`
+          className="fixed inset-0 z-30 bg-black/30 md:hidden"
+          onClick={closeSidebarMobile}
+        />
+      )}
+
+      {/* SIDEBAR MOVIL */}
+      <div
+        className={`
     fixed inset-y-0 left-0 z-40 md:hidden
     w-64
     transition-transform duration-300
     ${isSidebarMobileOpen ? "translate-x-0" : "-translate-x-full"}
   `}
-        >
-          <Sidebar
-            variant="mobile"
-            user={user}
-            activeSection={activeSection}
-            onSectionChange={(section) => {
-              setActiveSection(section);
-              closeSidebarMobile();
-            }}
-          />
-        </div>
-
-        {/* SIDEBAR DESKTOP */}
-        <div className="hidden md:block" ref={desktopSidebarRef}>
-          <Sidebar
-            variant="desktop"
-            user={user}
-            activeSection={activeSection}
-            onSectionChange={setActiveSection}
-            expanded={isSidebarExpanded}
-            onToggleSidebarDesktop={toggleSidebarDesktop}
-          />
-        </div>
-
-        <div className="flex flex-1 flex-col bg-lgc-bg dark:bg-lgc-darkBg">
-          <Header
-            user={user}
-            isDark={isDark}
-            activeSection={activeSection}
-            onToggleTheme={onToggleTheme}
-            onToggle={onToggleTheme}
-            onLogout={onLogout}
-            onToggleSidebarMobile={toggleSidebarMobile}
-          />
-
-          <Contain activeSection={activeSection} />
-          <Footer />
-        </div>
+      >
+        <Sidebar
+          variant="mobile"
+          user={user}
+          activeSection={activeSection}
+          onSectionChange={(section) => {
+            setActiveSection(section);
+            closeSidebarMobile();
+          }}
+        />
       </div>
-    </PersonasProvider>
+
+      {/* SIDEBAR DESKTOP */}
+      <div className="hidden md:block" ref={desktopSidebarRef}>
+        <Sidebar
+          variant="desktop"
+          user={user}
+          activeSection={activeSection}
+          onSectionChange={setActiveSection}
+          expanded={isSidebarExpanded}
+          onToggleSidebarDesktop={toggleSidebarDesktop}
+        />
+      </div>
+
+      <div className="flex flex-1 flex-col bg-lgc-bg dark:bg-lgc-darkBg">
+        <Header
+          user={user}
+          isDark={isDark}
+          activeSection={activeSection}
+          onToggleTheme={onToggleTheme}
+          onToggle={onToggleTheme}
+          onLogout={onLogout}
+          onToggleSidebarMobile={toggleSidebarMobile}
+        />
+
+        <Contain activeSection={activeSection} />
+        <Footer />
+      </div>
+    </div>
   );
 };
 

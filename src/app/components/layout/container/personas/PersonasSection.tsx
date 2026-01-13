@@ -67,7 +67,7 @@ const PersonasSection: FC<PersonasSectionProps> = ({
       {/* Modal de exito reutilizable */}
       <SuccessModal
         open={!!successMessage}
-        title="AcciÇün exitosa"
+        title="Acción exitosa"
         message={
           successMessage ?? "La operación se completó correctamente."
         }

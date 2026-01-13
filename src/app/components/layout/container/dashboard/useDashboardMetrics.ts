@@ -1,9 +1,9 @@
 import { useMemo } from "react";
-import {
-  actividadesRutaMock,
-  seguimientosMock,
-  contactosMock,
-} from "../../../../../domain/mock-data/lgc-mock";
+import { contactosMock } from "../../../../../domain/mock-data/lgc-mock";
+import type {
+  ActividadRutaCrecimiento,
+  SeguimientoActividadPersona,
+} from "../../../../../domain/interfaces/lgc-interfaces";
 import { usePersonasContext } from "../personas/PersonasContext";
 
 export type RangeOption = { label: string; days: number };
@@ -54,6 +54,10 @@ export type DashboardMetrics = {
   routeSteps: RouteStepItem[];
 };
 
+export type DashboardData = {
+  actividades: ActividadRutaCrecimiento[];
+  seguimientos: SeguimientoActividadPersona[];
+};
 const KPI_ICONS = {
   personas: "/person.svg",
   nuevos: "/person_add.svg",
@@ -84,19 +88,21 @@ const deltaPercent = (current: number, previous: number) => {
 };
 
 export const useDashboardMetrics = (
-  range: RangeOption
+  range: RangeOption,
+  data: DashboardData
 ): DashboardMetrics => {
   const { personas } = usePersonasContext();
+  const { actividades, seguimientos } = data;
 
   return useMemo(() => {
     const referenceDates: string[] = [
       ...personas.map((p) => p.creadoEn),
       ...contactosMock.map((c) => c.fecha),
-      ...seguimientosMock.map((s) => s.fechaAsignacion),
-      ...seguimientosMock.flatMap((s) =>
+      ...seguimientos.map((s) => s.fechaAsignacion),
+      ...seguimientos.flatMap((s) =>
         s.fechaCumplimiento ? [s.fechaCumplimiento] : []
       ),
-      ...actividadesRutaMock.map((a) => a.actualizadoEn),
+      ...actividades.map((a) => a.actualizadoEn),
     ];
 
     const now = getReferenceTimestamp(referenceDates);
@@ -127,12 +133,12 @@ export const useDashboardMetrics = (
       inPrevWindow(p.creadoEn, range.days)
     ).length;
 
-    const totalSeguimientos = seguimientosMock.length;
-    const seguimientosCompletados = seguimientosMock.filter(
+    const totalSeguimientos = seguimientos.length;
+    const seguimientosCompletados = seguimientos.filter(
       (s) => s.estado === "COMPLETADA"
     ).length;
 
-    const seguimientosPendientes = seguimientosMock.filter(
+    const seguimientosPendientes = seguimientos.filter(
       (s) => s.estado === "PENDIENTE"
     ).length;
 
@@ -142,10 +148,10 @@ export const useDashboardMetrics = (
         )
       : 0;
 
-    const totalActividades = actividadesRutaMock.length || 1;
+    const totalActividades = actividades.length || 1;
     const avancePromedio =
       personas.reduce((acc, persona) => {
-        const completadas = seguimientosMock.filter(
+        const completadas = seguimientos.filter(
           (s) =>
             s.personaId === persona.id && s.estado === "COMPLETADA"
         ).length;
@@ -168,7 +174,7 @@ export const useDashboardMetrics = (
       };
     });
 
-    const actividades = actividadesRutaMock.map((actividad) => ({
+    const actividadesRecientes = actividades.map((actividad) => ({
       id: actividad.id,
       title: actividad.nombre,
       subtitle: actividad.tipo,
@@ -177,11 +183,17 @@ export const useDashboardMetrics = (
       kind: "ruta" as const,
     }));
 
-    const recentActivity = [...contactos, ...actividades]
+    const recentActivity = [...contactos, ...actividadesRecientes]
       .filter((item) => inWindow(item.date, range.days))
       .sort((a, b) => toTimestamp(b.date) - toTimestamp(a.date))
       .slice(0, 5)
-      .map(({ date: _date, ...item }) => item);
+      .map((item) => ({
+        id: item.id,
+        title: item.title,
+        subtitle: item.subtitle,
+        dateLabel: item.dateLabel,
+        kind: item.kind,
+      }));
 
     const lastContactByPersona = new Map<string, number>();
     contactosMock.forEach((contacto) => {
@@ -199,9 +211,9 @@ export const useDashboardMetrics = (
       return daysBetween(now, lastContact) > 14;
     }).length;
 
-    const routeSteps: RouteStepItem[] = actividadesRutaMock.map(
+    const routeSteps: RouteStepItem[] = actividades.map(
       (actividad) => {
-        const completadas = seguimientosMock.filter(
+        const completadas = seguimientos.filter(
           (s) =>
             s.actividadRutaId === actividad.id &&
             s.estado === "COMPLETADA"
@@ -313,5 +325,5 @@ export const useDashboardMetrics = (
       recentActivity,
       routeSteps,
     };
-  }, [range, personas]);
+  }, [range, personas, actividades, seguimientos]);
 };

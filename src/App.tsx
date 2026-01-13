@@ -4,6 +4,7 @@ import type { Usuario } from "./domain/interfaces/lgc-interfaces";
 import AppLgc from "./app/App-lgc";
 import Login from "./app/Login";
 import PublicRegistroPersona from "./app/PublicRegistroPersona";
+import { PersonasProvider } from "./app/components/layout/container/personas/PersonasContext";
 import { useAuth } from "./app/hooks/useAuth";
 import { useTheme } from "./app/hooks/useTheme";
 
@@ -14,37 +15,42 @@ const App: React.FC = () => {
   return (
     <div className={dark ? "dark" : ""}>
       <div className="min-h-screen bg-lgc-bg text-lgc-text dark:bg-lgc-darkBg dark:text-lgc-darkText">
-        <Routes>
-          {/* 🔹 Ruta pública para el registro de personas */}
-          <Route path="/registro-persona" element={<PublicRegistroPersona isDark={dark} />} />
+        <PersonasProvider>
+          <Routes>
+            {/* 🔹 Ruta pública para el registro de personas */}
+            <Route
+              path="/registro-persona"
+              element={<PublicRegistroPersona isDark={dark} />}
+            />
 
-          <Route
-            path="/login"
-            element={
-              isAuthenticated ? (
-                <Navigate to="/" replace />
-              ) : (
-                <Login onLoginSuccess={login} isDark={dark} />
-              )
-            }
-          />
+            <Route
+              path="/login"
+              element={
+                isAuthenticated ? (
+                  <Navigate to="/" replace />
+                ) : (
+                  <Login onLoginSuccess={login} isDark={dark} />
+                )
+              }
+            />
 
-          <Route
-            path="/"
-            element={
-              isAuthenticated ? (
-                <AppLgc
-                  user={user as Usuario}
-                  isDark={dark}
-                  onToggleTheme={toggleTheme}
-                  onLogout={() => logout()}
-                />
-              ) : (
-                <Navigate to="/login" replace />
-              )
-            }
-          />
-        </Routes>
+            <Route
+              path="/"
+              element={
+                isAuthenticated ? (
+                  <AppLgc
+                    user={user as Usuario}
+                    isDark={dark}
+                    onToggleTheme={toggleTheme}
+                    onLogout={() => logout()}
+                  />
+                ) : (
+                  <Navigate to="/login" replace />
+                )
+              }
+            />
+          </Routes>
+        </PersonasProvider>
       </div>
     </div>
   );
