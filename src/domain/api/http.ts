@@ -1,4 +1,5 @@
-const BASE_URL = import.meta.env.VITE_API_URL ?? "";
+const RAW_BASE_URL = import.meta.env.VITE_API_URL ?? "";
+const BASE_URL = RAW_BASE_URL.replace(/\/+$/, "");
 
 export type ApiError = {
   status: number;
@@ -19,7 +20,11 @@ export async function apiFetch<T>(
     headers.set("Content-Type", "application/json");
   }
 
-  const response = await fetch(`${BASE_URL}${path}`, {
+  const url = `${BASE_URL}${
+    path.startsWith("/") ? path : `/${path}`
+  }`;
+
+  const response = await fetch(url, {
     ...options,
     headers,
   });

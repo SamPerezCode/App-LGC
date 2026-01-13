@@ -1,5 +1,5 @@
 import type { Persona } from "../interfaces/lgc-interfaces";
-import type { PersonaCreateInput } from "../../app/components/layout/container/personas/personas.types";
+import type { PersonaCreateInput } from "../interfaces/persona.dto";
 import { apiFetch } from "./http";
 import { API_PATHS } from "./endpoints";
 
