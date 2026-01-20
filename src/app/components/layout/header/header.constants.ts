@@ -1,24 +1,17 @@
 import type { AppSection } from "../../../types/layout";
 
-export const SECTION_TITLES: Record<AppSection, { title: string; subtitle: string }> = {
-  dashboard: {
-    title: "Dashboard",
-    subtitle: "Resumen general del estado de la iglesia y los módulos.",
+// src/app/components/layout/header/header.constants.ts
+export const HEADER_CONTENT: Record<
+  AppSection,
+  { title: string; subtitle: string }
+> = {
+  dashboard: { title: "Dashboard", subtitle: "..." },
+  personas: { title: "Personas", subtitle: "..." },
+  ruta: { title: "Ruta de crecimiento", subtitle: "..." },
+  seguimiento: { title: "Seguimiento", subtitle: "..." },
+  "miembros-antiguos": {
+    title: "Miembros antiguos",
+    subtitle: "Actualiza informacion de miembros.",
   },
-  personas: {
-    title: "Personas",
-    subtitle: "Administra los nuevos asistentes, miembros y su información.",
-  },
-  ruta: {
-    title: "Ruta de crecimiento",
-    subtitle: "Configura y administra las actividades de la ruta de crecimiento.",
-  },
-  seguimiento: {
-    title: "Seguimiento",
-    subtitle: "Da seguimiento a los nuevos según su avance en la ruta.",
-  },
-  config: {
-    title: "Configuración",
-    subtitle: "Ajusta parámetros generales del sistema.",
-  },
+  config: { title: "Configuracion", subtitle: "..." },
 };
