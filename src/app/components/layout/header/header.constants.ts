@@ -1,7 +1,6 @@
 import type { AppSection } from "../../../types/layout";
 
-// src/app/components/layout/header/header.constants.ts
-export const HEADER_CONTENT: Record<
+export const SECTION_TITLES: Record<
   AppSection,
   { title: string; subtitle: string }
 > = {
