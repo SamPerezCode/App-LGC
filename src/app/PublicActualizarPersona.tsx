@@ -1,10 +1,12 @@
-import { useState, type FC } from "react";
-import RegistrarPersonaForm from "./components/layout/container/personas/RegistrarPersonaForm";
-import type { PersonaCreateInput } from "./components/layout/container/personas/personas.types";
-import type { Persona } from "../domain/interfaces/lgc-interfaces";
-import { usePersonasContext } from "./components/layout/container/personas/PersonasContext";
-import SuccessModal from "./components/common/SuccessModal";
+import { type FC } from "react";
 import Footer from "./components/layout/footer/Footer";
+import SuccessModal from "./components/common/SuccessModal";
+import ProgressBar from "./components/public/actualizacion/ProgressBar";
+import StepSelector from "./components/public/actualizacion/StepSelector";
+import StepDatosPersonales from "./components/public/actualizacion/StepDatosPersonales";
+import StepContacto from "./components/public/actualizacion/StepContacto";
+import StepBautismo from "./components/public/actualizacion/StepBautismo";
+import { useActualizacionForm } from "./components/public/actualizacion/useActualizacionForm";
 
 interface PublicActualizarPersonaPageProps {
   isDark: boolean;
@@ -13,66 +15,33 @@ interface PublicActualizarPersonaPageProps {
 const PublicActualizarPersonaPage: FC<
   PublicActualizarPersonaPageProps
 > = ({ isDark }) => {
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [formKey, setFormKey] = useState(0);
-  const { setPersonas } = usePersonasContext();
+  const {
+    step,
+    form,
+    age,
+    isMinor,
+    error,
+    showSuccess,
+    updateField,
+    setRegistrando,
+    setAdultoRelacion,
+    setVinculadoMinisterio,
+    toggleMinisterio,
+    setBautizado,
+    nextStep,
+    prevStep,
+    submitForm,
+    closeSuccess,
+  } = useActualizacionForm();
 
   const logoSrc = isDark
     ? "/lgc-solo-manna.PNG"
     : "/lgc-solo-color.PNG";
 
-  const handleSave = (data: PersonaCreateInput) => {
-    const now = new Date().toISOString();
-    const doc = data.numeroDocumento?.trim();
-    const phone = data.telefono?.trim();
-    const email = data.correo?.trim().toLowerCase();
-
-    setPersonas((prev) => {
-      const matchIndex = prev.findIndex((persona) => {
-        if (doc && persona.numeroDocumento === doc) return true;
-        if (phone && persona.telefono === phone) return true;
-        if (email && persona.correo?.toLowerCase() === email)
-          return true;
-        return false;
-      });
-
-      if (matchIndex >= 0) {
-        const updated: Persona = {
-          ...prev[matchIndex],
-          ...data,
-          estado: data.estado ?? prev[matchIndex].estado ?? "MIEMBRO",
-          actualizadoEn: now,
-        };
-
-        const next = [...prev];
-        next[matchIndex] = updated;
-        return next;
-      }
-
-      const nextId = `PER-${String(prev.length + 1).padStart(3, "0")}`;
-      const newPersona = {
-        ...data,
-        id: nextId,
-        estado: data.estado ?? "MIEMBRO",
-        creadoEn: now,
-        actualizadoEn: now,
-      } as Persona;
-
-      return [...prev, newPersona];
-    });
-
-    setShowSuccess(true);
-  };
-
-  const handleCloseSuccess = () => {
-    setShowSuccess(false);
-    setFormKey((prev) => prev + 1);
-  };
-
   return (
     <div className="min-h-screen flex flex-col bg-lgc-bg dark:bg-lgc-darkBg">
       <main className="flex-1 flex items-center justify-center px-4 py-6">
-        <div className="w-full max-w-3xl">
+        <div className="w-full max-w-4xl">
           <div className="mb-6 flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-lgc-surface shadow-sm dark:bg-lgc-darkSurfaceMuted">
               <img
@@ -83,27 +52,108 @@ const PublicActualizarPersonaPage: FC<
             </div>
             <div>
               <h1 className="text-lg md:text-2xl font-semibold text-lgc-primary dark:text-lgc-darkPrimary">
-                Actualizar miembro antiguo
+                Actualizacion de datos
               </h1>
+              <p className="text-sm text-lgc-textMuted dark:text-lgc-darkTextMuted">
+                La Gran Comision - Comunidad Cristiana Integral. Toma
+                1-2 minutos.
+              </p>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-lgc-border/60 bg-lgc-surface p-4 md:p-6 shadow-sm dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurface">
-            <RegistrarPersonaForm
-              key={formKey}
-              onSave={handleSave}
-              onCancel={() => setFormKey((prev) => prev + 1)}
-              hideCancelUntilDirty
-              submitLabel="Guardar cambios"
-            />
+          <div className="rounded-2xl border border-lgc-border/60 bg-lgc-surface p-5 md:p-7 shadow-sm dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurface">
+            <ProgressBar current={step} />
+
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                submitForm();
+              }}
+              className="mt-6 space-y-6"
+            >
+              {step === 1 && (
+                <StepSelector
+                  form={form}
+                  onUpdate={updateField}
+                  onSetRegistrando={setRegistrando}
+                  onSetRelacion={setAdultoRelacion}
+                />
+              )}
+
+              {step === 2 && (
+                <StepDatosPersonales
+                  form={form}
+                  age={age}
+                  isMinor={isMinor}
+                  onUpdate={updateField}
+                />
+              )}
+
+              {step === 3 && (
+                <StepContacto
+                  form={form}
+                  onUpdate={updateField}
+                  onSetVinculado={setVinculadoMinisterio}
+                  onToggleMinisterio={toggleMinisterio}
+                />
+              )}
+
+              {step === 4 && (
+                <StepBautismo
+                  form={form}
+                  onUpdate={updateField}
+                  onSetBautizado={setBautizado}
+                />
+              )}
+
+              {error && (
+                <p className="text-xs md:text-sm text-lgc-danger dark:text-lgc-darkAccent">
+                  {error}
+                </p>
+              )}
+
+              <div className="flex items-center justify-between pt-2">
+                {step > 1 ? (
+                  <button
+                    type="button"
+                    onClick={prevStep}
+                    className="rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted px-4 py-2 text-xs md:text-sm text-lgc-text hover:bg-lgc-surface
+                               dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText dark:hover:bg-lgc-darkSurface"
+                  >
+                    Atras
+                  </button>
+                ) : (
+                  <span />
+                )}
+
+                {step < 4 ? (
+                  <button
+                    type="button"
+                    onClick={nextStep}
+                    className="rounded-xl bg-lgc-primary px-4 py-2 text-xs md:text-sm font-semibold text-lgc-onPrimary shadow-sm hover:bg-lgc-primarySoft
+                               dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna"
+                  >
+                    Siguiente
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    className="rounded-xl bg-lgc-primary px-4 py-2 text-xs md:text-sm font-semibold text-lgc-onPrimary shadow-sm hover:bg-lgc-primarySoft
+                               dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna"
+                  >
+                    Guardar informacion
+                  </button>
+                )}
+              </div>
+            </form>
           </div>
         </div>
 
         <SuccessModal
           open={showSuccess}
           title="Informacion guardada"
-          message="Los datos quedaron actualizados. Si no existia, se creo el registro."
-          onClose={handleCloseSuccess}
+          message="Gracias por completar la actualizacion de datos."
+          onClose={closeSuccess}
         />
       </main>
 
