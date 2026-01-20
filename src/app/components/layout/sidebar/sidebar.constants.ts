@@ -1,12 +1,12 @@
 // src/app/components/layout/sidebar/sidebar.constants.ts
 import type { SidebarGroup } from "./sidebar.types";
-
 const ICONS = {
   dashboard: "/home.svg",
   nuevoCreyente: "/new_believer.svg",
   personas: "/person.svg",
   ruta: "/road.svg",
   config: "/settings.svg",
+  miembrosAntiguos: "/person.svg",
 } as const;
 
 export const SIDEBAR_GROUPS: SidebarGroup[] = [
@@ -30,5 +30,11 @@ export const SIDEBAR_GROUPS: SidebarGroup[] = [
     label: "Configuración",
     icon: ICONS.config,
     section: "config",
+  },
+  {
+    id: "miembros-antiguos",
+    label: "Miembros antiguos",
+    icon: ICONS.miembrosAntiguos,
+    section: "miembros-antiguos",
   },
 ];

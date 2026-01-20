@@ -1,6 +1,7 @@
 import { type FC, type FormEvent, useState } from "react";
 import { loginMock } from "../domain/services/auth.service";
 import type { Usuario } from "../domain/interfaces/lgc-interfaces";
+import { Link } from "react-router-dom";
 
 interface LoginProps {
   onLoginSuccess: (user: Usuario) => void;
@@ -30,7 +31,9 @@ const Login: FC<LoginProps> = ({ onLoginSuccess, isDark }) => {
     onLoginSuccess(user);
   };
 
-  const logoSrc = isDark ? "/lgc-solo-manna.PNG" : "/lgc-solo-color.PNG";
+  const logoSrc = isDark
+    ? "/lgc-solo-manna.PNG"
+    : "/lgc-solo-color.PNG";
 
   return (
     <div className="min-h-[calc(100vh-80px)] flex items-center justify-center px-4">
@@ -107,7 +110,11 @@ const Login: FC<LoginProps> = ({ onLoginSuccess, isDark }) => {
               />
             </div>
 
-            {error && <p className="text-sm text-lgc-danger dark:text-lgc-darkAccent">{error}</p>}
+            {error && (
+              <p className="text-sm text-lgc-danger dark:text-lgc-darkAccent">
+                {error}
+              </p>
+            )}
 
             <button
               type="submit"
@@ -129,6 +136,15 @@ const Login: FC<LoginProps> = ({ onLoginSuccess, isDark }) => {
               {loading ? "Ingresando..." : "Ingresar"}
             </button>
           </form>
+
+          <div className="pt-3 text-center">
+            <Link
+              to="/registro-persona"
+              className="text-sm font-medium text-lgc-primary hover:underline dark:text-lgc-darkPrimary"
+            >
+              Registrar persona
+            </Link>
+          </div>
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ import DashboardSection from "./dashboard/DashboardSection";
 import PersonasSection from "./personas/PersonasSection";
 import ConfigSection from "./config/ConfigSection";
 import RutaCrecimientoSection from "./ruta/RutaCrecimientoSection";
+import MiembrosAntiguosSection from "./miembros/MiembrosAntiguosSection";
 
 import type {
   RutaCrecimiento,
@@ -59,6 +60,9 @@ const Contain: FC<ContainProps> = ({ activeSection }) => {
       )}
 
       {activeSection === "config" && <ConfigSection />}
+      {activeSection === "miembros-antiguos" && (
+        <MiembrosAntiguosSection />
+      )}
     </main>
   );
 };

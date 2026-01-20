@@ -1,1 +1,7 @@
-export type AppSection = "dashboard" | "personas" | "ruta" | "seguimiento" | "config";
+export type AppSection =
+  | "dashboard"
+  | "personas"
+  | "ruta"
+  | "seguimiento"
+  | "miembros-antiguos"
+  | "config";

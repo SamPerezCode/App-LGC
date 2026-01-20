@@ -4,6 +4,8 @@ import type { Usuario } from "./domain/interfaces/lgc-interfaces";
 import AppLgc from "./app/App-lgc";
 import Login from "./app/Login";
 import PublicRegistroPersona from "./app/PublicRegistroPersona";
+import PublicRegistroIndex from "./app/PublicRegistroIndex";
+import PublicActualizarPersona from "./app/PublicActualizarPersona";
 import { ApiProvider } from "./app/context/ApiContext";
 import { PersonasProvider } from "./app/components/layout/container/personas/PersonasContext";
 import { useAuth } from "./app/hooks/useAuth";
@@ -19,10 +21,22 @@ const App: React.FC = () => {
         <ApiProvider>
           <PersonasProvider>
             <Routes>
-              {/* 🔹 Ruta pública para el registro de personas */}
+              {/* Ruta publica: selector de tipo de inscripcion */}
               <Route
                 path="/registro-persona"
+                element={<PublicRegistroIndex isDark={dark} />}
+              />
+
+              {/* Ruta publica: nuevo creyente */}
+              <Route
+                path="/registro-persona/nuevo"
                 element={<PublicRegistroPersona isDark={dark} />}
+              />
+
+              {/* Ruta publica: miembro antiguo */}
+              <Route
+                path="/registro-persona/antiguo"
+                element={<PublicActualizarPersona isDark={dark} />}
               />
 
               <Route
