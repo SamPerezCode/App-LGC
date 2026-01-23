@@ -86,7 +86,7 @@ const StepVidaIglesiaMenor: FC<StepVidaIglesiaMenorProps> = ({
             {MINISTERIOS_INFANTIL.map((ministerio) => (
               <label
                 key={ministerio.id}
-                className="flex items-center gap-3 rounded-xl border border-lgc-border/70 bg-lgc-surface px-3 py-2 text-xs md:text-sm text-lgc-text dark:border-lgc-darkBorder/80 dark:bg-lgc-darkSurface dark:text-lgc-darkText"
+                className="flex items-center gap-3 rounded-xl border border-lgc-border/70 bg-lgc-surface px-3 py-3 text-xs md:text-sm text-lgc-text dark:border-lgc-darkBorder/80 dark:bg-lgc-darkSurface dark:text-lgc-darkText"
               >
                 <input
                   type="checkbox"
@@ -98,11 +98,14 @@ const StepVidaIglesiaMenor: FC<StepVidaIglesiaMenorProps> = ({
                   }
                   className="h-4 w-4 accent-lgc-primary dark:accent-lgc-darkPrimary"
                 />
-                <img
-                  src={ministerio.logo}
-                  alt={ministerio.label}
-                  className="h-8 w-8 rounded-lg object-contain bg-lgc-surfaceMuted dark:bg-lgc-darkSurfaceMuted"
-                />
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-lgc-surfaceMuted/80 dark:bg-lgc-darkSurfaceMuted">
+                  <img
+                    src={ministerio.logo}
+                    alt={ministerio.label}
+                    className="h-10 w-10 object-contain"
+                  />
+                </div>
+
                 <span>{ministerio.label}</span>
               </label>
             ))}

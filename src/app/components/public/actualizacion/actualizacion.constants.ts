@@ -66,13 +66,56 @@ export const RELACIONES = [
 
 // Logos provisionales (luego los cambias)
 export const MINISTERIOS_ADULTOS = [
-  { id: "ALABANZA", label: "Alabanza", logo: "/person.svg" },
-  { id: "UJIERES", label: "Ujieres", logo: "/person.svg" },
-  { id: "INTERCESION", label: "Intercesion", logo: "/person.svg" },
-  { id: "JOVENES", label: "Jovenes", logo: "/person.svg" },
-  { id: "NINOS", label: "Ninos", logo: "/person.svg" },
-  { id: "MEDIOS", label: "Medios", logo: "/person.svg" },
-  { id: "OTRO", label: "Otro", logo: "/person.svg" },
+  { id: "ALABANZA", label: "Alabanza", logo: "/adora.png" },
+  { id: "UJIERES", label: "Anfitriones", logo: "/anfitrion.png" },
+  {
+    id: "PREJUVENIL",
+    label: "Prejuveniles",
+    logo: "/prejuvenil.png",
+  },
+  {
+    id: "SOCIAL",
+    label: "Comisión Social",
+    logo: "/social.png",
+  },
+  {
+    id: "PLANTACION",
+    label: "Plantación de Iglesia",
+    logo: "/social.png",
+  },
+  {
+    id: "GPS",
+    label: "GPS-Grupos Pequeños Saludables",
+    logo: "/social.png",
+  },
+
+  {
+    id: "INTERCESION",
+    label: "Guerreros de Oración  ",
+    logo: "/intersecion.png",
+  },
+  { id: "NINOS", label: "Comisión Kids", logo: "/kids.png" },
+
+  {
+    id: "MUJERES",
+    label: "Mujeres de Valor",
+    logo: "/mujer-valor.png",
+  },
+  {
+    id: "CONSEJERIA",
+    label: "Consejería",
+    logo: "/consejeria.png",
+  },
+  {
+    id: "MATRIMONIOS",
+    label: "Matrimonios Saludables",
+    logo: "/matrimonios.png",
+  },
+  {
+    id: "COMUNICACIONES",
+    label: "Comunicaciones",
+    logo: "/comunicaciones.png",
+  },
 ];
 
 export const MINISTERIOS_INFANTIL = [
