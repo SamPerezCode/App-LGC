@@ -1,14 +1,14 @@
-// src/app/components/layout/container/personas/RegistrarPersonaForm.tsx
 import { useState, type FC, type FormEvent } from "react";
 import type { PersonaCreateInput } from "./personas.types";
 import { validatePersonaForm } from "./personas.utils";
 
 interface RegistrarPersonaFormProps {
   onSave: (data: PersonaCreateInput) => void;
-  onCancel?: () => void; // opcional
-  hideCancelUntilDirty?: boolean; // oculta "Cancelar" hasta que se modifique algo
-  initialData?: PersonaCreateInput; // para modo edición
+  onCancel?: () => void;
+  hideCancelUntilDirty?: boolean;
+  initialData?: PersonaCreateInput;
   submitLabel?: string;
+  cancelLabel?: string;
 }
 
 const EMPTY_FORM: PersonaCreateInput = {
@@ -19,16 +19,21 @@ const EMPTY_FORM: PersonaCreateInput = {
 const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
   onSave,
   onCancel,
-  hideCancelUntilDirty = false,
   initialData,
   submitLabel = "Guardar persona",
+  cancelLabel = "Cancelar",
 }) => {
   // usamos initialData solo al montar el componente
-  const [form, setForm] = useState<PersonaCreateInput>(() => initialData ?? EMPTY_FORM);
+  const [form, setForm] = useState<PersonaCreateInput>(
+    () => initialData ?? EMPTY_FORM
+  );
   const [error, setError] = useState<string | null>(null);
   const [isDirty, setIsDirty] = useState(false);
 
-  const handleChange = (field: keyof PersonaCreateInput, value: string) => {
+  const handleChange = (
+    field: keyof PersonaCreateInput,
+    value: string
+  ) => {
     const normalized = value === "" ? undefined : value;
 
     setForm((prev) => ({
@@ -64,7 +69,9 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
           <input
             type="text"
             value={form.nombreCompleto}
-            onChange={(e) => handleChange("nombreCompleto", e.target.value)}
+            onChange={(e) =>
+              handleChange("nombreCompleto", e.target.value)
+            }
             className="mt-1 w-full rounded-xl border border-lgc-border/70
                        bg-lgc-surfaceMuted/80 px-3 py-2 text-xs md:text-sm text-lgc-text
                        shadow-sm outline-none
@@ -98,7 +105,9 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
           </label>
           <select
             value={form.tipoDocumento ?? ""}
-            onChange={(e) => handleChange("tipoDocumento", e.target.value)}
+            onChange={(e) =>
+              handleChange("tipoDocumento", e.target.value)
+            }
             className="
               mt-1 w-full rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted/80
               px-3 py-2 text-xs md:text-sm text-lgc-text shadow-sm outline-none
@@ -120,7 +129,9 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
           <input
             type="text"
             value={form.numeroDocumento ?? ""}
-            onChange={(e) => handleChange("numeroDocumento", e.target.value)}
+            onChange={(e) =>
+              handleChange("numeroDocumento", e.target.value)
+            }
             className="mt-1 w-full rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted/80 px-3 py-2 text-xs md:text-sm text-lgc-text shadow-sm outline-none
                         focus:border-transparent focus:ring-2 focus:ring-lgc-primary focus:ring-offset-1 focus:ring-offset-lgc-surface
                         dark:bg-lgc-darkSurfaceMuted dark:border-lgc-darkBorder/80 dark:text-lgc-darkText
@@ -152,7 +163,9 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
           <input
             type="text"
             value={form.direccion ?? ""}
-            onChange={(e) => handleChange("direccion", e.target.value)}
+            onChange={(e) =>
+              handleChange("direccion", e.target.value)
+            }
             className="mt-1 w-full rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted/80 px-3 py-2 text-xs md:text-sm text-lgc-text shadow-sm outline-none
                         focus:border-transparent focus:ring-2 focus:ring-lgc-primary focus:ring-offset-1 focus:ring-offset-lgc-surface
                         dark:bg-lgc-darkSurfaceMuted dark:border-lgc-darkBorder/80 dark:text-lgc-darkText
@@ -187,7 +200,9 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
           </label>
           <select
             value={form.estadoCivil ?? ""}
-            onChange={(e) => handleChange("estadoCivil", e.target.value)}
+            onChange={(e) =>
+              handleChange("estadoCivil", e.target.value)
+            }
             className="mt-1 w-full rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted/80 px-3 py-2 text-xs md:text-sm text-lgc-text shadow-sm outline-none
                        dark:bg-lgc-darkSurfaceMuted dark:border-lgc-darkBorder/80 dark:text-lgc-darkText"
           >
@@ -209,7 +224,9 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
           <input
             type="date"
             value={form.fechaNacimiento ?? ""}
-            onChange={(e) => handleChange("fechaNacimiento", e.target.value)}
+            onChange={(e) =>
+              handleChange("fechaNacimiento", e.target.value)
+            }
             className="mt-1 w-full rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted/80 px-3 py-2 text-xs md:text-sm text-lgc-text shadow-sm outline-none
                        dark:bg-lgc-darkSurfaceMuted dark:border-lgc-darkBorder/80 dark:text-lgc-darkText"
           />
@@ -219,33 +236,29 @@ const RegistrarPersonaForm: FC<RegistrarPersonaFormProps> = ({
       </div>
 
       {error && (
-        <p className="text-xs md:text-sm text-lgc-danger dark:text-lgc-darkAccent">{error}</p>
+        <p className="text-xs md:text-sm text-lgc-danger dark:text-lgc-darkAccent">
+          {error}
+        </p>
       )}
 
-      <div className="flex justify-end gap-2 pt-2">
-        {onCancel && (!hideCancelUntilDirty || isDirty) && (
+      <div className="flex items-center justify-between pt-2">
+        {onCancel ? (
           <button
             type="button"
             onClick={onCancel}
-            className="
-              rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted px-4 py-2
-              text-xs md:text-sm text-lgc-text hover:bg-lgc-surface
-              dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText
-              dark:hover:bg-lgc-darkSurface
-          "
+            className="rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted px-4 py-2 text-xs md:text-sm text-lgc-text hover:bg-lgc-surface
+               dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText dark:hover:bg-lgc-darkSurface"
           >
-            Cancelar
+            {cancelLabel}
           </button>
+        ) : (
+          <span />
         )}
 
         <button
           type="submit"
-          className="
-            rounded-xl bg-lgc-primary px-4 py-2 text-xs md:text-sm font-semibold text-lgc-onPrimary
-            shadow-sm hover:bg-lgc-primarySoft
-            dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna
-            transition-colors
-          "
+          className="rounded-xl bg-lgc-primary px-4 py-2 text-xs md:text-sm font-semibold text-lgc-onPrimary shadow-sm hover:bg-lgc-primarySoft
+               dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna"
         >
           {submitLabel}
         </button>

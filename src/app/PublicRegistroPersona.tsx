@@ -6,6 +6,7 @@ import type { Persona } from "../domain/interfaces/lgc-interfaces";
 import { usePersonasContext } from "./components/layout/container/personas/PersonasContext";
 import SuccessModal from "./components/common/SuccessModal";
 import Footer from "./components/layout/footer/Footer";
+import { useNavigate } from "react-router-dom";
 
 interface PublicRegistroPersonaPageProps {
   isDark: boolean;
@@ -17,6 +18,7 @@ const PublicRegistroPersonaPage: FC<
   const [showSuccess, setShowSuccess] = useState(false);
   const [formKey, setFormKey] = useState(0);
   const { setPersonas } = usePersonasContext();
+  const navigate = useNavigate();
 
   const logoSrc = isDark
     ? "/lgc-solo-manna.PNG"
@@ -74,11 +76,8 @@ const PublicRegistroPersonaPage: FC<
             <RegistrarPersonaForm
               key={formKey}
               onSave={handleSave}
-              onCancel={() => {
-                // limpiar el form si ya escribió algo
-                setFormKey((prev) => prev + 1);
-              }}
-              hideCancelUntilDirty
+              onCancel={() => navigate("/registro-persona")}
+              cancelLabel="Volver"
             />
           </div>
         </div>

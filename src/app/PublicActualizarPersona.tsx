@@ -10,6 +10,7 @@ import StepAdultoResponsable from "./components/public/actualizacion/StepAdultoR
 import StepDatosMenor from "./components/public/actualizacion/StepDatosMenor";
 import StepVidaIglesiaMenor from "./components/public/actualizacion/StepVidaIglesiaMenor";
 import { useActualizacionForm } from "./components/public/actualizacion/useActualizacionForm";
+import { Link } from "react-router-dom";
 
 interface PublicActualizarPersonaPageProps {
   isDark: boolean;
@@ -147,12 +148,18 @@ const PublicActualizarPersonaPage: FC<
                     type="button"
                     onClick={prevStep}
                     className="rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted px-4 py-2 text-xs md:text-sm text-lgc-text hover:bg-lgc-surface
-                               dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText dark:hover:bg-lgc-darkSurface"
+                 dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText dark:hover:bg-lgc-darkSurface"
                   >
                     Volver
                   </button>
                 ) : (
-                  <span />
+                  <Link
+                    to="/registro-persona"
+                    className="rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted px-4 py-2 text-xs md:text-sm text-lgc-text hover:bg-lgc-surface
+                 dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText dark:hover:bg-lgc-darkSurface"
+                  >
+                    Volver
+                  </Link>
                 )}
 
                 {step < 4 ? (
@@ -160,7 +167,7 @@ const PublicActualizarPersonaPage: FC<
                     type="button"
                     onClick={nextStep}
                     className="rounded-xl bg-lgc-primary px-4 py-2 text-xs md:text-sm font-semibold text-lgc-onPrimary shadow-sm hover:bg-lgc-primarySoft
-                               dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna"
+                 dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna"
                   >
                     Siguiente
                   </button>
@@ -169,7 +176,7 @@ const PublicActualizarPersonaPage: FC<
                     type="button"
                     onClick={submitForm}
                     className="rounded-xl bg-lgc-primary px-4 py-2 text-xs md:text-sm font-semibold text-lgc-onPrimary shadow-sm hover:bg-lgc-primarySoft
-             dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna"
+                 dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna"
                   >
                     Finalizar
                   </button>
