@@ -6,10 +6,10 @@ export type AdultRelacion = "" | "PADRE" | "MADRE" | "TUTOR" | "OTRO";
 export type UpdateForm = {
   registrando: Registrando;
 
-  adultoNombre: string;
+  adultoTipoDocumento: string;
+  adultoNumeroDocumento: string;
   adultoRelacion: AdultRelacion;
   adultoRelacionOtro: string;
-  adultoContacto: string;
 
   nombreCompleto: string;
   fechaNacimiento: string;
@@ -19,6 +19,7 @@ export type UpdateForm = {
   estadoCivil: string;
   correo: string;
 
+  telefono: string;
   direccion: string;
   barrio: string;
   tiempoAsiste: string;
@@ -29,6 +30,7 @@ export type UpdateForm = {
   anoBautismo: string;
   deseaBautizarse: YesNo;
   aceptaPolitica: boolean;
+  autorizaImagen: boolean;
 };
 
 export type UpdateField = <K extends keyof UpdateForm>(

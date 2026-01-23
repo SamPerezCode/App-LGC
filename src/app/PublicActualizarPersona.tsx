@@ -6,6 +6,9 @@ import StepSelector from "./components/public/actualizacion/StepSelector";
 import StepDatosPersonales from "./components/public/actualizacion/StepDatosPersonales";
 import StepContacto from "./components/public/actualizacion/StepContacto";
 import StepBautismo from "./components/public/actualizacion/StepBautismo";
+import StepAdultoResponsable from "./components/public/actualizacion/StepAdultoResponsable";
+import StepDatosMenor from "./components/public/actualizacion/StepDatosMenor";
+import StepVidaIglesiaMenor from "./components/public/actualizacion/StepVidaIglesiaMenor";
 import { useActualizacionForm } from "./components/public/actualizacion/useActualizacionForm";
 
 interface PublicActualizarPersonaPageProps {
@@ -21,7 +24,10 @@ const PublicActualizarPersonaPage: FC<
     age,
     isMinor,
     error,
+    showFinalError,
     showSuccess,
+    adultoResponsable,
+    buscarAdultoResponsable,
     updateField,
     setRegistrando,
     setAdultoRelacion,
@@ -67,46 +73,69 @@ const PublicActualizarPersonaPage: FC<
             <form
               onSubmit={(event) => {
                 event.preventDefault();
-                submitForm();
               }}
               className="mt-6 space-y-6"
             >
               {step === 1 && (
                 <StepSelector
                   form={form}
-                  onUpdate={updateField}
                   onSetRegistrando={setRegistrando}
-                  onSetRelacion={setAdultoRelacion}
                 />
               )}
 
-              {step === 2 && (
-                <StepDatosPersonales
-                  form={form}
-                  age={age}
-                  isMinor={isMinor}
-                  onUpdate={updateField}
-                />
-              )}
+              {step === 2 &&
+                (isMinor ? (
+                  <StepAdultoResponsable
+                    form={form}
+                    onUpdate={updateField}
+                    onBuscar={buscarAdultoResponsable}
+                    adultoEncontrado={adultoResponsable}
+                    error={error}
+                  />
+                ) : (
+                  <StepDatosPersonales
+                    form={form}
+                    age={age}
+                    isMinor={isMinor}
+                    onUpdate={updateField}
+                  />
+                ))}
 
-              {step === 3 && (
-                <StepContacto
-                  form={form}
-                  onUpdate={updateField}
-                  onSetVinculado={setVinculadoMinisterio}
-                  onToggleMinisterio={toggleMinisterio}
-                />
-              )}
+              {step === 3 &&
+                (isMinor ? (
+                  <StepDatosMenor
+                    form={form}
+                    adulto={adultoResponsable}
+                    onUpdate={updateField}
+                    onSetRelacion={setAdultoRelacion}
+                  />
+                ) : (
+                  <StepContacto
+                    form={form}
+                    onUpdate={updateField}
+                    onSetVinculado={setVinculadoMinisterio}
+                    onToggleMinisterio={toggleMinisterio}
+                  />
+                ))}
 
-              {step === 4 && (
-                <StepBautismo
-                  form={form}
-                  onUpdate={updateField}
-                  onSetBautizado={setBautizado}
-                />
-              )}
+              {step === 4 &&
+                (isMinor ? (
+                  <StepVidaIglesiaMenor
+                    form={form}
+                    onUpdate={updateField}
+                    onSetVinculado={setVinculadoMinisterio}
+                    onToggleMinisterio={toggleMinisterio}
+                    onSetBautizado={setBautizado}
+                  />
+                ) : (
+                  <StepBautismo
+                    form={form}
+                    onUpdate={updateField}
+                    onSetBautizado={setBautizado}
+                  />
+                ))}
 
-              {error && (
+              {step === 4 && showFinalError && error && (
                 <p className="text-xs md:text-sm text-lgc-danger dark:text-lgc-darkAccent">
                   {error}
                 </p>
@@ -120,7 +149,7 @@ const PublicActualizarPersonaPage: FC<
                     className="rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted px-4 py-2 text-xs md:text-sm text-lgc-text hover:bg-lgc-surface
                                dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText dark:hover:bg-lgc-darkSurface"
                   >
-                    Atras
+                    Volver
                   </button>
                 ) : (
                   <span />
@@ -137,11 +166,12 @@ const PublicActualizarPersonaPage: FC<
                   </button>
                 ) : (
                   <button
-                    type="submit"
+                    type="button"
+                    onClick={submitForm}
                     className="rounded-xl bg-lgc-primary px-4 py-2 text-xs md:text-sm font-semibold text-lgc-onPrimary shadow-sm hover:bg-lgc-primarySoft
-                               dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna"
+             dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna"
                   >
-                    Guardar informacion
+                    Finalizar
                   </button>
                 )}
               </div>
@@ -151,8 +181,12 @@ const PublicActualizarPersonaPage: FC<
 
         <SuccessModal
           open={showSuccess}
-          title="Informacion guardada"
-          message="Gracias por completar la actualizacion de datos."
+          title="Registro exitoso"
+          message={
+            form.nombreCompleto
+              ? `${form.nombreCompleto} fue inscrito con exito.`
+              : "La persona fue inscrita con exito."
+          }
           onClose={closeSuccess}
         />
       </main>
