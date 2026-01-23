@@ -287,12 +287,23 @@ export const useActualizacionForm = () => {
 
     if (exists) return;
 
+    const telefono =
+      form.telefono.trim() || adultoResponsable?.telefono || "";
+
+    const correo =
+      form.correo.trim() || adultoResponsable?.correo || undefined;
+
+    const direccion =
+      form.direccion.trim() ||
+      adultoResponsable?.direccion ||
+      undefined;
+
     const nuevaPersona: Persona = {
       id: nextId,
       nombreCompleto: form.nombreCompleto.trim(),
-      telefono: form.telefono.trim(),
-      correo: form.correo.trim() || undefined,
-      direccion: form.direccion.trim() || undefined,
+      telefono,
+      correo,
+      direccion,
       genero: form.genero as Persona["genero"],
       fechaNacimiento: form.fechaNacimiento || undefined,
       tipoDocumento: form.tipoDocumento as Persona["tipoDocumento"],
@@ -349,9 +360,7 @@ export const useActualizacionForm = () => {
     }
     setError(null);
 
-    if (!isMinor) {
-      persistPersonaFromForm();
-    }
+    persistPersonaFromForm();
 
     setShowSuccess(true);
   };
