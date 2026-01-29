@@ -309,7 +309,7 @@ export const useActualizacionForm = () => {
       tipoDocumento: form.tipoDocumento as Persona["tipoDocumento"],
       numeroDocumento: numero,
       estadoCivil: form.estadoCivil as Persona["estadoCivil"],
-      estado: "NUEVO",
+      estado: "MIEMBRO",
       creadoEn: now,
       actualizadoEn: now,
     };

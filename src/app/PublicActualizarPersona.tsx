@@ -41,6 +41,8 @@ const PublicActualizarPersonaPage: FC<
     closeSuccess,
   } = useActualizacionForm();
 
+  const canContinue = !(step === 2 && isMinor && !adultoResponsable);
+
   const logoSrc = isDark
     ? "/lgc-solo-manna.PNG"
     : "/lgc-solo-color.PNG";
@@ -163,14 +165,16 @@ const PublicActualizarPersonaPage: FC<
                 )}
 
                 {step < 4 ? (
-                  <button
-                    type="button"
-                    onClick={nextStep}
-                    className="rounded-xl bg-lgc-primary px-4 py-2 text-xs md:text-sm font-semibold text-lgc-onPrimary shadow-sm hover:bg-lgc-primarySoft
+                  canContinue ? (
+                    <button
+                      type="button"
+                      onClick={nextStep}
+                      className="rounded-xl bg-lgc-primary px-4 py-2 text-xs md:text-sm font-semibold text-lgc-onPrimary shadow-sm hover:bg-lgc-primarySoft
                  dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary dark:hover:bg-lgc-manna"
-                  >
-                    Siguiente
-                  </button>
+                    >
+                      Siguiente
+                    </button>
+                  ) : null
                 ) : (
                   <button
                     type="button"

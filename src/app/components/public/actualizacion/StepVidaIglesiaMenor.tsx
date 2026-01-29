@@ -82,7 +82,8 @@ const StepVidaIglesiaMenor: FC<StepVidaIglesiaMenorProps> = ({
           <p className="text-xs font-medium text-lgc-text dark:text-lgc-darkText">
             ¿Cuál ministerio? *{" "}
           </p>
-          <div className="mt-3 grid gap-3 md:grid-cols-2">
+          <div className="mt-3 grid gap-3 md:grid-cols-2 h-80 overflow-y-auto pr-1">
+            {" "}
             {MINISTERIOS_INFANTIL.map((ministerio) => (
               <label
                 key={ministerio.id}

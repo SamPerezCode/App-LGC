@@ -35,7 +35,7 @@ const PublicRegistroPersonaPage: FC<
       const newPersona = {
         ...data,
         id: nextId,
-        estado: data.estado ?? "NUEVO",
+        estado: "NUEVO",
         creadoEn: now,
         actualizadoEn: now,
       } as Persona;
