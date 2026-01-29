@@ -13,7 +13,7 @@ const StepSelector: FC<StepSelectorProps> = ({
   return (
     <div className="space-y-4">
       <h2 className="text-base md:text-lg font-semibold text-lgc-primary dark:text-lgc-darkPrimary">
-        Paso 1 de 4. A quien estas registrando?
+        Paso 1 de 4.
       </h2>
 
       <div className="flex flex-wrap gap-3">

@@ -30,7 +30,7 @@ const StepVidaIglesiaMenor: FC<StepVidaIglesiaMenorProps> = ({
       <div className="grid gap-4 md:grid-cols-2">
         <div>
           <label className="block text-xs font-medium text-lgc-text dark:text-lgc-darkText">
-            Hace cuanto tiempo asiste a la iglesia? *
+            ¿Hace cuánto tiempo asiste a la iglesia? *
           </label>
           <select
             value={form.tiempoAsiste}
@@ -48,7 +48,7 @@ const StepVidaIglesiaMenor: FC<StepVidaIglesiaMenorProps> = ({
 
         <div>
           <label className="block text-xs font-medium text-lgc-text dark:text-lgc-darkText">
-            Esta vinculado a un ministerio infantil? *
+            ¿Está vinculado a un ministerio infantil? *{" "}
           </label>
           <div className="mt-1 flex flex-wrap gap-3">
             <label className="flex items-center gap-2 rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted/70 px-3 py-2 text-xs md:text-sm text-lgc-text dark:border-lgc-darkBorder/80 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText">
@@ -80,7 +80,7 @@ const StepVidaIglesiaMenor: FC<StepVidaIglesiaMenorProps> = ({
       {form.vinculadoMinisterio === "yes" && (
         <div className="rounded-2xl border border-dashed border-lgc-border/70 bg-lgc-surfaceMuted/60 p-4 dark:border-lgc-darkBorder/70 dark:bg-lgc-darkSurfaceMuted">
           <p className="text-xs font-medium text-lgc-text dark:text-lgc-darkText">
-            Cual ministerio? *
+            ¿Cuál ministerio? *{" "}
           </p>
           <div className="mt-3 grid gap-3 md:grid-cols-2">
             {MINISTERIOS_INFANTIL.map((ministerio) => (

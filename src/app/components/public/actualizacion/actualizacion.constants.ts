@@ -32,17 +32,18 @@ export const INITIAL_FORM: UpdateForm = {
 
 export const DOCUMENTOS = [
   { value: "", label: "Selecciona..." },
-  { value: "CC", label: "Cedula de ciudadania" },
-  { value: "CE", label: "Cedula de extranjeria" },
+  { value: "CC", label: "Cédula de ciudadanía" },
+  { value: "CE", label: "Cédula de extranjería" },
   { value: "PASAPORTE", label: "Pasaporte" },
   { value: "TI", label: "Tarjeta de identidad" },
+  { value: "PEP", label: "Permiso especial de permanencia (PEP)" },
 ];
 
 export const ESTADO_CIVIL = [
   { value: "", label: "Selecciona..." },
   { value: "SOLTERO", label: "Soltero" },
   { value: "CASADO", label: "Casado" },
-  { value: "UNION_LIBRE", label: "Union libre" },
+  { value: "UNION_LIBRE", label: "Unión libre" },
   { value: "DIVORCIADO", label: "Divorciado" },
   { value: "SEPARADO", label: "Separado" },
   { value: "VIUDO", label: "Viudo" },
@@ -51,9 +52,9 @@ export const ESTADO_CIVIL = [
 export const TIEMPOS_ASISTE = [
   { value: "", label: "Selecciona..." },
   { value: "MENOS_6", label: "Menos de 6 meses" },
-  { value: "ENTRE_6_12", label: "Entre 6 meses y 1 ano" },
-  { value: "ENTRE_1_3", label: "Entre 1 y 3 anos" },
-  { value: "MAS_3", label: "Mas de 3 anos" },
+  { value: "ENTRE_6_12", label: "Entre 6 meses y 1 año" },
+  { value: "ENTRE_1_3", label: "Entre 1 y 3 años" },
+  { value: "MAS_3", label: "Más de 3 años" },
 ];
 
 export const RELACIONES = [
@@ -85,17 +86,15 @@ export const MINISTERIOS_ADULTOS = [
   },
   {
     id: "GPS",
-    label: "GPS-Grupos Pequeños Saludables",
+    label: "GPS - Grupos Pequeños Saludables",
     logo: "/social.png",
   },
-
   {
     id: "INTERCESION",
-    label: "Guerreros de Oración  ",
+    label: "Guerreros de Oración",
     logo: "/intersecion.png",
   },
   { id: "NINOS", label: "Comisión Kids", logo: "/kids.png" },
-
   {
     id: "MUJERES",
     label: "Mujeres de Valor",
@@ -131,12 +130,12 @@ export const MINISTERIOS_INFANTIL = [
   },
   {
     id: "COMISION_DANCE",
-    label: "Comision Dance",
+    label: "Comisión Dance",
     logo: "/person.svg",
   },
   {
     id: "COMISION_KIDS",
-    label: "Comision KIDS",
+    label: "Comisión KIDS",
     logo: "/person.svg",
   },
   { id: "GPS", label: "GPS", logo: "/person.svg" },

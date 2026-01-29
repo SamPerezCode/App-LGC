@@ -41,7 +41,7 @@ const StepDatosMenor: FC<StepDatosMenorProps> = ({
               {adulto.numeroDocumento ?? "-"}
             </p>
             <p>
-              <span className="font-semibold">Telefono:</span>{" "}
+              <span className="font-semibold">Teléfono:</span>{" "}
               {adulto.telefono ?? "-"}
             </p>
             <p>
@@ -49,13 +49,13 @@ const StepDatosMenor: FC<StepDatosMenorProps> = ({
               {adulto.correo ?? "-"}
             </p>
             <p>
-              <span className="font-semibold">Direccion:</span>{" "}
+              <span className="font-semibold">Dirección:</span>{" "}
               {adulto.direccion ?? "-"}
             </p>
           </div>
         ) : (
           <p className="mt-2 text-xs text-lgc-textMuted dark:text-lgc-darkTextMuted">
-            Aun no se ha confirmado el adulto responsable.
+            Aún no se ha confirmado el adulto responsable.
           </p>
         )}
       </div>
@@ -160,7 +160,7 @@ const StepDatosMenor: FC<StepDatosMenorProps> = ({
 
         <div>
           <label className="block text-xs font-medium text-lgc-text dark:text-lgc-darkText">
-            Numero de documento *
+            Número de documento *
           </label>
           <input
             type="text"
@@ -177,7 +177,7 @@ const StepDatosMenor: FC<StepDatosMenorProps> = ({
 
         <div>
           <label className="block text-xs font-medium text-lgc-text dark:text-lgc-darkText">
-            Genero *
+            Género *
           </label>
           <div className="mt-1 flex flex-wrap gap-3">
             <label className="flex items-center gap-2 rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted/70 px-3 py-2 text-xs md:text-sm text-lgc-text dark:border-lgc-darkBorder/80 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText">

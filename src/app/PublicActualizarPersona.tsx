@@ -59,10 +59,10 @@ const PublicActualizarPersonaPage: FC<
             </div>
             <div>
               <h1 className="text-lg md:text-2xl font-semibold text-lgc-primary dark:text-lgc-darkPrimary">
-                Actualizacion de datos
+                Actualización de datos{" "}
               </h1>
               <p className="text-sm text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                La Gran Comision - Comunidad Cristiana Integral. Toma
+                La Gran Comisión - Comunidad Cristiana Integral. Toma
                 1-2 minutos.
               </p>
             </div>

@@ -82,7 +82,7 @@ const StepDatosPersonales: FC<StepDatosPersonalesProps> = ({
 
         <div>
           <label className="block text-xs font-medium text-lgc-text dark:text-lgc-darkText">
-            Numero de documento *
+            Número de documento *
           </label>
           <input
             type="text"
@@ -100,7 +100,7 @@ const StepDatosPersonales: FC<StepDatosPersonalesProps> = ({
 
         <div>
           <label className="block text-xs font-medium text-lgc-text dark:text-lgc-darkText">
-            Genero *
+            Género *
           </label>
           <div className="mt-1 flex flex-wrap gap-3">
             <label className="flex items-center gap-2 rounded-xl border border-lgc-border/70 bg-lgc-surfaceMuted/70 px-3 py-2 text-xs md:text-sm text-lgc-text dark:border-lgc-darkBorder/80 dark:bg-lgc-darkSurfaceMuted dark:text-lgc-darkText">
@@ -153,7 +153,7 @@ const StepDatosPersonales: FC<StepDatosPersonalesProps> = ({
         {!isMinor && (
           <div className="md:col-span-2">
             <label className="block text-xs font-medium text-lgc-text dark:text-lgc-darkText">
-              Correo electronico *
+              Correo electrónico *
             </label>
             <input
               type="email"

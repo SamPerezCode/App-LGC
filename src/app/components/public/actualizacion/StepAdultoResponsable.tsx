@@ -48,7 +48,7 @@ const StepAdultoResponsable: FC<StepAdultoResponsableProps> = ({
 
         <div>
           <label className="block text-xs font-medium text-lgc-text dark:text-lgc-darkText">
-            Numero de documento *
+            Número de documento *
           </label>
           <input
             type="text"
@@ -93,7 +93,7 @@ const StepAdultoResponsable: FC<StepAdultoResponsableProps> = ({
               {adultoEncontrado.numeroDocumento ?? "-"}
             </p>
             <p>
-              <span className="font-semibold">Telefono:</span>{" "}
+              <span className="font-semibold">Teléfono:</span>{" "}
               {adultoEncontrado.telefono ?? "-"}
             </p>
             <p>
@@ -101,7 +101,7 @@ const StepAdultoResponsable: FC<StepAdultoResponsableProps> = ({
               {adultoEncontrado.correo ?? "-"}
             </p>
             <p>
-              <span className="font-semibold">Direccion:</span>{" "}
+              <span className="font-semibold">Dirección:</span>{" "}
               {adultoEncontrado.direccion ?? "-"}
             </p>
           </div>
