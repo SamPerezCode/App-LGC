@@ -62,16 +62,36 @@ const ConexionSection: FC<ConexionSectionProps> = ({
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="space-y-8">
       {/* Header */}
-      <header className="flex flex-col gap-1">
-        <h1 className="text-xl font-semibold text-lgc-primary dark:text-lgc-darkPrimary">
-          Conexion
-        </h1>
-        <p className="text-sm text-lgc-textMuted dark:text-lgc-darkTextMuted">
-          Seguimiento y acompanamiento de nuevos creyentes
-        </p>
-      </header>
+      <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-lgc-text dark:text-lgc-darkText">
+            Conexion
+          </h1>
+          <p className="mt-1 text-sm text-lgc-textMuted dark:text-lgc-darkTextMuted">
+            Seguimiento de nuevos creyentes en su camino de fe
+          </p>
+        </div>
+        <div className="mt-4 sm:mt-0">
+          <button
+            type="button"
+            className="
+              inline-flex items-center gap-2 rounded-lg bg-lgc-primary px-4 py-2.5
+              text-sm font-medium text-lgc-onPrimary shadow-sm
+              transition-all hover:bg-lgc-primarySoft hover:shadow-md
+              focus:outline-none focus:ring-2 focus:ring-lgc-primary/50 focus:ring-offset-2
+              dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary
+              dark:hover:bg-lgc-manna dark:focus:ring-lgc-darkPrimary/50
+            "
+          >
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Nueva Persona
+          </button>
+        </div>
+      </div>
 
       {/* Dashboard KPIs */}
       <ConexionDashboard metrics={metrics} />

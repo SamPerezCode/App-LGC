@@ -13,24 +13,21 @@ type ConexionPersonaCardProps = {
   onSelect: () => void;
 };
 
-const estadoConfig: Record<
-  string,
-  { label: string; badgeClass: string }
-> = {
+const estadoConfig: Record<string, { label: string; color: string; bgColor: string }> = {
   NUEVO: {
     label: "Nuevo",
-    badgeClass:
-      "bg-lgc-accent/15 text-lgc-accent dark:bg-lgc-darkAccent/20 dark:text-lgc-darkAccent",
+    color: "text-amber-700 dark:text-amber-400",
+    bgColor: "bg-amber-100 dark:bg-amber-900/30",
   },
   ASISTENTE_REGULAR: {
     label: "Asistente",
-    badgeClass:
-      "bg-lgc-olive/15 text-lgc-everdeep dark:bg-lgc-olive/20 dark:text-lgc-olive",
+    color: "text-blue-700 dark:text-blue-400",
+    bgColor: "bg-blue-100 dark:bg-blue-900/30",
   },
   MIEMBRO: {
     label: "Miembro",
-    badgeClass:
-      "bg-lgc-primary/10 text-lgc-primary dark:bg-lgc-darkPrimary/15 dark:text-lgc-darkPrimary",
+    color: "text-emerald-700 dark:text-emerald-400",
+    bgColor: "bg-emerald-100 dark:bg-emerald-900/30",
   },
 };
 
@@ -73,70 +70,69 @@ const ConexionPersonaCard: FC<ConexionPersonaCardProps> = ({
       type="button"
       onClick={onSelect}
       className="
-        group flex w-full flex-col gap-3 rounded-2xl border border-lgc-border/50 bg-lgc-surface p-4
-        text-left transition-all
-        hover:border-lgc-primary/30 hover:shadow-md
+        group relative flex w-full flex-col rounded-xl border border-lgc-border/40
+        bg-white p-5 text-left transition-all duration-200
+        hover:border-lgc-primary/30 hover:shadow-lg hover:shadow-lgc-primary/5
         focus:outline-none focus:ring-2 focus:ring-lgc-primary/20
-        dark:border-lgc-darkBorder/50 dark:bg-lgc-darkSurface
-        dark:hover:border-lgc-darkPrimary/30
+        dark:border-lgc-darkBorder/40 dark:bg-lgc-darkSurface
+        dark:hover:border-lgc-darkPrimary/30 dark:hover:shadow-lgc-darkPrimary/5
       "
     >
-      {/* Header: Avatar + Name + Badge */}
-      <div className="flex items-start gap-3">
+      {/* Header */}
+      <div className="flex items-start gap-4">
         {/* Avatar */}
         <div
           className="
-            flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full
-            bg-lgc-olive/20 text-sm font-semibold text-lgc-everdeep
-            dark:bg-lgc-olive/30 dark:text-lgc-manna
+            flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full
+            bg-gradient-to-br from-lgc-olive/20 to-lgc-olive/30
+            text-sm font-semibold text-lgc-everdeep
+            dark:from-lgc-olive/30 dark:to-lgc-olive/40 dark:text-lgc-manna
           "
         >
           {initials}
         </div>
 
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <h3
-              className="
-                flex-1 truncate text-sm font-medium text-lgc-text
-                group-hover:text-lgc-primary
-                dark:text-lgc-darkText dark:group-hover:text-lgc-darkPrimary
-              "
-            >
-              {persona.nombreCompleto}
-            </h3>
-            <span
-              className={`flex-shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium ${estado.badgeClass}`}
-            >
-              {estado.label}
-            </span>
-          </div>
-
-          {/* Contact info */}
+        <div className="min-w-0 flex-1">
+          <h3
+            className="
+              truncate text-sm font-semibold text-lgc-text transition-colors
+              group-hover:text-lgc-primary
+              dark:text-lgc-darkText dark:group-hover:text-lgc-darkPrimary
+            "
+          >
+            {persona.nombreCompleto}
+          </h3>
           <p className="mt-0.5 text-xs text-lgc-textMuted dark:text-lgc-darkTextMuted">
             {persona.telefono}
           </p>
+          <span
+            className={`
+              mt-2 inline-flex items-center rounded-full px-2 py-0.5
+              text-[10px] font-medium ${estado.bgColor} ${estado.color}
+            `}
+          >
+            {estado.label}
+          </span>
         </div>
       </div>
 
-      {/* Progress bar */}
+      {/* Progress */}
       {progress.total > 0 && (
-        <div className="flex flex-col gap-1.5">
+        <div className="mt-5 space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] text-lgc-textMuted dark:text-lgc-darkTextMuted">
-              Progreso en ruta
+            <span className="text-xs text-lgc-textMuted dark:text-lgc-darkTextMuted">
+              Progreso
             </span>
-            <span className="text-[11px] font-medium text-lgc-text dark:text-lgc-darkText">
-              {progress.completed}/{progress.total}
+            <span className="text-xs font-medium text-lgc-text dark:text-lgc-darkText">
+              {progress.percent}%
             </span>
           </div>
-          <div className="h-1.5 w-full overflow-hidden rounded-full bg-lgc-border/30 dark:bg-lgc-darkBorder/30">
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-lgc-surfaceMuted dark:bg-lgc-darkSurfaceMuted">
             <div
-              className={`h-full rounded-full transition-all ${
-                progress.percent === 100
-                  ? "bg-lgc-olive"
-                  : "bg-lgc-accent"
-              }`}
+              className={`
+                h-full rounded-full transition-all duration-500
+                ${progress.percent === 100 ? "bg-emerald-500" : "bg-lgc-accent"}
+              `}
               style={{ width: `${progress.percent}%` }}
             />
           </div>
@@ -144,23 +140,26 @@ const ConexionPersonaCard: FC<ConexionPersonaCardProps> = ({
       )}
 
       {/* Footer */}
-      <div className="flex items-center justify-between pt-1">
+      <div className="mt-4 flex items-center justify-between border-t border-lgc-border/30 pt-4 dark:border-lgc-darkBorder/30">
         <span className="text-[11px] text-lgc-textMuted dark:text-lgc-darkTextMuted">
-          Actualizado: {formatDate(persona.actualizadoEn)}
+          {formatDate(persona.actualizadoEn)}
         </span>
-        <svg
-          className="h-4 w-4 text-lgc-textMuted/50 transition-transform group-hover:translate-x-0.5 group-hover:text-lgc-primary dark:text-lgc-darkTextMuted/50 dark:group-hover:text-lgc-darkPrimary"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M9 5l7 7-7 7"
-          />
-        </svg>
+        <span className="flex items-center gap-1 text-[11px] font-medium text-lgc-primary opacity-0 transition-opacity group-hover:opacity-100 dark:text-lgc-darkPrimary">
+          Ver detalle
+          <svg
+            className="h-3 w-3 transition-transform group-hover:translate-x-0.5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </span>
       </div>
     </button>
   );

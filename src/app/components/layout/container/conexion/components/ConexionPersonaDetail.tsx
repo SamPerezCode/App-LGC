@@ -7,7 +7,6 @@ import type {
 } from "../../../../../../domain/interfaces/lgc-interfaces";
 import ConexionTimeline from "./ConexionTimeline";
 import ConexionRegistroModal from "./ConexionRegistroModal";
-import Button from "../../../../../ui/Button";
 
 type ConexionPersonaDetailProps = {
   persona: Persona;
@@ -22,22 +21,25 @@ type ConexionPersonaDetailProps = {
 
 const estadoConfig: Record<
   string,
-  { label: string; description: string; color: string }
+  { label: string; description: string; color: string; bgColor: string }
 > = {
   NUEVO: {
     label: "Nuevo Creyente",
     description: "Persona recien registrada que necesita acompanamiento inicial",
-    color: "bg-lgc-accent/15 text-lgc-accent border-lgc-accent/30",
+    color: "text-amber-700 dark:text-amber-400",
+    bgColor: "bg-amber-100 dark:bg-amber-900/30",
   },
   ASISTENTE_REGULAR: {
     label: "Asistente Regular",
     description: "Asiste regularmente y esta en proceso de integracion",
-    color: "bg-lgc-olive/15 text-lgc-everdeep border-lgc-olive/30",
+    color: "text-blue-700 dark:text-blue-400",
+    bgColor: "bg-blue-100 dark:bg-blue-900/30",
   },
   MIEMBRO: {
     label: "Miembro",
     description: "Completamente integrado a la comunidad de la iglesia",
-    color: "bg-lgc-primary/10 text-lgc-primary border-lgc-primary/20",
+    color: "text-emerald-700 dark:text-emerald-400",
+    bgColor: "bg-emerald-100 dark:bg-emerald-900/30",
   },
 };
 
@@ -82,12 +84,10 @@ const ConexionPersonaDetail: FC<ConexionPersonaDetailProps> = ({
   const estado = estadoConfig[persona.estado] ?? estadoConfig.NUEVO;
   const initials = getInitials(persona.nombreCompleto);
 
-  // Find applicable route for current estado
   const rutaAplicable = useMemo(() => {
     return rutas.find((r) => r.activa && r.aplicaAEstado === persona.estado) ?? null;
   }, [rutas, persona.estado]);
 
-  // Get activities for the route
   const actividadesDeRuta = useMemo(() => {
     if (!rutaAplicable) return [];
     return actividades
@@ -95,7 +95,6 @@ const ConexionPersonaDetail: FC<ConexionPersonaDetailProps> = ({
       .sort((a, b) => a.orden - b.orden);
   }, [actividades, rutaAplicable]);
 
-  // Get seguimientos for this persona
   const seguimientosPersona = useMemo(
     () => seguimientos.filter((s) => s.personaId === persona.id),
     [seguimientos, persona.id]
@@ -116,7 +115,6 @@ const ConexionPersonaDetail: FC<ConexionPersonaDetailProps> = ({
     [actividadesDeRuta, actividadCompletadaIds]
   );
 
-  // Calculate progress
   const progress = {
     completed: seguimientosCompletados.length,
     total: actividadesDeRuta.length,
@@ -147,15 +145,16 @@ const ConexionPersonaDetail: FC<ConexionPersonaDetailProps> = ({
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="space-y-6">
       {/* Back Button */}
       <button
         type="button"
         onClick={onBack}
         className="
-          flex w-fit items-center gap-2 text-sm text-lgc-textMuted transition-colors
-          hover:text-lgc-primary
-          dark:text-lgc-darkTextMuted dark:hover:text-lgc-darkPrimary
+          inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium
+          text-lgc-textMuted transition-all
+          hover:bg-lgc-surfaceMuted hover:text-lgc-text
+          dark:text-lgc-darkTextMuted dark:hover:bg-lgc-darkSurfaceMuted dark:hover:text-lgc-darkText
         "
       >
         <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -166,147 +165,171 @@ const ConexionPersonaDetail: FC<ConexionPersonaDetailProps> = ({
             d="M15 19l-7-7 7-7"
           />
         </svg>
-        Volver a la lista
+        Volver
       </button>
 
       {/* Profile Card */}
       <div
         className="
-          rounded-2xl border border-lgc-border/50 bg-lgc-surface p-6
-          dark:border-lgc-darkBorder/50 dark:bg-lgc-darkSurface
+          overflow-hidden rounded-xl border border-lgc-border/40 bg-white
+          dark:border-lgc-darkBorder/40 dark:bg-lgc-darkSurface
         "
       >
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-          {/* Left: Avatar + Info */}
-          <div className="flex items-start gap-4">
+        {/* Header with gradient */}
+        <div className="relative h-24 bg-gradient-to-r from-lgc-primary via-lgc-primarySoft to-lgc-olive dark:from-lgc-darkBgAlt dark:via-lgc-darkSurface dark:to-lgc-olive/30">
+          <div className="absolute -bottom-10 left-6">
             <div
               className="
-                flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl
-                bg-lgc-olive/20 text-xl font-semibold text-lgc-everdeep
-                dark:bg-lgc-olive/30 dark:text-lgc-manna
+                flex h-20 w-20 items-center justify-center rounded-2xl
+                border-4 border-white bg-gradient-to-br from-lgc-olive/80 to-lgc-everdeep
+                text-2xl font-bold text-white shadow-lg
+                dark:border-lgc-darkSurface
               "
             >
               {initials}
             </div>
+          </div>
+        </div>
 
-            <div className="flex flex-col gap-1">
-              <h1 className="text-xl font-semibold text-lgc-primary dark:text-lgc-darkPrimary">
+        <div className="px-6 pb-6 pt-14">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div className="space-y-2">
+              <h1 className="text-xl font-bold text-lgc-text dark:text-lgc-darkText">
                 {persona.nombreCompleto}
               </h1>
               <span
-                className={`w-fit rounded-full border px-3 py-1 text-xs font-medium ${estado.color}`}
+                className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${estado.bgColor} ${estado.color}`}
               >
                 {estado.label}
               </span>
-              <p className="mt-1 text-xs text-lgc-textMuted dark:text-lgc-darkTextMuted">
+              <p className="max-w-md text-sm text-lgc-textMuted dark:text-lgc-darkTextMuted">
                 {estado.description}
               </p>
             </div>
-          </div>
 
-          {/* Right: Actions */}
-          <div className="flex gap-2">
-            <Button
-              variant="primary"
+            <button
+              type="button"
               onClick={() => setIsModalOpen(true)}
               disabled={actividadesDisponibles.length === 0}
+              className="
+                inline-flex items-center gap-2 rounded-lg bg-lgc-primary px-4 py-2.5
+                text-sm font-medium text-lgc-onPrimary shadow-sm
+                transition-all hover:bg-lgc-primarySoft hover:shadow-md
+                focus:outline-none focus:ring-2 focus:ring-lgc-primary/50 focus:ring-offset-2
+                disabled:cursor-not-allowed disabled:opacity-50
+                dark:bg-lgc-darkPrimary dark:text-lgc-darkOnPrimary
+                dark:hover:bg-lgc-manna dark:focus:ring-lgc-darkPrimary/50
+              "
             >
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
               Registrar actividad
-            </Button>
+            </button>
           </div>
-        </div>
 
-        {/* Contact Details */}
-        <div className="mt-6 grid gap-4 border-t border-lgc-border/30 pt-6 sm:grid-cols-2 lg:grid-cols-4 dark:border-lgc-darkBorder/30">
-          <div>
-            <span className="text-[11px] uppercase tracking-wide text-lgc-textMuted dark:text-lgc-darkTextMuted">
-              Telefono
-            </span>
-            <p className="mt-1 text-sm font-medium text-lgc-text dark:text-lgc-darkText">
-              {persona.telefono}
-            </p>
-          </div>
-          {persona.correo && (
-            <div>
-              <span className="text-[11px] uppercase tracking-wide text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                Correo
+          {/* Contact Grid */}
+          <div className="mt-8 grid gap-4 border-t border-lgc-border/30 pt-6 sm:grid-cols-2 lg:grid-cols-4 dark:border-lgc-darkBorder/30">
+            <div className="space-y-1">
+              <span className="text-[11px] font-medium uppercase tracking-wider text-lgc-textMuted dark:text-lgc-darkTextMuted">
+                Telefono
               </span>
-              <p className="mt-1 text-sm font-medium text-lgc-text dark:text-lgc-darkText">
-                {persona.correo}
+              <p className="text-sm font-medium text-lgc-text dark:text-lgc-darkText">
+                {persona.telefono}
               </p>
             </div>
-          )}
-          <div>
-            <span className="text-[11px] uppercase tracking-wide text-lgc-textMuted dark:text-lgc-darkTextMuted">
-              Registro
-            </span>
-            <p className="mt-1 text-sm font-medium text-lgc-text dark:text-lgc-darkText">
-              {formatDate(persona.creadoEn)}
-            </p>
-          </div>
-          {persona.direccion && (
-            <div>
-              <span className="text-[11px] uppercase tracking-wide text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                Direccion
+            {persona.correo && (
+              <div className="space-y-1">
+                <span className="text-[11px] font-medium uppercase tracking-wider text-lgc-textMuted dark:text-lgc-darkTextMuted">
+                  Correo
+                </span>
+                <p className="text-sm font-medium text-lgc-text dark:text-lgc-darkText">
+                  {persona.correo}
+                </p>
+              </div>
+            )}
+            <div className="space-y-1">
+              <span className="text-[11px] font-medium uppercase tracking-wider text-lgc-textMuted dark:text-lgc-darkTextMuted">
+                Fecha de registro
               </span>
-              <p className="mt-1 text-sm font-medium text-lgc-text dark:text-lgc-darkText">
-                {persona.direccion}
+              <p className="text-sm font-medium text-lgc-text dark:text-lgc-darkText">
+                {formatDate(persona.creadoEn)}
               </p>
             </div>
-          )}
+            {persona.direccion && (
+              <div className="space-y-1">
+                <span className="text-[11px] font-medium uppercase tracking-wider text-lgc-textMuted dark:text-lgc-darkTextMuted">
+                  Direccion
+                </span>
+                <p className="text-sm font-medium text-lgc-text dark:text-lgc-darkText">
+                  {persona.direccion}
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Progress Section */}
+      {/* Progress Card */}
       {rutaAplicable && (
         <div
           className="
-            rounded-2xl border border-lgc-border/50 bg-lgc-surface p-6
-            dark:border-lgc-darkBorder/50 dark:bg-lgc-darkSurface
+            rounded-xl border border-lgc-border/40 bg-white p-6
+            dark:border-lgc-darkBorder/40 dark:bg-lgc-darkSurface
           "
         >
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h2 className="text-sm font-semibold text-lgc-primary dark:text-lgc-darkPrimary">
+            <div className="space-y-1">
+              <h2 className="text-sm font-semibold text-lgc-text dark:text-lgc-darkText">
                 Ruta de Crecimiento
               </h2>
-              <p className="mt-1 text-xs text-lgc-textMuted dark:text-lgc-darkTextMuted">
+              <p className="text-xs text-lgc-textMuted dark:text-lgc-darkTextMuted">
                 {rutaAplicable.nombre}
               </p>
             </div>
 
-            <div className="flex items-center gap-4">
-              <div className="text-right">
-                <p className="text-2xl font-semibold text-lgc-primary dark:text-lgc-darkPrimary">
+            <div className="flex items-center gap-6">
+              <div className="text-center">
+                <p className="text-3xl font-bold text-lgc-primary dark:text-lgc-darkPrimary">
                   {progress.percent}%
                 </p>
                 <p className="text-xs text-lgc-textMuted dark:text-lgc-darkTextMuted">
-                  {progress.completed} de {progress.total} completadas
+                  Completado
+                </p>
+              </div>
+              <div className="h-12 w-px bg-lgc-border/30 dark:bg-lgc-darkBorder/30" />
+              <div className="text-center">
+                <p className="text-3xl font-bold text-lgc-text dark:text-lgc-darkText">
+                  {progress.completed}
+                </p>
+                <p className="text-xs text-lgc-textMuted dark:text-lgc-darkTextMuted">
+                  de {progress.total} actividades
                 </p>
               </div>
             </div>
           </div>
 
           {/* Progress bar */}
-          <div className="mt-4 h-2 w-full overflow-hidden rounded-full bg-lgc-border/30 dark:bg-lgc-darkBorder/30">
+          <div className="mt-6 h-2 w-full overflow-hidden rounded-full bg-lgc-surfaceMuted dark:bg-lgc-darkSurfaceMuted">
             <div
-              className={`h-full rounded-full transition-all ${
-                progress.percent === 100 ? "bg-lgc-olive" : "bg-lgc-accent"
-              }`}
+              className={`
+                h-full rounded-full transition-all duration-500
+                ${progress.percent === 100 ? "bg-emerald-500" : "bg-gradient-to-r from-lgc-accent to-lgc-desert"}
+              `}
               style={{ width: `${progress.percent}%` }}
             />
           </div>
         </div>
       )}
 
-      {/* Timeline */}
+      {/* Timeline Card */}
       <div
         className="
-          rounded-2xl border border-lgc-border/50 bg-lgc-surface p-6
-          dark:border-lgc-darkBorder/50 dark:bg-lgc-darkSurface
+          rounded-xl border border-lgc-border/40 bg-white p-6
+          dark:border-lgc-darkBorder/40 dark:bg-lgc-darkSurface
         "
       >
-        <h2 className="mb-4 text-sm font-semibold text-lgc-primary dark:text-lgc-darkPrimary">
+        <h2 className="mb-6 text-sm font-semibold text-lgc-text dark:text-lgc-darkText">
           Historial de Actividades
         </h2>
 
