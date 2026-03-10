@@ -6,6 +6,7 @@ import PersonasSection from "./personas/PersonasSection";
 import ConfigSection from "./config/ConfigSection";
 import RutaCrecimientoSection from "./ruta/RutaCrecimientoSection";
 import MiembrosAntiguosSection from "./miembros/MiembrosAntiguosSection";
+import ConexionSection from "./conexion/ConexionSection";
 
 import type {
   RutaCrecimiento,
@@ -17,6 +18,7 @@ import {
   rutasMock,
   actividadesRutaMock,
   seguimientosMock,
+  personasMock,
 } from "../../../../domain/mock-data/lgc-mock";
 
 interface ContainProps {
@@ -32,12 +34,24 @@ const Contain: FC<ContainProps> = ({ activeSection }) => {
   const [seguimientos, setSeguimientos] =
     useState<SeguimientoActividadPersona[]>(seguimientosMock);
 
+  const [personas] = useState(personasMock);
+
   return (
     <main className="flex-1 overflow-y-auto px-4 py-4 md:px-6 md:py-6">
       {activeSection === "dashboard" && (
         <DashboardSection
           actividades={actividades}
           seguimientos={seguimientos}
+        />
+      )}
+
+      {activeSection === "conexion" && (
+        <ConexionSection
+          personas={personas}
+          rutas={rutas}
+          actividades={actividades}
+          seguimientos={seguimientos}
+          setSeguimientos={setSeguimientos}
         />
       )}
 

@@ -1,5 +1,6 @@
 export type AppSection =
   | "dashboard"
+  | "conexion"
   | "personas"
   | "ruta"
   | "seguimiento"

@@ -18,7 +18,7 @@ export interface SidebarChildItem {
 }
 
 export interface SidebarGroup {
-  id: "dashboard" | "nuevo-creyente" | "miembros-antiguos" | "config";
+  id: "dashboard" | "conexion" | "nuevo-creyente" | "miembros-antiguos" | "config";
   label: string;
   icon: string;
   section?: AppSection;

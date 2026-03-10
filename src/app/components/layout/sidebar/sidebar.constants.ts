@@ -2,6 +2,7 @@
 import type { SidebarGroup } from "./sidebar.types";
 const ICONS = {
   dashboard: "/home.svg",
+  conexion: "/conexion.svg",
   nuevoCreyente: "/new_believer.svg",
   personas: "/person.svg",
   ruta: "/road.svg",
@@ -17,6 +18,12 @@ export const SIDEBAR_GROUPS: SidebarGroup[] = [
     section: "dashboard",
   },
   {
+    id: "conexion",
+    label: "Conexion",
+    icon: ICONS.conexion,
+    section: "conexion",
+  },
+  {
     id: "nuevo-creyente",
     label: "Nuevo creyente",
     icon: ICONS.nuevoCreyente,
@@ -27,7 +34,7 @@ export const SIDEBAR_GROUPS: SidebarGroup[] = [
   },
   {
     id: "config",
-    label: "Configuración",
+    label: "Configuracion",
     icon: ICONS.config,
     section: "config",
   },
