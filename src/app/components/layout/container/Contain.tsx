@@ -26,7 +26,6 @@ interface ContainProps {
 }
 
 const Contain: FC<ContainProps> = ({ activeSection }) => {
-  console.log("[v0] activeSection:", activeSection);
   const [rutas, setRutas] = useState<RutaCrecimiento[]>(rutasMock);
   const [actividades, setActividades] = useState<
     ActividadRutaCrecimiento[]
